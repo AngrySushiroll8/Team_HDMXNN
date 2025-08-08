@@ -2,15 +2,9 @@ using UnityEngine;
 
 public class ButtonFuntions : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void resumeButton()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GameManager.instance.stateUnpaused();
     }
 }
+
