@@ -1,9 +1,19 @@
 using System.Collections;
 using System.ComponentModel;
+using Unity.VisualScripting;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage
 {
+    // Weapon List
+    enum Weapon
+    {
+        Pistol,
+        AssaultRifle,
+        Shotgun
+    }
+
     [Category("Controller")]
     [SerializeField] CharacterController controller;
 
@@ -13,13 +23,17 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
-    [SerializeField] int damage;
 
     [Category("Shooting System")]
     [SerializeField] LayerMask ignoreLayer;
-    [SerializeField] float fireTimer;
-    [SerializeField] int fireRate;
-    [SerializeField] int fireDistance;
+    [SerializeField] Weapon weapon;
+    float fireRate;
+    float bloomMod;
+    int damage;
+    int fireDistance;
+    int bullets;
+    bool isAutomatic = false;
+    float fireTimer;
 
 
     [Category("Player Materials")]
@@ -30,13 +44,49 @@ public class PlayerController : MonoBehaviour, IDamage
     int jumpCount;
     int healthMax;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         healthMax = health;
+
+        // Sets Weapon Values Based On Weapon Type
+        switch (weapon)
+        {
+            case Weapon.Pistol:
+                {
+                    fireDistance = 40;
+                    fireRate = 0;
+                    damage = 20;
+                    bullets = 1;
+                    bloomMod = 0.01f;
+                    break;
+                }
+
+            case Weapon.AssaultRifle:
+                {
+                    isAutomatic = true;
+                    fireDistance = 60;
+                    fireRate = 0.25f;
+                    damage = 30;
+                    bullets = 1;
+                    bloomMod = 0.015f;
+                    break;
+                }
+
+            case Weapon.Shotgun:
+                {
+                    fireDistance = 20;
+                    fireRate = 0;
+                    damage = 50;
+                    bullets = 6;
+                    bloomMod = 0.1f;
+                    break;
+                }
+
+            default:
+                break;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -46,6 +96,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         fireTimer += Time.deltaTime;
 
+        // Gravity System
         if (controller.isGrounded)
         {
             jumpCount = 0;
@@ -56,13 +107,16 @@ public class PlayerController : MonoBehaviour, IDamage
             jumpVec.y -= gravity * Time.deltaTime;
         }
 
+        // WASD Movement
         moveDir = (Input.GetAxis("Horizontal") * Vector3.right) + (Input.GetAxis("Vertical") * Vector3.forward);
         controller.Move(moveDir * speed * Time.deltaTime);
 
+        // Jump Movement
         Jump();
         controller.Move(jumpVec * Time.deltaTime);
 
-        if (Input.GetButton("Fire1") && fireTimer >= fireRate)
+        // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
+        if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
         {
             Shoot();
         }
@@ -81,16 +135,39 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         fireTimer = 0;
 
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, fireDistance, ~ignoreLayer))
+        for (int bulletIndex = 0; bulletIndex < bullets; bulletIndex++)
         {
-            Debug.Log("HIT! | " + hit.collider.name);
+            RaycastHit hit;
+            float rangeX = Random.Range(-bloomMod, bloomMod);
+            float rangeY = Random.Range(-bloomMod, bloomMod);
 
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            // Debug Ray For Testing Weapons
+            int rayLength = 10;
+            int rayDuration = 5;
+            Debug.DrawRay(Camera.main.transform.position,
+                          new Vector3(Camera.main.transform.forward.x + rangeX,
+                                    Camera.main.transform.forward.y + rangeY,
+                                    Camera.main.transform.forward.z) * rayLength,
+                          Color.red,
+                          rayDuration);
 
-            if (dmg != null)
+            // Raycast For Shooting
+            if (Physics.Raycast(Camera.main.transform.position,
+                                new Vector3(Camera.main.transform.forward.x + rangeX,
+                                            Camera.main.transform.forward.y + rangeY,
+                                            Camera.main.transform.forward.z),
+                                out hit,
+                                fireDistance,
+                                ~ignoreLayer))
             {
-                dmg.TakeDamage(damage);
+                Debug.Log("HIT! | " + hit.collider.name);
+
+                IDamage dmg = hit.collider.GetComponent<IDamage>();
+
+                if (dmg != null)
+                {
+                    dmg.TakeDamage(damage);
+                }
             }
         }
     }
