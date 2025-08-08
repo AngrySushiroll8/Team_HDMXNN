@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuLose;
 
     public bool isPaused;
+    public GameObject player;
+    public PlayerController playerScript;
 
     float timeScaleOriginal;
 
@@ -21,6 +23,9 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         timeScaleOriginal = Time.timeScale;
+
+        player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame

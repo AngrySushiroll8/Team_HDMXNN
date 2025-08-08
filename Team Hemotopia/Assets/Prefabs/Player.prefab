@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 2586898108793330339}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,13 +209,10 @@ MonoBehaviour:
   jumpHeight: 2
   gravity: 10
   jumpMax: 1
-  damage: 0
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
-  fireTimer: 0
-  fireRate: 0
-  fireDistance: 0
+  weapon: 0
   hurtMaterial: {fileID: 0}
 --- !u!33 &8926156876114342359
 MeshFilter:
