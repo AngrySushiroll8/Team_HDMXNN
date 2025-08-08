@@ -206,9 +206,14 @@ MonoBehaviour:
   controller: {fileID: 2586898108793330339}
   health: 100
   speed: 10
-  jumpHeight: 2
-  gravity: 10
+  jumpHeight: 10
+  gravity: 25
   jumpMax: 1
+  ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  weapon: 0
+  hurtMaterial: {fileID: 0}
 --- !u!33 &8926156876114342359
 MeshFilter:
   m_ObjectHideFlags: 0
