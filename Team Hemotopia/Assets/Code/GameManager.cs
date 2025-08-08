@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        timeScaleOriginal = Time.timeScale;
     }
 
     // Update is called once per frame
@@ -27,8 +28,33 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetButtonDown("Cancel"))
         {
-            isPaused = !isPaused;
-            menuPause.SetActive(isPaused);
+            if(menuActive == null)
+            {
+                statePaused();
+                menuActive = menuPause;
+                menuActive.SetActive(true);
+            }
+            else if(menuActive == menuPause)
+            {
+                stateUnpaused();
+            }
         }
+    }
+
+    public void statePaused()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void stateUnpaused()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = timeScaleOriginal;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        menuActive.SetActive(false);
+        menuActive = null;
     }
 }
