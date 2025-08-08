@@ -6,22 +6,22 @@ using UnityEngine.AI;
 public class EnemyAI_Base : MonoBehaviour, IDamage
 {
 
-    [SerializeField] Renderer model;
-    [SerializeField] NavMeshAgent agent;
-    [SerializeField] int HP;
-    [SerializeField] int faceTargetSpeed;
+    [SerializeField] protected Renderer model;
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected int HP;
+    [SerializeField] protected int faceTargetSpeed;
 
-    Transform player;
+    protected Transform player;
 
-    Color colorOrig;
+    protected Color colorOrig;
 
-    bool playerInTrigger;
+    protected bool playerInTrigger;
 
-    Vector3 playerDir;
+    protected Vector3 playerDir;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
         colorOrig = model.material.color;
 
@@ -35,7 +35,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         
     }
 
-    void FaceTarget()
+    public void FaceTarget()
     {
         Quaternion rot = Quaternion.LookRotation(playerDir);
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
@@ -62,7 +62,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         model.material.color = colorOrig;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -70,7 +70,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
