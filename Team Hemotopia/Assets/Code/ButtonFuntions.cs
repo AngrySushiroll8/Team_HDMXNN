@@ -14,6 +14,13 @@ public class ButtonFuntions : MonoBehaviour
         GameManager.instance.stateUnpaused();
     }
 
-
+    public void quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+Application.Quit();
+#endif
+    }
 }
 
