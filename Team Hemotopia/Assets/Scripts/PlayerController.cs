@@ -178,15 +178,12 @@ public class PlayerController : MonoBehaviour, IDamage
         health -= amount;
 
         updatePlayerUI();
+        StartCoroutine(FlashDamage());
 
         if (health <= 0)
         {
             // Lose
             Destroy(gameObject);
-        }
-        else
-        {
-            //StartCoroutine(FlashDamage());
         }
     }
 
@@ -195,14 +192,12 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.PlayerHealth.fillAmount = (float)health / healthMax;
     }
 
-    // IEnumerator FlashDamage()
-    // {
-    //     GameManager.instance.playerDamageScreen.SetActive(true);
-        
-    //     GameManager.instance.playerDamageScreen.GetComponent<Image>().color = color;
+    IEnumerator FlashDamage()
+    {
+         GameManager.instance.PlayerDamageScreen.SetActive(true);
 
-    //     yield return new WaitForSeconds(0.1f);
+         yield return new WaitForSeconds(0.1f);
 
-    //     GameManager.instance.playerDamageScreen.SetActive(false);
-    // }
+         GameManager.instance.PlayerDamageScreen.SetActive(false);
+    }
 }
