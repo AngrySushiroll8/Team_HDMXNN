@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
 
         // WASD Movement
-        moveDir = (Input.GetAxis("Horizontal") * Vector3.right) + (Input.GetAxis("Vertical") * Vector3.forward);
+        moveDir = (Input.GetAxis("Horizontal") * transform.right) + (Input.GetAxis("Vertical") * transform.forward);
         controller.Move(moveDir * speed * Time.deltaTime);
 
         // Jump Movement
