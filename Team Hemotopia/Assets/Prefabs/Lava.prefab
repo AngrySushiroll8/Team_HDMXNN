@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7716503368247493967}
   - component: {fileID: 3543699879451708652}
   - component: {fileID: 481490182067843170}
-  - component: {fileID: 6885168089825089495}
+  - component: {fileID: 8532893651122487851}
   m_Layer: 0
   m_Name: Lava
   m_TagString: Untagged
@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4f5d5aa350af7428c08be76b8f76ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  rb: {fileID: 6885168089825089495}
+  type: 1
+  rb: {fileID: 8532893651122487851}
   damageAmount: 10
   speed: 0
   destroyTime: 0
@@ -128,7 +128,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &6885168089825089495
+--- !u!54 &8532893651122487851
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
