@@ -23,6 +23,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Start()
     {
+        player = GameManager.instance.player.transform;
         colorOrig = model.material.color;
 
 

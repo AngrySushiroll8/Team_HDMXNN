@@ -17,18 +17,20 @@ public class EnemyRangedAI : EnemyAI_Base
         if (!playerInTrigger) return;
 
         shootTimer += Time.deltaTime;
+        
         playerDir = player.position - transform.position;
         float distance = Vector3.Distance(transform.position, player.position);
 
         if (distance > shootRange)
         {
             agent.SetDestination(player.position);
+            
         }
         else
         {
             agent.SetDestination(transform.position);
             FaceTarget();
-
+            
             if (shootTimer >= shootCooldown)
             {
                 shootTimer = 0;
@@ -41,6 +43,7 @@ public class EnemyRangedAI : EnemyAI_Base
     void shoot()
     {
         Instantiate(bullet, shootPos.position, transform.rotation);
+        
 
     }
 }
