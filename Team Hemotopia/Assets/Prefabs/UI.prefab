@@ -1561,8 +1561,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuActive: {fileID: 0}
-  menuPause: {fileID: 0}
+  menuPause: {fileID: 405405144702656288}
   menuSettings: {fileID: 0}
   menuWin: {fileID: 0}
   menuLose: {fileID: 0}
   isPaused: 0
+  player: {fileID: 0}
+  playerScript: {fileID: 0}
