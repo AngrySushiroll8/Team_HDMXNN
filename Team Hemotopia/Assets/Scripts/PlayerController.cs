@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage
@@ -17,10 +18,12 @@ public class PlayerController : MonoBehaviour, IDamage
 
     [Category("Player Stats")]
     [SerializeField] int health;
-    [SerializeField] int speed;
+    [SerializeField] float speed;
+    [SerializeField] float sprintMod;
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
+    bool isSprinting;
 
     [Category("Shooting System")]
     [SerializeField] LayerMask ignoreLayer;
@@ -33,6 +36,12 @@ public class PlayerController : MonoBehaviour, IDamage
     bool isAutomatic = false;
     float fireTimer;
 
+    [Category("Dash")]
+    [SerializeField] float dashDistance;
+    [SerializeField] float dashDuration;
+    [SerializeField] int dashCooldown;
+    float dashTimer;
+    [SerializeField] LayerMask dashWallCollision; // Layer Mask so player doesn't dash through walls
 
     [Category("Player Materials")]
     [SerializeField] Material hurtMaterial;
@@ -45,6 +54,9 @@ public class PlayerController : MonoBehaviour, IDamage
     void Start()
     {
         healthMax = health;
+        dashTimer = dashCooldown;
+
+        updatePlayerUI();
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -88,11 +100,13 @@ public class PlayerController : MonoBehaviour, IDamage
     void Update()
     {
         Movement();
+        sprint();
     }
 
     void Movement()
     {
         fireTimer += Time.deltaTime;
+        dashTimer += Time.deltaTime;
 
         // Gravity System
         if (controller.isGrounded)
@@ -113,6 +127,12 @@ public class PlayerController : MonoBehaviour, IDamage
         Jump();
         controller.Move(jumpVec * Time.deltaTime);
 
+        // Dash ability
+        if (Input.GetButton("Dash") && dashTimer >= dashCooldown)
+        {
+            StartCoroutine(dash());
+        }
+
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
         if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
         {
@@ -120,6 +140,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
+    
     void Jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
@@ -128,6 +149,42 @@ public class PlayerController : MonoBehaviour, IDamage
             jumpVec.y = jumpHeight;
         }
     }
+
+    void sprint()
+    {
+        if (Input.GetButtonDown("Sprint"))
+        {
+            speed *= sprintMod;
+            isSprinting = true;
+        }
+        else if (Input.GetButtonUp("Sprint"))
+        {
+            speed /= sprintMod;
+            isSprinting = false;
+        }
+    }
+
+    IEnumerator dash()
+    {
+        dashTimer = 0;
+        Vector3 start = transform.position;
+        Vector3 end = (transform.position + (transform.forward * dashDistance));
+        float time = 0f;
+
+        while (time < dashDuration)
+        {
+            if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x, transform.localScale.y, 0.1f),
+                transform.forward / 10, transform.rotation, 1, dashWallCollision))
+            {
+                break;
+            }
+
+            time += Time.deltaTime;
+            transform.position = Vector3.Lerp(start, end, time / dashDuration);     
+            yield return null;
+        }
+    }
+
 
     void Shoot()
     {
@@ -174,25 +231,27 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         health -= amount;
 
+        updatePlayerUI();
+        StartCoroutine(FlashDamage());
+
         if (health <= 0)
         {
             // Lose
             Destroy(gameObject);
         }
-        else
-        {
-            //StartCoroutine(FlashDamage());
-        }
     }
 
-    // IEnumerator FlashDamage()
-    // {
-    //     GameManager.instance.playerDamageScreen.SetActive(true);
-        
-    //     GameManager.instance.playerDamageScreen.GetComponent<Image>().color = color;
+    public void updatePlayerUI()
+    {
+        GameManager.instance.PlayerHealth.fillAmount = (float)health / healthMax;
+    }
 
-    //     yield return new WaitForSeconds(0.1f);
+    IEnumerator FlashDamage()
+    {
+         GameManager.instance.PlayerDamageScreen.SetActive(true);
 
-    //     GameManager.instance.playerDamageScreen.SetActive(false);
-    // }
+         yield return new WaitForSeconds(0.1f);
+
+         GameManager.instance.PlayerDamageScreen.SetActive(false);
+    }
 }
