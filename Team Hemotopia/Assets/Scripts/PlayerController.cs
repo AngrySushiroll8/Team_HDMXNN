@@ -1,7 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
 using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage
@@ -47,6 +46,8 @@ public class PlayerController : MonoBehaviour, IDamage
     void Start()
     {
         healthMax = health;
+
+        updatePlayerUI();
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -176,25 +177,27 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         health -= amount;
 
+        updatePlayerUI();
+        StartCoroutine(FlashDamage());
+
         if (health <= 0)
         {
             // Lose
             Destroy(gameObject);
         }
-        else
-        {
-            //StartCoroutine(FlashDamage());
-        }
     }
 
-    // IEnumerator FlashDamage()
-    // {
-    //     GameManager.instance.playerDamageScreen.SetActive(true);
-        
-    //     GameManager.instance.playerDamageScreen.GetComponent<Image>().color = color;
+    public void updatePlayerUI()
+    {
+        GameManager.instance.PlayerHealth.fillAmount = (float)health / healthMax;
+    }
 
-    //     yield return new WaitForSeconds(0.1f);
+    IEnumerator FlashDamage()
+    {
+         GameManager.instance.PlayerDamageScreen.SetActive(true);
 
-    //     GameManager.instance.playerDamageScreen.SetActive(false);
-    // }
+         yield return new WaitForSeconds(0.1f);
+
+         GameManager.instance.PlayerDamageScreen.SetActive(false);
+    }
 }
