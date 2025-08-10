@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPaused;
 
+    public Image PlayerDash;
     public Image PlayerHealth;
     public GameObject PlayerDamageScreen;
 

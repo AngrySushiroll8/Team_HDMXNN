@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Movement();
         sprint();
+        updatePlayerUIDash();
     }
 
     void Movement()
@@ -180,6 +182,12 @@ public class PlayerController : MonoBehaviour, IDamage
             }
 
             time += Time.deltaTime;
+
+            //if(dashTimer <= dashCooldown)
+            //{
+            //    dashTimer += time;
+            //    updatePlayerUI();
+            //}
             transform.position = Vector3.Lerp(start, end, time / dashDuration);     
             yield return null;
         }
@@ -254,4 +262,10 @@ public class PlayerController : MonoBehaviour, IDamage
 
          GameManager.instance.PlayerDamageScreen.SetActive(false);
     }
+
+    public void updatePlayerUIDash()
+    {
+        GameManager.instance.PlayerDash.fillAmount = dashTimer / (float)dashCooldown;
+    }
 }
+
