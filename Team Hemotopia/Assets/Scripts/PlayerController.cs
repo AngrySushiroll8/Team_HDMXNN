@@ -1,7 +1,5 @@
 using System.Collections;
 using System.ComponentModel;
-using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage
