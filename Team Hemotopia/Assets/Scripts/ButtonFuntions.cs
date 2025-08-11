@@ -22,5 +22,15 @@ public class ButtonFuntions : MonoBehaviour
 Application.Quit();
 #endif
     }
+
+    public void settings()
+    {
+        GameManager.instance.settingsOpen();
+    }
+
+    public void back()
+    {
+        GameManager.instance.settingsClosed();
+    }
 }
 

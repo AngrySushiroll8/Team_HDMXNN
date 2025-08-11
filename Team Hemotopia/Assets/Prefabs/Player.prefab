@@ -206,6 +206,8 @@ MonoBehaviour:
   controller: {fileID: 2586898108793330339}
   health: 100
   speed: 10
+  walkingSpeed: 10
+  sprintMod: 1.5
   jumpHeight: 2
   gravity: 10
   jumpMax: 1
@@ -213,6 +215,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   weapon: 0
+  crouchSpeed: 3
+  crouchYScale: 0.6
+  startYScale: 1
+  dashDistance: 8
+  dashDuration: 0.2
+  dashCooldown: 6
+  dashWallCollision:
+    serializedVersion: 2
+    m_Bits: 512
   hurtMaterial: {fileID: 0}
 --- !u!33 &8926156876114342359
 MeshFilter:
