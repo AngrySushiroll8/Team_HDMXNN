@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [Category("Player Stats")]
     [SerializeField] int health;
     [SerializeField] float speed;
+    [SerializeField] float walkingSpeed;
     [SerializeField] float sprintMod;
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
@@ -36,6 +37,11 @@ public class PlayerController : MonoBehaviour, IDamage
     int bullets;
     bool isAutomatic = false;
     float fireTimer;
+
+    [Category("Crounch")]
+    [SerializeField] float crouchSpeed;
+    [SerializeField] float crouchYScale;
+    [SerializeField] float startYScale;
 
     [Category("Dash")]
     [SerializeField] float dashDistance;
@@ -104,6 +110,7 @@ public class PlayerController : MonoBehaviour, IDamage
         Movement();
         sprint();
         updatePlayerUIDash();
+        crouch();
     }
 
     void Movement()
@@ -153,6 +160,20 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
+    void crouch()
+    {
+        if (Input.GetButtonDown("Crouch"))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            speed = crouchSpeed;
+        }
+        if (Input.GetButtonUp("Crouch"))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            speed = walkingSpeed;
+        }
+    }
+
     void sprint()
     {
         if (Input.GetButtonDown("Sprint"))
@@ -188,8 +209,6 @@ public class PlayerController : MonoBehaviour, IDamage
             yield return null;
         }
     }
-
-
     void Shoot()
     {
         fireTimer = 0;
