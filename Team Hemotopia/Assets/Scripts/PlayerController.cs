@@ -14,10 +14,13 @@ public class PlayerController : MonoBehaviour, IDamage
         Shotgun
     }
 
-    [Category("Controller")]
+    [Header("Controller")]
     [SerializeField] CharacterController controller;
 
-    [Category("Player Stats")]
+    [Space(10)]
+    [Header("Player Stats")]
+    [Space(10)]
+
     [SerializeField] int health;
     [SerializeField] float speed;
     [SerializeField] float walkingSpeed;
@@ -33,7 +36,10 @@ public class PlayerController : MonoBehaviour, IDamage
     bool isSprinting;
     bool isRaging;
 
-    [Category("Shooting System")]
+    [Space(10)]
+    [Header("Shooting System")]
+    [Space(10)]
+
     [SerializeField] LayerMask ignoreLayer;
     [SerializeField] Weapon weapon;
     float fireRate;
@@ -47,19 +53,28 @@ public class PlayerController : MonoBehaviour, IDamage
     bool isAutomatic = false;
     float fireTimer;
 
-    [Category("Crounch")]
+    [Space(10)]
+    [Header("Crounch")]
+    [Space(10)]
+
     [SerializeField] float crouchSpeed;
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
 
-    [Category("Dash")]
+    [Space(10)]
+    [Header("Dash")]
+    [Space(10)]
+
     [SerializeField] float dashDistance;
     [SerializeField] float dashDuration;
     [SerializeField] int dashCooldown;
     float dashTimer;
     [SerializeField] LayerMask dashWallCollision; // Layer Mask so player doesn't dash through walls
 
-    [Category("Player Materials")]
+    [Space(10)]
+    [Header("Player Materials")]
+    [Space(10)]
+
     [SerializeField] Material hurtMaterial;
 
     Vector3 jumpVec;
