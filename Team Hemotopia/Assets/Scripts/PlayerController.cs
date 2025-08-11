@@ -55,7 +55,15 @@ public class PlayerController : MonoBehaviour, IDamage
     bool isAutomatic = false;
     float fireTimer;
 
-   [Category("Melee System")]
+    [Space(10)]
+    [Header("Crounch")]
+    [Space(10)]
+
+    [SerializeField] float crouchSpeed;
+    [SerializeField] float crouchYScale;
+    [SerializeField] float startYScale;
+
+    [Category("Melee System")]
     float swingDistance;
     float swingRate;
     float swingTimer;
