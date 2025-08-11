@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour, IDamage
         dashTimer = dashCooldown;
 
         updatePlayerUI();
+        GameManager.instance.updateGameGoal(1);
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -183,11 +184,6 @@ public class PlayerController : MonoBehaviour, IDamage
 
             time += Time.deltaTime;
 
-            //if(dashTimer <= dashCooldown)
-            //{
-            //    dashTimer += time;
-            //    updatePlayerUI();
-            //}
             transform.position = Vector3.Lerp(start, end, time / dashDuration);     
             yield return null;
         }
@@ -244,8 +240,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if (health <= 0)
         {
-            // Lose
-            Destroy(gameObject);
+            // Lose proc
+            GameManager.instance.updateToLoseScreen();
         }
     }
 

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,5 +68,44 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         menuActive.SetActive(false);
         menuActive = null;
+    }
+    
+    public void updateGameGoal(int value)
+    {
+        gameGoalCount += value;
+
+        // Win screen
+        if(gameGoalCount <= 0)
+        {
+            statePaused();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
+        }
+    }
+
+    public void updateToLoseScreen()
+    {
+        statePaused();
+        menuActive = menuLose;
+        menuActive.SetActive(true);
+    }
+
+    public void settingsOpen()
+    {
+        statePaused();
+        menuActive.SetActive(false);
+        menuActive = null;
+
+        menuActive = menuSettings;
+        menuActive.SetActive(true);
+    }
+
+    public void settingsClosed()
+    {
+        menuActive.SetActive(false);
+        menuActive = null;
+
+        menuActive = menuPause;
+        menuActive.SetActive(true);
     }
 }
