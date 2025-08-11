@@ -1,8 +1,8 @@
 using System.Collections;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour, IDamage
 {
@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour, IDamage
     [Category("Player Stats")]
     [SerializeField] int health;
     [SerializeField] float speed;
-    [SerializeField] float walkingSpeed;
     [SerializeField] float sprintMod;
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
@@ -37,17 +36,6 @@ public class PlayerController : MonoBehaviour, IDamage
     int bullets;
     bool isAutomatic = false;
     float fireTimer;
-
-    [Category("Crounch")]
-    [SerializeField] float crouchSpeed;
-    [SerializeField] float crouchYScale;
-    [SerializeField] float startYScale;
-
-    [Category("Slope Handling")]
-    [SerializeField] float maxSlopeAngle;
-    [SerializeField] RaycastHit slopeRaycast;
-    float playerHeight;
-    Rigidbody rb;
 
     [Category("Dash")]
     [SerializeField] float dashDistance;
@@ -68,9 +56,9 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         healthMax = health;
         dashTimer = dashCooldown;
-        startYScale = transform.localScale.y;
 
         updatePlayerUI();
+        GameManager.instance.updateGameGoal(1);
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -115,7 +103,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Movement();
         sprint();
-        crouch();
+        updatePlayerUIDash();
     }
 
     void Movement()
@@ -132,12 +120,6 @@ public class PlayerController : MonoBehaviour, IDamage
         else
         {
             jumpVec.y -= gravity * Time.deltaTime;
-        }
-
-        // Slope Handling
-        if (onSlope())
-        {
-            rb.AddForce(GetSlopeMoveDirection() * speed * 20f, ForceMode.Force);
         }
 
         // WASD Movement
@@ -160,6 +142,7 @@ public class PlayerController : MonoBehaviour, IDamage
             Shoot();
         }
     }
+
     
     void Jump()
     {
@@ -184,20 +167,6 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
-    void crouch()
-    {
-        if (Input.GetButtonDown("Crouch"))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            speed = crouchSpeed;
-        }
-        if (Input.GetButtonUp("Crouch"))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-            speed = walkingSpeed;
-        }
-    }
-
     IEnumerator dash()
     {
         dashTimer = 0;
@@ -214,10 +183,12 @@ public class PlayerController : MonoBehaviour, IDamage
             }
 
             time += Time.deltaTime;
+
             transform.position = Vector3.Lerp(start, end, time / dashDuration);     
             yield return null;
         }
     }
+
 
     void Shoot()
     {
@@ -269,8 +240,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if (health <= 0)
         {
-            // Lose
-            Destroy(gameObject);
+            // Lose proc
+            GameManager.instance.updateToLoseScreen();
         }
     }
 
@@ -288,18 +259,9 @@ public class PlayerController : MonoBehaviour, IDamage
          GameManager.instance.PlayerDamageScreen.SetActive(false);
     }
 
-    private bool onSlope()
+    public void updatePlayerUIDash()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeRaycast, playerHeight * 0.5f + 0.3f))
-        {
-            float angle = Vector3.Angle(Vector3.up, slopeRaycast.normal);
-            return angle < maxSlopeAngle && angle != 0;
-        }
-        return false;
-    }
-
-    private Vector3 GetSlopeMoveDirection()
-    {
-        return Vector3.ProjectOnPlane(moveDir, slopeRaycast.normal).normalized;
+        GameManager.instance.PlayerDash.fillAmount = dashTimer / (float)dashCooldown;
     }
 }
+

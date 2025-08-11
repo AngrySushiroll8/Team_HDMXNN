@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,9 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuSettings;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
+    [SerializeField] MenuState menu;
 
     public bool isPaused;
 
+    public Image PlayerDash;
     public Image PlayerHealth;
     public GameObject PlayerDamageScreen;
 
@@ -22,6 +25,15 @@ public class GameManager : MonoBehaviour
     float timeScaleOriginal;
 
     int gameGoalCount;
+
+    enum MenuState
+    {
+        None,
+        Pause,
+        Win,
+        Lose
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -57,6 +69,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        menu = MenuState.Pause;
     }
     public void stateUnpaused()
     {
@@ -66,5 +79,73 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         menuActive.SetActive(false);
         menuActive = null;
+    }
+    
+    public void updateGameGoal(int value)
+    {
+        gameGoalCount += value;
+
+        // Win screen
+        if(gameGoalCount <= 0)
+        {
+            statePaused();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
+            menu = MenuState.Win;
+        }
+    }
+
+    public void updateToLoseScreen()
+    {
+        statePaused();
+        menuActive = menuLose;
+        menuActive.SetActive(true);
+        menu = MenuState.Lose;
+    }
+
+    public void settingsOpen()
+    {
+        menuActive.SetActive(false);
+        menuActive = null;
+
+        menuActive = menuSettings;
+        menuActive.SetActive(true);
+    }
+
+    public void settingsClosed()
+    {
+        switch(menu)
+        {
+            case MenuState.Pause:
+            {
+                 menuActive.SetActive(false);
+                 menuActive = null;
+
+                 menuActive = menuPause;
+                 menuActive.SetActive(true);
+                 break;
+            }
+            case MenuState.Win:
+            {
+                 menuActive.SetActive(false);
+                 menuActive = null;
+
+                 menuActive = menuWin;
+                 menuActive.SetActive(true);
+                 break;
+            }
+            case MenuState.Lose:
+            {
+                 menuActive.SetActive(false);
+                 menuActive = null;
+
+                 menuActive = menuLose;
+                 menuActive.SetActive(true);
+                 break;
+            }
+
+            default:
+                break;
+        }
     }
 }
