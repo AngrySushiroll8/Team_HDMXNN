@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour, IDamage
         healthMax = health;
         dashTimer = dashCooldown;
         speedOriginal = speed;
+        damageOriginal = damage;
 
         updatePlayerUI();
         GameManager.instance.updateGameGoal(1);
