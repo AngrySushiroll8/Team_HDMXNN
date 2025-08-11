@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7430086865367419667}
   - component: {fileID: 8945266890682765536}
   - component: {fileID: 5795204342824810344}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 8576956961291998452}
   - component: {fileID: 1776617147312271147}
   - component: {fileID: 2586898108793330339}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -206,14 +206,19 @@ MonoBehaviour:
   controller: {fileID: 2586898108793330339}
   health: 100
   speed: 10
+  walkingSpeed: 10
   sprintMod: 1.5
   jumpHeight: 2
   gravity: 10
   jumpMax: 1
+  rageTimeLength: 0
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
   weapon: 0
+  crouchSpeed: 3
+  crouchYScale: 0.6
+  startYScale: 1
   dashDistance: 8
   dashDuration: 0.2
   dashCooldown: 6
