@@ -1309,38 +1309,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
---- !u!1 &1005449018 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8891338025465336973, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-  m_PrefabInstance: {fileID: 2117167343}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1005449025
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005449018}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!43 &1352597163
 Mesh:
   m_ObjectHideFlags: 0
@@ -2148,26 +2116,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-      propertyPath: crouchSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-      propertyPath: startYScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-      propertyPath: crouchYScale
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-      propertyPath: walkingSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-      propertyPath: maxSlopeAngle
-      value: 40
-      objectReference: {fileID: 0}
     - target: {fileID: 8891338025465336973, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2175,10 +2123,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8891338025465336973, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1005449025}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
