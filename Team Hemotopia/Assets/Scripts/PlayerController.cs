@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
             case Weapon.Axe:
                 {
-                    swingDistance = 1;
+                    swingDistance = 5;
                     swingRate = 0;
                     damage = 30;
                    
@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
         else
         {
-
+            Swing();
         }
             
         
@@ -221,7 +221,32 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Swing()
     {
+        RaycastHit hit;
 
+        swingTimer = 0;
+
+        float rangeX = Random.Range(-bloomMod, bloomMod);
+        float rangeY = Random.Range(-bloomMod, bloomMod);
+
+        if (Physics.Raycast(Camera.main.transform.position,
+                                new Vector3(Camera.main.transform.forward.x + rangeX,
+                                            Camera.main.transform.forward.y + rangeY,
+                                            Camera.main.transform.forward.z),
+                                out hit,
+                                fireDistance,
+                                ~ignoreLayer))
+        {
+            Debug.Log("HIT! | " + hit.collider.name);
+
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+
+            if (dmg != null)
+            {
+                dmg.TakeDamage(damage);
+            }
+        }
+
+        
     }
 
 
