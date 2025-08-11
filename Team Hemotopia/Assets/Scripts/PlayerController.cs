@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour, IDamage
         dashTimer = dashCooldown;
 
         updatePlayerUI();
+        GameManager.instance.updateGameGoal(1);
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Movement();
         sprint();
+        updatePlayerUIDash();
     }
 
     void Movement()
@@ -180,6 +183,7 @@ public class PlayerController : MonoBehaviour, IDamage
             }
 
             time += Time.deltaTime;
+
             transform.position = Vector3.Lerp(start, end, time / dashDuration);     
             yield return null;
         }
@@ -236,8 +240,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if (health <= 0)
         {
-            // Lose
-            Destroy(gameObject);
+            // Lose proc
+            GameManager.instance.updateToLoseScreen();
         }
     }
 
@@ -254,4 +258,10 @@ public class PlayerController : MonoBehaviour, IDamage
 
          GameManager.instance.PlayerDamageScreen.SetActive(false);
     }
+
+    public void updatePlayerUIDash()
+    {
+        GameManager.instance.PlayerDash.fillAmount = dashTimer / (float)dashCooldown;
+    }
 }
+
