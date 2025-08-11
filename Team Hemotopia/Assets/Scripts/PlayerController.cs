@@ -24,8 +24,13 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
-    [Range(0, 1000)] float rageMeter;
+    [SerializeField] float rageTimeLength;
+    float rageMeter;
+    float rageTimer = 0;
+    float rageSpeed;
+    float speedOriginal;
     bool isSprinting;
+    bool isRaging;
 
     [Category("Shooting System")]
     [SerializeField] LayerMask ignoreLayer;
@@ -33,6 +38,8 @@ public class PlayerController : MonoBehaviour, IDamage
     float fireRate;
     float bloomMod;
     int damage;
+    int rageDamage;
+    int damageOriginal;
     float rageMeterIncrement;
     int fireDistance;
     int bullets;
@@ -58,6 +65,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         healthMax = health;
         dashTimer = dashCooldown;
+        speedOriginal = speed;
 
         updatePlayerUI();
         GameManager.instance.updateGameGoal(1);
@@ -72,7 +80,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     damage = 20;
                     bullets = 1;
                     bloomMod = 0.01f;
-                    rageMeterIncrement = 10;
+                    rageMeterIncrement = 1000;
                     break;
                 }
 
@@ -102,6 +110,9 @@ public class PlayerController : MonoBehaviour, IDamage
             default:
                 break;
         }
+
+        rageSpeed = speed * 1.5f;
+        rageDamage = (int)(damage * 1.5f);
     }
 
     void Update()
@@ -141,6 +152,8 @@ public class PlayerController : MonoBehaviour, IDamage
             StartCoroutine(dash());
         }
 
+        Rage();
+
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
         if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
         {
@@ -148,6 +161,39 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
+    void Rage()
+    {
+        if (Input.GetButtonDown("Rage") && !isRaging && rageMeter == 1000)
+        {
+            RageAbilityStart();
+        }
+
+        if (isRaging)
+        {
+            rageTimer += Time.deltaTime;
+            if (rageTimer >= rageTimeLength)
+            {
+                RageAbilityEnd();
+            }
+        }
+    }
+
+    void RageAbilityStart()
+    {
+        isRaging = true;
+        speed = rageSpeed;
+        damage = rageDamage;
+    }
+
+    void RageAbilityEnd()
+    {
+        isRaging = false;
+        rageMeter = 0;
+        rageTimer = 0;
+        speed = speedOriginal;
+        damage = damageOriginal;
+
+    }
 
     void Jump()
     {
@@ -280,6 +326,7 @@ public class PlayerController : MonoBehaviour, IDamage
     public void AddRage(float amount)
     {
         rageMeter += amount;
+        rageMeter = Mathf.Clamp(rageMeter, 0, 1000);
         updatePlayerUIRage();
     }
 }
