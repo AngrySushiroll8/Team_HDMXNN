@@ -15,8 +15,13 @@ TagManager:
   - Enemy
   - Player Bullet
   - Enemy Bullet
-  - Wall
+<<<<<<< Updated upstream
   - 
+  - 
+=======
+  - Wall
+  - Powerup
+>>>>>>> Stashed changes
   - 
   - 
   - 
