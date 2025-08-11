@@ -11,7 +11,9 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Pistol,
         AssaultRifle,
-        Shotgun
+        Shotgun,
+        Axe
+
     }
 
     [Category("Controller")]
@@ -36,6 +38,11 @@ public class PlayerController : MonoBehaviour, IDamage
     int bullets;
     bool isAutomatic = false;
     float fireTimer;
+
+    [Category("Melee System")]
+    float swingDistance;
+    float swingRate;
+    float swingTimer;
 
     [Category("Dash")]
     [SerializeField] float dashDistance;
@@ -94,6 +101,18 @@ public class PlayerController : MonoBehaviour, IDamage
                     break;
                 }
 
+            case Weapon.Axe:
+                {
+                    swingDistance = 1;
+                    swingRate = 0;
+                    damage = 30;
+                   
+                   
+                    break;
+                }
+        
+              
+
             default:
                 break;
         }
@@ -137,10 +156,21 @@ public class PlayerController : MonoBehaviour, IDamage
         }
 
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+        
+        if(DetermineWeaponType() == "Ranged")
         {
-            Shoot();
+            if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+            {
+                Shoot();
+            }
         }
+        else
+        {
+
+        }
+            
+        
+        
     }
 
     
@@ -187,6 +217,11 @@ public class PlayerController : MonoBehaviour, IDamage
             transform.position = Vector3.Lerp(start, end, time / dashDuration);     
             yield return null;
         }
+    }
+
+    void Swing()
+    {
+
     }
 
 
@@ -262,6 +297,18 @@ public class PlayerController : MonoBehaviour, IDamage
     public void updatePlayerUIDash()
     {
         GameManager.instance.PlayerDash.fillAmount = dashTimer / (float)dashCooldown;
+    }
+
+    public string DetermineWeaponType()
+    {
+        if(weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
+        {
+            return "Ranged";
+        }
+        else
+        {
+            return "Melee";
+        }
     }
 }
 
