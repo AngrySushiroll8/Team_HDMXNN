@@ -106,8 +106,8 @@ public class PlayerController : MonoBehaviour, IDamage
                     swingDistance = 5;
                     swingRate = 0;
                     damage = 30;
-                   
-                   
+                    bloomMod = 0.1f;
+
                     break;
                 }
         
@@ -166,7 +166,12 @@ public class PlayerController : MonoBehaviour, IDamage
         }
         else
         {
-            Swing();
+
+            if ((Input.GetButtonDown("Fire1") && swingTimer >= swingRate))
+            {
+                Swing();
+            }
+            
         }
             
         
@@ -233,7 +238,7 @@ public class PlayerController : MonoBehaviour, IDamage
                                             Camera.main.transform.forward.y + rangeY,
                                             Camera.main.transform.forward.z),
                                 out hit,
-                                fireDistance,
+                                swingDistance,
                                 ~ignoreLayer))
         {
             Debug.Log("HIT! | " + hit.collider.name);
