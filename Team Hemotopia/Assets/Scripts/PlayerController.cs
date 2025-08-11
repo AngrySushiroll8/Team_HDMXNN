@@ -14,37 +14,67 @@ public class PlayerController : MonoBehaviour, IDamage
         Shotgun
     }
 
-    [Category("Controller")]
+    [Header("Controller")]
     [SerializeField] CharacterController controller;
 
-    [Category("Player Stats")]
+    [Space(10)]
+    [Header("Player Stats")]
+    [Space(10)]
+
     [SerializeField] int health;
     [SerializeField] float speed;
+    [SerializeField] float walkingSpeed;
     [SerializeField] float sprintMod;
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
+    [SerializeField] float rageTimeLength;
+    float rageMeter;
+    float rageTimer = 0;
+    float rageSpeed;
+    float speedOriginal;
     bool isSprinting;
+    bool isRaging;
 
-    [Category("Shooting System")]
+    [Space(10)]
+    [Header("Shooting System")]
+    [Space(10)]
+
     [SerializeField] LayerMask ignoreLayer;
     [SerializeField] Weapon weapon;
     float fireRate;
     float bloomMod;
     int damage;
+    int rageDamage;
+    int damageOriginal;
+    float rageMeterIncrement;
     int fireDistance;
     int bullets;
     bool isAutomatic = false;
     float fireTimer;
 
-    [Category("Dash")]
+    [Space(10)]
+    [Header("Crounch")]
+    [Space(10)]
+
+    [SerializeField] float crouchSpeed;
+    [SerializeField] float crouchYScale;
+    [SerializeField] float startYScale;
+
+    [Space(10)]
+    [Header("Dash")]
+    [Space(10)]
+
     [SerializeField] float dashDistance;
     [SerializeField] float dashDuration;
     [SerializeField] int dashCooldown;
     float dashTimer;
     [SerializeField] LayerMask dashWallCollision; // Layer Mask so player doesn't dash through walls
 
-    [Category("Player Materials")]
+    [Space(10)]
+    [Header("Player Materials")]
+    [Space(10)]
+
     [SerializeField] Material hurtMaterial;
 
     Vector3 jumpVec;
@@ -56,6 +86,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         healthMax = health;
         dashTimer = dashCooldown;
+        speedOriginal = speed;
 
         updatePlayerUI();
         GameManager.instance.updateGameGoal(1);
@@ -70,6 +101,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     damage = 20;
                     bullets = 1;
                     bloomMod = 0.01f;
+                    rageMeterIncrement = 1000;
                     break;
                 }
 
@@ -81,6 +113,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     damage = 30;
                     bullets = 1;
                     bloomMod = 0.015f;
+                    rageMeterIncrement = 5;
                     break;
                 }
 
@@ -88,15 +121,19 @@ public class PlayerController : MonoBehaviour, IDamage
                 {
                     fireDistance = 20;
                     fireRate = 0;
-                    damage = 50;
+                    damage = 8;
                     bullets = 6;
                     bloomMod = 0.1f;
+                    rageMeterIncrement = 8;
                     break;
                 }
 
             default:
                 break;
         }
+
+        rageSpeed = speed * 1.5f;
+        rageDamage = (int)(damage * 1.5f);
     }
 
     void Update()
@@ -104,6 +141,7 @@ public class PlayerController : MonoBehaviour, IDamage
         Movement();
         sprint();
         updatePlayerUIDash();
+        crouch();
     }
 
     void Movement()
@@ -136,6 +174,8 @@ public class PlayerController : MonoBehaviour, IDamage
             StartCoroutine(dash());
         }
 
+        Rage();
+
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
         if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
         {
@@ -143,13 +183,60 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
-    
+    void Rage()
+    {
+        if (Input.GetButtonDown("Rage") && !isRaging && rageMeter == 1000)
+        {
+            RageAbilityStart();
+        }
+
+        if (isRaging)
+        {
+            rageTimer += Time.deltaTime;
+            if (rageTimer >= rageTimeLength)
+            {
+                RageAbilityEnd();
+            }
+        }
+    }
+
+    void RageAbilityStart()
+    {
+        isRaging = true;
+        speed = rageSpeed;
+        damage = rageDamage;
+    }
+
+    void RageAbilityEnd()
+    {
+        isRaging = false;
+        rageMeter = 0;
+        rageTimer = 0;
+        speed = speedOriginal;
+        damage = damageOriginal;
+
+    }
+
     void Jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             jumpCount++;
             jumpVec.y = jumpHeight;
+        }
+    }
+
+    void crouch()
+    {
+        if (Input.GetButtonDown("Crouch"))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            speed = crouchSpeed;
+        }
+        if (Input.GetButtonUp("Crouch"))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            speed = walkingSpeed;
         }
     }
 
@@ -184,12 +271,10 @@ public class PlayerController : MonoBehaviour, IDamage
 
             time += Time.deltaTime;
 
-            transform.position = Vector3.Lerp(start, end, time / dashDuration);     
+            transform.position = Vector3.Lerp(start, end, time / dashDuration);
             yield return null;
         }
     }
-
-
     void Shoot()
     {
         fireTimer = 0;
@@ -225,6 +310,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
                 if (dmg != null)
                 {
+                    AddRage(rageMeterIncrement);
                     dmg.TakeDamage(damage);
                 }
             }
@@ -250,18 +336,32 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.PlayerHealth.fillAmount = (float)health / healthMax;
     }
 
-    IEnumerator FlashDamage()
-    {
-         GameManager.instance.PlayerDamageScreen.SetActive(true);
-
-         yield return new WaitForSeconds(0.1f);
-
-         GameManager.instance.PlayerDamageScreen.SetActive(false);
-    }
-
     public void updatePlayerUIDash()
     {
         GameManager.instance.PlayerDash.fillAmount = dashTimer / (float)dashCooldown;
+    }
+
+    public void updatePlayerUIRage()
+    {
+        // uncomment this when the rage meter is added to the GameManager.
+        //GameManager.instance.RageMeter.fillAmount = rageMeter;
+    }
+
+    IEnumerator FlashDamage()
+    {
+        GameManager.instance.PlayerDamageScreen.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        GameManager.instance.PlayerDamageScreen.SetActive(false);
+    }
+
+
+    public void AddRage(float amount)
+    {
+        rageMeter += amount;
+        rageMeter = Mathf.Clamp(rageMeter, 0, 1000);
+        updatePlayerUIRage();
     }
 }
 
