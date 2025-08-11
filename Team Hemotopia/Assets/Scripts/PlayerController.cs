@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int jumpHeight;
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
+    [Range(0, 1000)] float rageMeter;
     bool isSprinting;
 
     [Category("Shooting System")]
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour, IDamage
     float fireRate;
     float bloomMod;
     int damage;
+    float rageMeterIncrement;
     int fireDistance;
     int bullets;
     bool isAutomatic = false;
@@ -70,6 +72,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     damage = 20;
                     bullets = 1;
                     bloomMod = 0.01f;
+                    rageMeterIncrement = 10;
                     break;
                 }
 
@@ -81,6 +84,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     damage = 30;
                     bullets = 1;
                     bloomMod = 0.015f;
+                    rageMeterIncrement = 5;
                     break;
                 }
 
@@ -88,9 +92,10 @@ public class PlayerController : MonoBehaviour, IDamage
                 {
                     fireDistance = 20;
                     fireRate = 0;
-                    damage = 50;
+                    damage = 8;
                     bullets = 6;
                     bloomMod = 0.1f;
+                    rageMeterIncrement = 8;
                     break;
                 }
 
@@ -143,7 +148,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
-    
+
     void Jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
@@ -184,7 +189,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
             time += Time.deltaTime;
 
-            transform.position = Vector3.Lerp(start, end, time / dashDuration);     
+            transform.position = Vector3.Lerp(start, end, time / dashDuration);
             yield return null;
         }
     }
@@ -225,6 +230,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
                 if (dmg != null)
                 {
+                    AddRage(rageMeterIncrement);
                     dmg.TakeDamage(damage);
                 }
             }
@@ -250,18 +256,31 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.PlayerHealth.fillAmount = (float)health / healthMax;
     }
 
-    IEnumerator FlashDamage()
-    {
-         GameManager.instance.PlayerDamageScreen.SetActive(true);
-
-         yield return new WaitForSeconds(0.1f);
-
-         GameManager.instance.PlayerDamageScreen.SetActive(false);
-    }
-
     public void updatePlayerUIDash()
     {
         GameManager.instance.PlayerDash.fillAmount = dashTimer / (float)dashCooldown;
+    }
+
+    public void updatePlayerUIRage()
+    {
+        // uncomment this when the rage meter is added to the GameManager.
+        //GameManager.instance.RageMeter.fillAmount = rageMeter;
+    }
+
+    IEnumerator FlashDamage()
+    {
+        GameManager.instance.PlayerDamageScreen.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        GameManager.instance.PlayerDamageScreen.SetActive(false);
+    }
+
+
+    public void AddRage(float amount)
+    {
+        rageMeter += amount;
+        updatePlayerUIRage();
     }
 }
 
