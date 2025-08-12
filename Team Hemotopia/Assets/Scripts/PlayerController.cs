@@ -409,25 +409,31 @@ public class PlayerController : MonoBehaviour, IDamage
             case 1: // pistol
                 {
                     weapon = Weapon.Pistol;
-
+                    HideAllWeapons();
+                    pistolModel.gameObject.SetActive(true);
                     break;
                 }
 
             case 2: // Assault Rifle
                 {
                     weapon = Weapon.AssaultRifle;
+                    HideAllWeapons();
+                    assaultRifleModel.gameObject.SetActive(true);
                     break;
                 }
 
             case 3: // Shotgun
                 {
                     weapon = Weapon.Shotgun;
+                    HideAllWeapons();
+                    shotgunModel.gameObject.SetActive(true);
                     break;
                 }
 
             case 4: //Axe
                 {
                     weapon = Weapon.Axe;
+                    HideAllWeapons();
                     axeModel.gameObject.SetActive(true);
                     break;
                 }
@@ -513,6 +519,14 @@ public class PlayerController : MonoBehaviour, IDamage
             default:
                 break;
         }
+    }
+
+    void HideAllWeapons()
+    {
+        pistolModel.gameObject.SetActive(false);
+        assaultRifleModel.gameObject.SetActive(false);
+        shotgunModel.gameObject.SetActive(false);
+        axeModel.gameObject.SetActive(false);
     }
 
 
