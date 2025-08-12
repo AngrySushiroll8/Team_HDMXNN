@@ -486,7 +486,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     isAutomatic = true;
                     fireDistance = 60;
                     fireRate = 0.25f;
-                    damage = 30;
+                    damage = 10;
                     bullets = 1;
                     bloomMod = 0.015f;
                     rageMeterIncrement = 5;
