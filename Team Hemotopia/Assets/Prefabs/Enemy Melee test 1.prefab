@@ -131,6 +131,9 @@ MonoBehaviour:
   agent: {fileID: 2878564877571143860}
   HP: 50
   faceTargetSpeed: 10
+  FOV: 90
+  roamDistance: 15
+  roamPauseTimer: 3
   weapon: {fileID: 0}
   attackPos: {fileID: 206979622822436845}
   attackRange: 1.5
