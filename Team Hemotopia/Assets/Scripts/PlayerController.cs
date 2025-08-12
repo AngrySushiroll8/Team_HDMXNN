@@ -101,57 +101,7 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.updateGameGoal(1);
 
         // Sets Weapon Values Based On Weapon Type
-        switch (weapon)
-        {
-            case Weapon.Pistol:
-                {
-                    fireDistance = 40;
-                    fireRate = 0;
-                    damage = 20;
-                    bullets = 1;
-                    bloomMod = 0.01f;
-                    rageMeterIncrement = 1000;
-                    break;
-                }
-
-            case Weapon.AssaultRifle:
-                {
-                    isAutomatic = true;
-                    fireDistance = 60;
-                    fireRate = 0.25f;
-                    damage = 30;
-                    bullets = 1;
-                    bloomMod = 0.015f;
-                    rageMeterIncrement = 5;
-                    break;
-                }
-
-            case Weapon.Shotgun:
-                {
-                    fireDistance = 20;
-                    fireRate = 0;
-                    damage = 8;
-                    bullets = 6;
-                    bloomMod = 0.1f;
-                    rageMeterIncrement = 8;
-                    break;
-                }
-
-            case Weapon.Axe:
-                {
-                    swingDistance = 5;
-                    swingRate = 0;
-                    damage = 30;
-                    bloomMod = 0.1f;
-
-                    break;
-                }
-        
-              
-
-            default:
-                break;
-        }
+        SwitchCaseWeapon(weapon);
 
         rageSpeed = speed * 1.5f;
         rageDamage = (int)(damage * 1.5f);
@@ -169,6 +119,7 @@ public class PlayerController : MonoBehaviour, IDamage
     void Movement()
     {
         GetNumpadInput();
+        SwitchCaseWeapon(weapon);
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
 
@@ -502,6 +453,61 @@ public class PlayerController : MonoBehaviour, IDamage
         else if (Input.GetButtonDown("Weapon4"))
         {
             SwitchWeapon(4);
+        }
+    }
+
+    void SwitchCaseWeapon(Weapon weapon)
+    {
+        switch (weapon)
+        {
+            case Weapon.Pistol:
+                {
+                    fireDistance = 40;
+                    fireRate = 0;
+                    damage = 20;
+                    bullets = 1;
+                    bloomMod = 0.01f;
+                    rageMeterIncrement = 1000;
+                    break;
+                }
+
+            case Weapon.AssaultRifle:
+                {
+                    isAutomatic = true;
+                    fireDistance = 60;
+                    fireRate = 0.25f;
+                    damage = 30;
+                    bullets = 1;
+                    bloomMod = 0.015f;
+                    rageMeterIncrement = 5;
+                    break;
+                }
+
+            case Weapon.Shotgun:
+                {
+                    fireDistance = 20;
+                    fireRate = 0;
+                    damage = 8;
+                    bullets = 6;
+                    bloomMod = 0.1f;
+                    rageMeterIncrement = 8;
+                    break;
+                }
+
+            case Weapon.Axe:
+                {
+                    swingDistance = 5;
+                    swingRate = 0;
+                    damage = 30;
+                    bloomMod = 0.1f;
+
+                    break;
+                }
+
+
+
+            default:
+                break;
         }
     }
 
