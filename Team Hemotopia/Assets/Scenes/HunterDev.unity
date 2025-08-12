@@ -535,6 +535,10 @@ PrefabInstance:
       propertyPath: sensitvity
       value: 600
       objectReference: {fileID: 0}
+    - target: {fileID: 8576956961291998452, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 41c395a8ae1a8524a8b0bba501f932a6, type: 2}
     - target: {fileID: 8891338025465336973, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: m_Name
       value: Player
