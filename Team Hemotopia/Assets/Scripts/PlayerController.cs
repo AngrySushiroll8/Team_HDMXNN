@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour, IDamage
         damageOriginal = damage;
 
         updatePlayerUI();
-        GameManager.instance.updateGameGoal(1);
+        
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -345,7 +345,7 @@ public class PlayerController : MonoBehaviour, IDamage
     public void updatePlayerUIRage()
     {
         // uncomment this when the rage meter is added to the GameManager.
-        //GameManager.instance.RageMeter.fillAmount = rageMeter;
+        GameManager.instance.RageMeter.fillAmount = rageMeter;
     }
 
     IEnumerator FlashDamage()
