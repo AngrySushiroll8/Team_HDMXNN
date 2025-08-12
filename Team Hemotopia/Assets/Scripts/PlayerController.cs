@@ -16,7 +16,9 @@ public class PlayerController : MonoBehaviour, IDamage
 
     }
 
-    [Category("Controller")]
+    [SerializeField] GameObject axeModel;
+
+    [Header("Controller")]
     [SerializeField] CharacterController controller;
 
     [Category("Player Stats")]
@@ -339,6 +341,43 @@ public class PlayerController : MonoBehaviour, IDamage
         {
             return "Melee";
         }
+    }
+
+    void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot
+    {
+        switch (weaponID)
+        {
+            case 1: // pistol
+                {
+                    weapon = Weapon.Pistol;
+                    break;
+                }
+
+            case 2: // Assault Rifle
+                {
+                    weapon = Weapon.AssaultRifle;
+                    break;
+                }
+
+            case 3: // Shotgun
+                {
+                    weapon = Weapon.Shotgun;
+                    break;
+                }
+
+            case 4: //Axe
+                {
+                    weapon = Weapon.Axe;
+                    axeModel.gameObject.SetActive(true);
+                    break;
+                }
+
+
+
+            default:
+                break;
+        }
+
     }
 }
 
