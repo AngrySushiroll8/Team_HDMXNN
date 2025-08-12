@@ -48,8 +48,16 @@ public class EnemyRangedAI : EnemyAI_Base
                 playerDir = player.position - transform.position;
                 FaceTarget();
 
-                if(shootTimer >= shootRate)
+                if(shootTimer >= shootCooldown)
+                {
+                    shootTimer = 0f;
+                    shoot();
+                }
             }
+        }
+        else
+        {
+            CheckRoam();
         }
 
         

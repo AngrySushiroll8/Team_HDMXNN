@@ -268,8 +268,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 145585257626084619}
   agent: {fileID: 2896526524155027639}
-  HP: 50
+  HP: 25
   faceTargetSpeed: 10
+  FOV: 90
+  roamDistance: 15
+  roamPauseTimer: 3
   weapon: {fileID: 0}
   attackPos: {fileID: 7949479292987463009}
   attackRange: 1.5
@@ -306,7 +309,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 8
   m_Acceleration: 32
   avoidancePriority: 50
   m_AngularSpeed: 600
