@@ -35,7 +35,7 @@ public class PowerupController : MonoBehaviour
         {
             case PowerupType.Health:
                 {
-                    GameManager.instance.player.GetComponent<PlayerController>().TakeDamage(-healAmount);  // heal amount is added to player's health
+                    GameManager.instance.player.GetComponent<PlayerController>().HealPlayer(healAmount);
 
 
                     break;
@@ -49,7 +49,6 @@ public class PowerupController : MonoBehaviour
                 }
         }
 
-        Destroy(gameObject);  
-        //Destroy(GetComponent<Collider>()); 
+        Destroy(gameObject);
     }
 }
