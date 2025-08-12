@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
     [SerializeField] float rageTimeLength;
+    [Range(0.0f, 1.0f)][SerializeField] float rageDamageReduction;
     float rageMeter;
     float rageTimer = 0;
     float rageSpeed;
@@ -320,7 +321,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
+        health -= isRaging ? (int)(rageDamageReduction * amount) : amount;
 
         updatePlayerUI();
         StartCoroutine(FlashDamage());
