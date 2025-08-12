@@ -144,8 +144,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
                     break;
                 }
-        
-              
+
+
 
             default:
                 break;
@@ -196,8 +196,8 @@ public class PlayerController : MonoBehaviour, IDamage
         Rage();
 
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        
-        if(DetermineWeaponType() == "Ranged")
+
+        if (DetermineWeaponType() == "Ranged")
         {
             if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
             {
@@ -211,11 +211,11 @@ public class PlayerController : MonoBehaviour, IDamage
             {
                 Swing();
             }
-            
+
         }
-            
-        
-        
+
+
+
     }
 
     void Rage()
@@ -338,7 +338,7 @@ public class PlayerController : MonoBehaviour, IDamage
             }
         }
 
-        
+
     }
 
 
@@ -433,7 +433,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public string DetermineWeaponType()
     {
-        if(weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
+        if (weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
         {
             return "Ranged";
         }
