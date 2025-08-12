@@ -10,6 +10,9 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected int HP;
     [SerializeField] protected int faceTargetSpeed;
+    [SerializeField] protected int FOV;
+    [SerializeField] protected float roamDistance;
+    [SerializeField] protected float roamPauseTimer;
 
     protected Transform player;
 
@@ -19,22 +22,93 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
 
     protected Vector3 playerDir;
 
+    protected float angleToPlayer;
+
+    protected float roamTimer;
+
+    protected float stoppingDistOrig;
+
+    protected Vector3 startingPos;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Start()
+    protected virtual void Start()
     {
         player = GameManager.instance.player.transform;
         colorOrig = model.material.color;
 
-
+        startingPos = transform.position;
+        stoppingDistOrig = agent != null ? agent.stoppingDistance : 0f;
 
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
+        if(agent != null && agent.remainingDistance < 0.01f)
+        {
+            roamTimer += Time.deltaTime;
+        }
 
     }
+
+    protected bool CanSeePlayer()
+    {
+        if (player == null) return false;
+
+        playerDir = player.position - transform.position;
+        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+        if(angleToPlayer > FOV)
+        {
+            ResetStoppingDistanceToZero();
+            return false;
+        } 
+
+        if(Physics.Raycast(transform.position, playerDir.normalized, out RaycastHit hit))
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                if (agent) agent.stoppingDistance = stoppingDistOrig;
+                return true;
+            }
+        }
+        ResetStoppingDistanceToZero();
+        return false;
+    }
+
+    public void CheckRoam()
+    {
+        if (agent == null) return;
+
+        if(roamTimer >= roamPauseTimer && agent.remainingDistance < 0.01f)
+        {
+            Roam();
+        }
+        
+
+    }
+
+    public void Roam()
+    {
+        if (agent == null) return;
+
+        roamTimer = 0f;
+        agent.stoppingDistance = 0f;
+
+        Vector3 ranPos = Random.insideUnitSphere * roamDistance + startingPos;
+        if(NavMesh.SamplePosition(ranPos, out NavMeshHit hit, roamDistance, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+
+    }
+
+    void ResetStoppingDistanceToZero()
+    {
+        if (agent) agent.stoppingDistance = 0f;
+    }
+    
 
     public void FaceTarget()
     {
@@ -76,6 +150,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
+            ResetStoppingDistanceToZero();
         }
 
     }

@@ -12,31 +12,48 @@ public class EnemyRangedAI : EnemyAI_Base
     float shootTimer;
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if (!playerInTrigger) return;
+        base.Update();
 
         shootTimer += Time.deltaTime;
-        
-        playerDir = player.position - transform.position;
-        float distance = Vector3.Distance(transform.position, player.position);
 
-        if (distance > shootRange)
+        if (!playerInTrigger)
         {
-            agent.SetDestination(player.position);
-            
+            CheckRoam();
+            return;
+
         }
-        else
+
+        if (CanSeePlayer())
         {
-            agent.SetDestination(transform.position);
-            FaceTarget();
-            
-            if (shootTimer >= shootCooldown)
+            float d = Vector3.Distance(transform.position, player.position);
+
+            if(d > shootRange)
             {
-                shootTimer = 0;
-                shoot();
+                if (agent)
+                {
+                    agent.isStopped = false;
+                    agent.SetDestination(player.position);
+                }
+            }
+            else
+            {
+                if (agent)
+                {
+                    agent.isStopped = true;
+                    agent.ResetPath();
+                }
+
+                playerDir = player.position - transform.position;
+                FaceTarget();
+
+                if(shootTimer >= shootRate)
             }
         }
+
+        
+       
 
     }
 
