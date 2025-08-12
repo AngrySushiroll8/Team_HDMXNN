@@ -159,6 +159,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Update()
     {
+        
         Movement();
         sprint();
         updatePlayerUIDash();
@@ -167,6 +168,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Movement()
     {
+        GetNumpadInput();
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
 
@@ -446,7 +448,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     }
 
-    void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot
+    void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
     {
         switch (weaponID)
         {
@@ -482,5 +484,27 @@ public class PlayerController : MonoBehaviour, IDamage
         }
 
     }
+
+    void GetNumpadInput()
+    {
+        if(Input.GetButtonDown("Weapon1"))
+        {
+            SwitchWeapon(1);
+        }
+        else if (Input.GetButtonDown("Weapon2"))
+        {
+            SwitchWeapon(2);
+        }
+        else if (Input.GetButtonDown("Weapon3"))
+        {
+            SwitchWeapon(3);
+        }
+        else if (Input.GetButtonDown("Weapon4"))
+        {
+            SwitchWeapon(4);
+        }
+    }
+
+
 }
 
