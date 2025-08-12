@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour, IDamage
         damageOriginal = damage;
 
         updatePlayerUI();
-        
+
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -189,12 +189,19 @@ public class PlayerController : MonoBehaviour, IDamage
         if (Input.GetButtonDown("Rage") && !isRaging && rageMeter == 1000)
         {
             RageAbilityStart();
+            rageTimer = rageTimeLength;
+        }
+        else
+        {
+            updatePlayerUIRageIncrement();
         }
 
         if (isRaging)
         {
-            rageTimer += Time.deltaTime;
-            if (rageTimer >= rageTimeLength)
+            rageTimer -= Time.deltaTime;
+            updatePlayerUIRage();
+
+            if (rageTimer <= 0)
             {
                 RageAbilityEnd();
             }
@@ -215,7 +222,6 @@ public class PlayerController : MonoBehaviour, IDamage
         rageTimer = 0;
         speed = speedOriginal;
         damage = damageOriginal;
-
     }
 
     void Jump()
@@ -345,7 +351,11 @@ public class PlayerController : MonoBehaviour, IDamage
     public void updatePlayerUIRage()
     {
         // uncomment this when the rage meter is added to the GameManager.
-        GameManager.instance.RageMeter.fillAmount = rageMeter;
+        GameManager.instance.RageMeter.fillAmount = rageTimer / rageTimeLength;
+    }
+    public void updatePlayerUIRageIncrement()
+    {
+        GameManager.instance.RageMeter.fillAmount = rageMeter / 1000;
     }
 
     IEnumerator FlashDamage()
