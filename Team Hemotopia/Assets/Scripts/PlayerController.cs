@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour, IDamage
     }
 
     [SerializeField] GameObject axeModel;
+    [SerializeField] GameObject pistolModel;
+    [SerializeField] GameObject assaultRifleModel;
+    [SerializeField] GameObject shotgunModel;
 
     [Header("Controller")]
     [SerializeField] CharacterController controller;
@@ -406,6 +409,7 @@ public class PlayerController : MonoBehaviour, IDamage
             case 1: // pistol
                 {
                     weapon = Weapon.Pistol;
+
                     break;
                 }
 
