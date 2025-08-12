@@ -364,5 +364,41 @@ public class PlayerController : MonoBehaviour, IDamage
         rageMeter = Mathf.Clamp(rageMeter, 0, 1000);
         updatePlayerUIRage();
     }
+
+    public string DetermineWeaponType()
+    {
+        if(weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
+        {
+            return "Ranged";
+        }
+        else
+        {
+            return "Melee";
+        }
+
+    }
+
+    public void HealPlayer(int amount)
+    {
+        health += amount;
+
+        updatePlayerUI();
+        StartCoroutine(FlashHeal());
+
+        if (health >= healthMax)
+        {
+            health = healthMax; // does not allow for healing above max health
+
+        }
+    }
+
+    IEnumerator FlashHeal()
+    {
+        GameManager.instance.PlayerHealScreen.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        GameManager.instance.PlayerHealScreen.SetActive(false);
+    }
 }
 
