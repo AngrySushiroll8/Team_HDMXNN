@@ -501,7 +501,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
     }
 
-    void HideAllWeapons()
+    void HideAllWeapons() // sets visibility of all weapons to false
     {
         pistolModel.gameObject.SetActive(false);
         assaultRifleModel.gameObject.SetActive(false);
