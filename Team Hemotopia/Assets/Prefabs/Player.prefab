@@ -347,8 +347,7 @@ MonoBehaviour:
   jumpHeight: 10
   gravity: 25
   jumpMax: 1
-  rageTimeLength: 0
-  rageDamageReduction: 0
+  rageTimeLength: 8
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
