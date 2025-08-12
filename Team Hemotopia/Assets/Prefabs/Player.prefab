@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caad8ce07181a1441b0b6de2711f11ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitvity: 100
+  sensitvity: 600
   lockVertMin: -90
   lockVertMax: 90
   invertY: 0
@@ -208,8 +208,8 @@ MonoBehaviour:
   speed: 10
   walkingSpeed: 10
   sprintMod: 1.5
-  jumpHeight: 2
-  gravity: 10
+  jumpHeight: 10
+  gravity: 25
   jumpMax: 1
   rageTimeLength: 0
   ignoreLayer:
@@ -296,7 +296,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
