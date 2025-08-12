@@ -509,45 +509,6 @@ public class PlayerController : MonoBehaviour, IDamage
         axeModel.gameObject.SetActive(false);
     }
 
-    //void ShowPistol(bool show)
-    //{
-    //    if(show == true)
-    //    {
-    //        pistolModel.gameObject.SetActive(true);
-            
-    //    }
-    //    else
-    //    {
-    //        pistolModel.gameObject.SetActive(false);
-    //    }
-    //}
-
-    //void ShowRifle(bool show)
-    //{
-    //    if (show == true)
-    //    {
-    //        assaultRifleModel.gameObject.SetActive(true);
-
-    //    }
-    //    else
-    //    {
-    //        assaultRifleModel.gameObject.SetActive(false);
-    //    }
-    //}
-
-    //void ShowShotgun(bool show)
-    //{
-    //    if (show == true)
-    //    {
-    //        shotgunModel.gameObject.SetActive(true);
-
-    //    }
-    //    else
-    //    {
-    //        //shotgunModel.
-    //       // shotgunModel.gameObject.SetActive(false);
-    //    }
-    //}
 
 }
 
