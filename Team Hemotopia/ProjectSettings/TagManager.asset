@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - canManipulate
+  - RotatingWall
   layers:
   - Default
   - TransparentFX
