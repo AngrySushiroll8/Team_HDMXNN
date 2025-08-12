@@ -411,7 +411,7 @@ public class PlayerController : MonoBehaviour, IDamage
     public void updatePlayerUIRage()
     {
         // uncomment this when the rage meter is added to the GameManager.
-        //GameManager.instance.RageMeter.fillAmount = rageMeter;
+        //GameManager.instance.RageMeter.fillAmount = rageMeter / 1000;
     }
 
     IEnumerator FlashDamage()
