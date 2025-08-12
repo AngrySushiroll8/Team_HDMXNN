@@ -12,27 +12,52 @@ public class EnemyMeleeAI : EnemyAI_Base
     float attackTimer;
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if (!playerInTrigger) return;
-
+        base.Update();
         attackTimer += Time.deltaTime;
-        playerDir = player.position - transform.position;
-        agent.SetDestination(player.position);
 
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        if(distance <= attackRange)
+        if (!playerInTrigger)
         {
-            agent.SetDestination(transform.position);
-            FaceTarget();
-
-            if(attackTimer >= attackCooldown)
-            {
-                attackTimer = 0;
-                DoMeleeAttack();
-            }
+            CheckRoam();
+            return;
         }
+
+        if (CanSeePlayer())
+        {
+            float distance = Vector3.Distance(transform.position, player.position);
+
+            if(distance > attackRange)
+            {
+                if (agent)
+                {
+                    agent.isStopped = false;
+                    agent.SetDestination(player.position);
+                }
+            }
+            else
+            {
+                if (agent)
+                {
+                    agent.isStopped = true;
+                    agent.ResetPath();
+                }
+                playerDir = player.position - transform.position;
+                FaceTarget();
+
+                if(attackTimer >= attackCooldown)
+                {
+                    attackTimer = 0f;
+                    DoMeleeAttack();
+                }
+            }
+
+        }
+        else
+        {
+            CheckRoam();
+        }
+  
         
     }
 

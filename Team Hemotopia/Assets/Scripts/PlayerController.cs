@@ -11,9 +11,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Pistol,
         AssaultRifle,
-        Shotgun,
-        Axe
-
+        Shotgun
     }
 
     [Header("Controller")]
@@ -31,7 +29,6 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
     [SerializeField] float rageTimeLength;
-    [Range(0.0f, 1.0f)][SerializeField] float rageDamageReduction;
     float rageMeter;
     float rageTimer = 0;
     float rageSpeed;
@@ -64,13 +61,10 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
 
-    [Category("Melee System")]
-    float swingDistance;
-    float swingRate;
-    float swingTimer;
+    [Space(10)]
+    [Header("Dash")]
+    [Space(10)]
 
-
-    [Category("Dash")]
     [SerializeField] float dashDistance;
     [SerializeField] float dashDuration;
     [SerializeField] int dashCooldown;
@@ -96,7 +90,7 @@ public class PlayerController : MonoBehaviour, IDamage
         damageOriginal = damage;
 
         updatePlayerUI();
-        GameManager.instance.updateGameGoal(1);
+
 
         // Sets Weapon Values Based On Weapon Type
         switch (weapon)
@@ -134,18 +128,6 @@ public class PlayerController : MonoBehaviour, IDamage
                     rageMeterIncrement = 8;
                     break;
                 }
-
-            case Weapon.Axe:
-                {
-                    swingDistance = 5;
-                    swingRate = 0;
-                    damage = 30;
-                    bloomMod = 0.1f;
-
-                    break;
-                }
-        
-              
 
             default:
                 break;
@@ -196,26 +178,10 @@ public class PlayerController : MonoBehaviour, IDamage
         Rage();
 
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        
-        if(DetermineWeaponType() == "Ranged")
+        if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
         {
-            if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
-            {
-                Shoot();
-            }
+            Shoot();
         }
-        else
-        {
-
-            if ((Input.GetButtonDown("Fire1") && swingTimer >= swingRate))
-            {
-                Swing();
-            }
-            
-        }
-            
-        
-        
     }
 
     void Rage()
@@ -223,12 +189,19 @@ public class PlayerController : MonoBehaviour, IDamage
         if (Input.GetButtonDown("Rage") && !isRaging && rageMeter == 1000)
         {
             RageAbilityStart();
+            rageTimer = rageTimeLength;
+        }
+        else
+        {
+            updatePlayerUIRageIncrement();
         }
 
         if (isRaging)
         {
-            rageTimer += Time.deltaTime;
-            if (rageTimer >= rageTimeLength)
+            rageTimer -= Time.deltaTime;
+            updatePlayerUIRage();
+
+            if (rageTimer <= 0)
             {
                 RageAbilityEnd();
             }
@@ -249,7 +222,6 @@ public class PlayerController : MonoBehaviour, IDamage
         rageTimer = 0;
         speed = speedOriginal;
         damage = damageOriginal;
-
     }
 
     void Jump()
@@ -310,38 +282,6 @@ public class PlayerController : MonoBehaviour, IDamage
             yield return null;
         }
     }
-
-    void Swing()
-    {
-        RaycastHit hit;
-
-        swingTimer = 0;
-
-        float rangeX = Random.Range(-bloomMod, bloomMod);
-        float rangeY = Random.Range(-bloomMod, bloomMod);
-
-        if (Physics.Raycast(Camera.main.transform.position,
-                                new Vector3(Camera.main.transform.forward.x + rangeX,
-                                            Camera.main.transform.forward.y + rangeY,
-                                            Camera.main.transform.forward.z),
-                                out hit,
-                                swingDistance,
-                                ~ignoreLayer))
-        {
-            Debug.Log("HIT! | " + hit.collider.name);
-
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-
-            if (dmg != null)
-            {
-                dmg.TakeDamage(damage);
-            }
-        }
-
-        
-    }
-
-
     void Shoot()
     {
         fireTimer = 0;
@@ -386,7 +326,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public void TakeDamage(int amount)
     {
-        health -= isRaging ? (int)(rageDamageReduction * amount) : amount;
+        health -= amount;
 
         updatePlayerUI();
         StartCoroutine(FlashDamage());
@@ -411,7 +351,11 @@ public class PlayerController : MonoBehaviour, IDamage
     public void updatePlayerUIRage()
     {
         // uncomment this when the rage meter is added to the GameManager.
-        //GameManager.instance.RageMeter.fillAmount = rageMeter / 1000;
+        GameManager.instance.RageMeter.fillAmount = rageTimer / rageTimeLength;
+    }
+    public void updatePlayerUIRageIncrement()
+    {
+        GameManager.instance.RageMeter.fillAmount = rageMeter / 1000;
     }
 
     IEnumerator FlashDamage()
@@ -443,5 +387,29 @@ public class PlayerController : MonoBehaviour, IDamage
         }
 
     }
+
+    public void HealPlayer(int amount)
+    {
+        health += amount;
+
+        updatePlayerUI();
+        StartCoroutine(FlashHeal());
+
+        if (health >= healthMax)
+        {
+            health = healthMax; // does not allow for healing above max health
+
+        }
+    }
+
+    IEnumerator FlashHeal()
+    {
+        GameManager.instance.PlayerHealScreen.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        GameManager.instance.PlayerHealScreen.SetActive(false);
+    }
+
 }
 

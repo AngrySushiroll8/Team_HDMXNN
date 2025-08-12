@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,11 +14,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuLose;
     [SerializeField] MenuState menu;
 
+    [SerializeField] TMP_Text gameGoalCountText;
+
     public bool isPaused;
 
+    public Image RageMeter;
     public Image PlayerDash;
     public Image PlayerHealth;
     public GameObject PlayerDamageScreen;
+    public GameObject PlayerHealScreen;
 
     public GameObject player;
     public PlayerController playerScript;
@@ -84,6 +89,8 @@ public class GameManager : MonoBehaviour
     public void updateGameGoal(int value)
     {
         gameGoalCount += value;
+
+        gameGoalCountText.text = gameGoalCount.ToString("F0");
 
         // Win screen
         if(gameGoalCount <= 0)
