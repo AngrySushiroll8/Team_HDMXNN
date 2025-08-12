@@ -37,6 +37,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         player = GameManager.instance.player.transform;
         colorOrig = model.material.color;
 
+        GameManager.instance.updateGameGoal(1);
         startingPos = transform.position;
         stoppingDistOrig = agent != null ? agent.stoppingDistance : 0f;
 
@@ -126,6 +127,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
+            GameManager.instance.updateGameGoal(-1);
             Destroy(gameObject);
         }
     }

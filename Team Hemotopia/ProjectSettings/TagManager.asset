@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Enemy
+  - canManipulate
   layers:
   - Default
   - TransparentFX
@@ -17,7 +17,7 @@ TagManager:
   - Enemy Bullet
   - Wall
   - Powerup
-  - 
+  - Manipulate
   - 
   - 
   - 
