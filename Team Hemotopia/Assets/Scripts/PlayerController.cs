@@ -299,6 +299,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
             if (dmg != null)
             {
+                AddRage(rageMeterIncrement);
                 dmg.TakeDamage(damage);
             }
         }
@@ -543,11 +544,9 @@ public class PlayerController : MonoBehaviour, IDamage
                     swingRate = 0;
                     damage = 30;
                     bloomMod = 0.1f;
-
+                    rageMeterIncrement = 10;
                     break;
                 }
-
-
 
             default:
                 break;
