@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour, IDamage
         dashTimer = dashCooldown;
         dashTimer = dashCooldown;
         speedOriginal = speed;
-        damageOriginal = damage;
+        
 
         updatePlayerUI();
 
@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour, IDamage
                 break;
         }
 
+        damageOriginal = damage;
         rageSpeed = speed * 1.5f;
         rageDamage = (int)(damage * 1.5f);
     }
