@@ -2,6 +2,7 @@ using System.Collections;
 using System.ComponentModel;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+//using UnityEditor.ProBuilder;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage
@@ -467,6 +468,14 @@ public class PlayerController : MonoBehaviour, IDamage
                     weapon = Weapon.Pistol;
                     HideAllWeapons();
                     pistolModel.gameObject.SetActive(true);
+
+                    //GameManager.instance.PistolIcon.SetActive(true);
+                    GameManager.instance.ActiveReticle.SetActive(false);
+                    GameManager.instance.ActiveReticle = null;
+                   
+                    GameManager.instance.ActiveReticle = GameManager.instance.PistolReticle;
+                    GameManager.instance.ActiveReticle.SetActive(true);
+
                     break;
                 }
 
@@ -475,6 +484,13 @@ public class PlayerController : MonoBehaviour, IDamage
                     weapon = Weapon.AssaultRifle;
                     HideAllWeapons();
                     assaultRifleModel.gameObject.SetActive(true);
+                    //GameManager.instance.ARIcon.SetActive(true);
+                    GameManager.instance.ActiveReticle.SetActive(false);
+                    GameManager.instance.ActiveReticle = null;
+                    
+                    GameManager.instance.ActiveReticle = GameManager.instance.ARReticle;
+                    GameManager.instance.ActiveReticle.SetActive(true);
+
                     break;
                 }
 
@@ -483,6 +499,13 @@ public class PlayerController : MonoBehaviour, IDamage
                     weapon = Weapon.Shotgun;
                     HideAllWeapons();
                     shotgunModel.gameObject.SetActive(true);
+                    //GameManager.instance.ShotgunIcon.SetActive(true);
+                    GameManager.instance.ActiveReticle.SetActive(false);
+                    GameManager.instance.ActiveReticle = null;
+                   
+                    GameManager.instance.ActiveReticle = GameManager.instance.ShotgunReticle;
+                    GameManager.instance.ActiveReticle.SetActive(true);
+
                     break;
                 }
 
@@ -491,10 +514,15 @@ public class PlayerController : MonoBehaviour, IDamage
                     weapon = Weapon.Axe;
                     HideAllWeapons();
                     axeModel.gameObject.SetActive(true);
+                    //GameManager.instance.AxeIcon.SetActive(true);
+                    GameManager.instance.ActiveReticle.SetActive(false);
+                    GameManager.instance.ActiveReticle = null;
+
+                    GameManager.instance.ActiveReticle = GameManager.instance.AxeReticle;
+                    GameManager.instance.ActiveReticle.SetActive(true);
+
                     break;
                 }
-
-
 
             default:
                 break;
