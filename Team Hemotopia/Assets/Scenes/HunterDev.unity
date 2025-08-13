@@ -294,7 +294,7 @@ PrefabInstance:
       objectReference: {fileID: 922922074}
     - target: {fileID: 3797580176351545747, guid: bc6e2a620c6fce642869d41355ef2203, type: 3}
       propertyPath: m_VersionIndex
-      value: 3838
+      value: 3841
       objectReference: {fileID: 0}
     - target: {fileID: 4335679158265559294, guid: bc6e2a620c6fce642869d41355ef2203, type: 3}
       propertyPath: m_Name
@@ -494,7 +494,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3677999173075853174, guid: 5ff31fc4b6d77e34fab95b04c79d7759, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -793,11 +793,15 @@ PrefabInstance:
       objectReference: {fileID: 642578609}
     - target: {fileID: 3797580176351545747, guid: bc6e2a620c6fce642869d41355ef2203, type: 3}
       propertyPath: m_VersionIndex
-      value: 3838
+      value: 3841
       objectReference: {fileID: 0}
     - target: {fileID: 4335679158265559294, guid: bc6e2a620c6fce642869d41355ef2203, type: 3}
       propertyPath: m_Name
       value: RotatingWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335679158265559294, guid: bc6e2a620c6fce642869d41355ef2203, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -856,6 +860,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2537194250853230366, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2586898108793330339, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: m_SkinWidth
       value: 0.16
@@ -863,6 +871,10 @@ PrefabInstance:
     - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: gravity
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+      propertyPath: rageMax
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: jumpHeight
