@@ -11,8 +11,16 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Pistol,
         AssaultRifle,
-        Shotgun
+        Shotgun,
+        Axe
+
     }
+
+
+    [SerializeField] GameObject axeModel;
+    [SerializeField] GameObject pistolModel;
+    [SerializeField] GameObject assaultRifleModel;
+    [SerializeField] GameObject shotgunModel;
 
     [Header("Controller")]
     [SerializeField] CharacterController controller;
@@ -61,6 +69,12 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
 
+    [Category("Melee System")]
+    float swingDistance;
+    float swingRate;
+    float swingTimer;
+
+
     [Space(10)]
     [Header("Dash")]
     [Space(10)]
@@ -93,45 +107,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
 
         // Sets Weapon Values Based On Weapon Type
-        switch (weapon)
-        {
-            case Weapon.Pistol:
-                {
-                    fireDistance = 40;
-                    fireRate = 0;
-                    damage = 20;
-                    bullets = 1;
-                    bloomMod = 0.01f;
-                    rageMeterIncrement = 1000;
-                    break;
-                }
-
-            case Weapon.AssaultRifle:
-                {
-                    isAutomatic = true;
-                    fireDistance = 60;
-                    fireRate = 0.25f;
-                    damage = 30;
-                    bullets = 1;
-                    bloomMod = 0.015f;
-                    rageMeterIncrement = 5;
-                    break;
-                }
-
-            case Weapon.Shotgun:
-                {
-                    fireDistance = 20;
-                    fireRate = 0;
-                    damage = 8;
-                    bullets = 6;
-                    bloomMod = 0.1f;
-                    rageMeterIncrement = 8;
-                    break;
-                }
-
-            default:
-                break;
-        }
+        SwitchCaseWeapon(weapon);
 
         damageOriginal = damage;
         rageSpeed = speed * 1.5f;
@@ -140,6 +116,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Update()
     {
+        
         Movement();
         sprint();
         updatePlayerUIDash();
@@ -148,6 +125,8 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Movement()
     {
+        GetNumpadInput();
+        SwitchCaseWeapon(weapon);
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
 
@@ -179,10 +158,23 @@ public class PlayerController : MonoBehaviour, IDamage
         Rage();
 
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+        if (DetermineWeaponType() == "Ranged")
         {
-            Shoot();
+            if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+            {
+                Shoot();
+            }
         }
+        else
+        {
+
+            if ((Input.GetButtonDown("Fire1") && swingTimer >= swingRate))
+            {
+                Swing();
+            }
+
+        }
+
     }
 
     void Rage()
@@ -283,6 +275,38 @@ public class PlayerController : MonoBehaviour, IDamage
             yield return null;
         }
     }
+
+    void Swing()
+    {
+        RaycastHit hit;
+
+        swingTimer = 0;
+
+        float rangeX = Random.Range(-bloomMod, bloomMod);
+        float rangeY = Random.Range(-bloomMod, bloomMod);
+
+        if (Physics.Raycast(Camera.main.transform.position,
+                                new Vector3(Camera.main.transform.forward.x + rangeX,
+                                            Camera.main.transform.forward.y + rangeY,
+                                            Camera.main.transform.forward.z),
+                                out hit,
+                                swingDistance,
+                                ~ignoreLayer))
+        {
+            Debug.Log("HIT! | " + hit.collider.name);
+
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+
+            if (dmg != null)
+            {
+                AddRage(rageMeterIncrement);
+                dmg.TakeDamage(damage);
+            }
+        }
+
+
+    }
+
     void Shoot()
     {
         fireTimer = 0;
@@ -378,7 +402,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public string DetermineWeaponType()
     {
-        if(weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
+        if (weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
         {
             return "Ranged";
         }
@@ -396,7 +420,7 @@ public class PlayerController : MonoBehaviour, IDamage
         updatePlayerUI();
         StartCoroutine(FlashHeal());
 
-        if (health >= healthMax)
+        if (health > healthMax)
         {
             health = healthMax; // does not allow for healing above max health
 
@@ -411,6 +435,154 @@ public class PlayerController : MonoBehaviour, IDamage
 
         GameManager.instance.PlayerHealScreen.SetActive(false);
     }
+
+    IEnumerator DoubleJumpEnum()
+    {
+        jumpMax = 2;
+        yield return new WaitForSeconds(10);
+        jumpMax = 1;
+    }
+    public void DoubleJump()
+    {
+        StartCoroutine(DoubleJumpEnum());
+    }
+
+    IEnumerator SpeedBoostEnum(float speedBoostMulti)
+    {
+        speed *= speedBoostMulti;
+        yield return new WaitForSeconds(5);
+        speed = speedOriginal;
+    }
+
+    public void SpeedBoost(float speedBoostMulti)
+    {
+        StartCoroutine(SpeedBoostEnum(speedBoostMulti));
+    }
+    void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
+    {
+        switch (weaponID)
+        {
+            case 1: // pistol
+                {
+                    weapon = Weapon.Pistol;
+                    HideAllWeapons();
+                    pistolModel.gameObject.SetActive(true);
+                    break;
+                }
+
+            case 2: // Assault Rifle
+                {
+                    weapon = Weapon.AssaultRifle;
+                    HideAllWeapons();
+                    assaultRifleModel.gameObject.SetActive(true);
+                    break;
+                }
+
+            case 3: // Shotgun
+                {
+                    weapon = Weapon.Shotgun;
+                    HideAllWeapons();
+                    shotgunModel.gameObject.SetActive(true);
+                    break;
+                }
+
+            case 4: //Axe
+                {
+                    weapon = Weapon.Axe;
+                    HideAllWeapons();
+                    axeModel.gameObject.SetActive(true);
+                    break;
+                }
+
+
+
+            default:
+                break;
+        }
+
+    }
+
+    void GetNumpadInput()
+    {
+        if(Input.GetButtonDown("Weapon1"))
+        {
+            SwitchWeapon(1);
+        }
+        else if (Input.GetButtonDown("Weapon2"))
+        {
+            SwitchWeapon(2);
+        }
+        else if (Input.GetButtonDown("Weapon3"))
+        {
+            SwitchWeapon(3);
+        }
+        else if (Input.GetButtonDown("Weapon4"))
+        {
+            SwitchWeapon(4);
+        }
+    }
+
+    void SwitchCaseWeapon(Weapon weapon)
+    {
+        switch (weapon)
+        {
+            case Weapon.Pistol:
+                {
+                    fireDistance = 40;
+                    fireRate = 0;
+                    damage = 20;
+                    bullets = 1;
+                    bloomMod = 0.01f;
+                    rageMeterIncrement = 1000;
+                    break;
+                }
+
+            case Weapon.AssaultRifle:
+                {
+                    isAutomatic = true;
+                    fireDistance = 60;
+                    fireRate = 0.25f;
+                    damage = 10;
+                    bullets = 1;
+                    bloomMod = 0.015f;
+                    rageMeterIncrement = 5;
+                    break;
+                }
+
+            case Weapon.Shotgun:
+                {
+                    fireDistance = 20;
+                    fireRate = 0;
+                    damage = 8;
+                    bullets = 6;
+                    bloomMod = 0.1f;
+                    rageMeterIncrement = 8;
+                    break;
+                }
+
+            case Weapon.Axe:
+                {
+                    swingDistance = 5;
+                    swingRate = 0;
+                    damage = 30;
+                    bloomMod = 0.1f;
+                    rageMeterIncrement = 10;
+                    break;
+                }
+
+            default:
+                break;
+        }
+    }
+
+    void HideAllWeapons() // sets visibility of all weapons to false
+    {
+        pistolModel.gameObject.SetActive(false);
+        assaultRifleModel.gameObject.SetActive(false);
+        shotgunModel.gameObject.SetActive(false);
+        axeModel.gameObject.SetActive(false);
+    }
+
 
 }
 
