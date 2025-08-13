@@ -299,6 +299,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
             if (dmg != null)
             {
+                AddRage(rageMeterIncrement);
                 dmg.TakeDamage(damage);
             }
         }
@@ -401,7 +402,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public string DetermineWeaponType()
     {
-        if(weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
+        if (weapon == Weapon.Pistol || weapon == Weapon.Shotgun || weapon == Weapon.AssaultRifle)
         {
             return "Ranged";
         }
@@ -419,7 +420,7 @@ public class PlayerController : MonoBehaviour, IDamage
         updatePlayerUI();
         StartCoroutine(FlashHeal());
 
-        if (health >= healthMax)
+        if (health > healthMax)
         {
             health = healthMax; // does not allow for healing above max health
 
@@ -435,6 +436,28 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.PlayerHealScreen.SetActive(false);
     }
 
+    IEnumerator DoubleJumpEnum()
+    {
+        jumpMax = 2;
+        yield return new WaitForSeconds(10);
+        jumpMax = 1;
+    }
+    public void DoubleJump()
+    {
+        StartCoroutine(DoubleJumpEnum());
+    }
+
+    IEnumerator SpeedBoostEnum(float speedBoostMulti)
+    {
+        speed *= speedBoostMulti;
+        yield return new WaitForSeconds(5);
+        speed = speedOriginal;
+    }
+
+    public void SpeedBoost(float speedBoostMulti)
+    {
+        StartCoroutine(SpeedBoostEnum(speedBoostMulti));
+    }
     void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
     {
         switch (weaponID)
@@ -543,11 +566,9 @@ public class PlayerController : MonoBehaviour, IDamage
                     swingRate = 0;
                     damage = 30;
                     bloomMod = 0.1f;
-
+                    rageMeterIncrement = 10;
                     break;
                 }
-
-
 
             default:
                 break;
