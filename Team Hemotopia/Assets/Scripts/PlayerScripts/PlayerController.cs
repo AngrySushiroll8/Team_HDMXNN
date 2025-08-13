@@ -17,13 +17,19 @@ public class PlayerController : MonoBehaviour, IDamage
 
     }
 
-
+    [Space(10)]
+    [Header("Models")]
+    [Space(10)]
+    
     [SerializeField] GameObject axeModel;
     [SerializeField] GameObject pistolModel;
     [SerializeField] GameObject assaultRifleModel;
     [SerializeField] GameObject shotgunModel;
 
+    [Space(10)]
     [Header("Controller")]
+    [Space(10)]
+
     [SerializeField] CharacterController controller;
 
     [Space(10)]
@@ -38,8 +44,9 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int gravity;
     [SerializeField] int jumpMax;
     [SerializeField] float rageTimeLength;
+    [SerializeField] float rageMax;
+    [Range(0.0f, 1.0f)][SerializeField] float rageDamageReduction;
     float rageMeter;
-    float rageTimer = 0;
     float rageSpeed;
     float speedOriginal;
     bool isSprinting;
@@ -71,7 +78,10 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float startYScale;
     bool isCrouching;
 
+    [Space(10)]
     [Category("Melee System")]
+    [Space(10)]
+
     float swingDistance;
     float swingRate;
     float swingTimer;
@@ -113,7 +123,7 @@ public class PlayerController : MonoBehaviour, IDamage
         dashTimer = dashCooldown;
         slideTimer = slideCooldown;
         speedOriginal = speed;
-        
+
 
         updatePlayerUI();
 
@@ -128,7 +138,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Update()
     {
-        
+
         Movement();
         updatePlayerUIDash();
     }
@@ -166,7 +176,7 @@ public class PlayerController : MonoBehaviour, IDamage
             StartCoroutine(dash());
         }
 
-        // Rage Meter
+        // Rage ability
         Rage();
 
         // Crouch
@@ -207,22 +217,23 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Rage()
     {
-        if (Input.GetButtonDown("Rage") && !isRaging && rageMeter == 1000)
+        // Starts rage ability if the player hits the rage button, is not raging, and if the rage meter is full
+        if (Input.GetButtonDown("Rage") && !isRaging && rageMeter == rageMax)
         {
             RageAbilityStart();
-            rageTimer = rageTimeLength;
         }
         else
         {
-            updatePlayerUIRageIncrement();
+            updatePlayerUIRage();
         }
 
+        // Decreases the rage meter then update the UI and check if the rage is over
         if (isRaging)
         {
-            rageTimer -= Time.deltaTime;
+            DecreaseRage();
             updatePlayerUIRage();
 
-            if (rageTimer <= 0)
+            if (rageMeter <= 0)
             {
                 RageAbilityEnd();
             }
@@ -240,7 +251,6 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         isRaging = false;
         rageMeter = 0;
-        rageTimer = 0;
         speed = speedOriginal;
         damage = damageOriginal;
     }
@@ -403,7 +413,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
+        health -= isRaging ? (int)(rageDamageReduction * amount) : amount;
 
         updatePlayerUI();
         StartCoroutine(FlashDamage());
@@ -427,11 +437,6 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public void updatePlayerUIRage()
     {
-        // uncomment this when the rage meter is added to the GameManager.
-        GameManager.instance.RageMeter.fillAmount = rageTimer / rageTimeLength;
-    }
-    public void updatePlayerUIRageIncrement()
-    {
         GameManager.instance.RageMeter.fillAmount = rageMeter / 1000;
     }
 
@@ -447,9 +452,13 @@ public class PlayerController : MonoBehaviour, IDamage
 
     public void AddRage(float amount)
     {
-        rageMeter += amount;
-        rageMeter = Mathf.Clamp(rageMeter, 0, 1000);
-        updatePlayerUIRage();
+        // Adds rage if the player is not raging
+        if (!isRaging)
+        {
+            rageMeter += amount;
+            rageMeter = Mathf.Clamp(rageMeter, 0, rageMax);
+            updatePlayerUIRage();
+        }
     }
 
     public string DetermineWeaponType()
@@ -556,7 +565,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void GetNumpadInput()
     {
-        if(Input.GetButtonDown("Weapon1"))
+        if (Input.GetButtonDown("Weapon1"))
         {
             SwitchWeapon(1);
         }
@@ -637,6 +646,9 @@ public class PlayerController : MonoBehaviour, IDamage
         axeModel.gameObject.SetActive(false);
     }
 
-
+    void DecreaseRage()
+    {
+        rageMeter -= (rageMax / rageTimeLength) * Time.deltaTime;
+    }
 }
 
