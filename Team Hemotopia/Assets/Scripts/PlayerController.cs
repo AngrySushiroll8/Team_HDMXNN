@@ -11,8 +11,11 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Pistol,
         AssaultRifle,
-        Shotgun
+        Shotgun,
+        Axe
+
     }
+
 
     [SerializeField] GameObject axeModel;
     [SerializeField] GameObject pistolModel;
@@ -65,6 +68,12 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float crouchSpeed;
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
+
+    [Category("Melee System")]
+    float swingDistance;
+    float swingRate;
+    float swingTimer;
+
 
     [Space(10)]
     [Header("Dash")]
@@ -149,10 +158,23 @@ public class PlayerController : MonoBehaviour, IDamage
         Rage();
 
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+        if (DetermineWeaponType() == "Ranged")
         {
-            Shoot();
+            if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+            {
+                Shoot();
+            }
         }
+        else
+        {
+
+            if ((Input.GetButtonDown("Fire1") && swingTimer >= swingRate))
+            {
+                Swing();
+            }
+
+        }
+
     }
 
     void Rage()
@@ -253,6 +275,37 @@ public class PlayerController : MonoBehaviour, IDamage
             yield return null;
         }
     }
+
+    void Swing()
+    {
+        RaycastHit hit;
+
+        swingTimer = 0;
+
+        float rangeX = Random.Range(-bloomMod, bloomMod);
+        float rangeY = Random.Range(-bloomMod, bloomMod);
+
+        if (Physics.Raycast(Camera.main.transform.position,
+                                new Vector3(Camera.main.transform.forward.x + rangeX,
+                                            Camera.main.transform.forward.y + rangeY,
+                                            Camera.main.transform.forward.z),
+                                out hit,
+                                swingDistance,
+                                ~ignoreLayer))
+        {
+            Debug.Log("HIT! | " + hit.collider.name);
+
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+
+            if (dmg != null)
+            {
+                dmg.TakeDamage(damage);
+            }
+        }
+
+
+    }
+
     void Shoot()
     {
         fireTimer = 0;
