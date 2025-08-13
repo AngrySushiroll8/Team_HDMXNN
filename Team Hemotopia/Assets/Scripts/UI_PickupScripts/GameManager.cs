@@ -18,6 +18,13 @@ public class GameManager : MonoBehaviour
 
     public bool isPaused;
 
+    [SerializeField] public GameObject ActiveReticle;
+    public GameObject PistolReticle;
+    public GameObject ShotgunReticle;
+    public GameObject ARReticle;
+    public GameObject AxeReticle;
+    public GameObject DefaultReticle;
+
     public Image RageMeter;
     public Image PlayerDash;
     public Image PlayerHealth;
@@ -48,6 +55,8 @@ public class GameManager : MonoBehaviour
 
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
+
+        ActiveReticle = DefaultReticle;
     }
 
     // Update is called once per frame
