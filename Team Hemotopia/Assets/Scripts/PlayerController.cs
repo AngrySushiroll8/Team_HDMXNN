@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         healthMax = health;
         dashTimer = dashCooldown;
-        dashTimer = dashCooldown;
+        slideTimer = slideCooldown;
         speedOriginal = speed;
         
 
