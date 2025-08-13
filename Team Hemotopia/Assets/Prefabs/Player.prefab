@@ -348,20 +348,22 @@ MonoBehaviour:
   gravity: 25
   jumpMax: 1
   rageTimeLength: 0
-  rageDamageReduction: 0
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
-  weapon: 0
+  weapon: 1
   crouchSpeed: 3
   crouchYScale: 0.6
   startYScale: 1
   dashDistance: 8
   dashDuration: 0.2
   dashCooldown: 3
-  dashWallCollision:
+  wallCollision:
     serializedVersion: 2
     m_Bits: 512
+  slideDistance: 50
+  slideDuration: 0.5
+  slideCooldown: 5
   hurtMaterial: {fileID: 0}
 --- !u!33 &8926156876114342359
 MeshFilter:
