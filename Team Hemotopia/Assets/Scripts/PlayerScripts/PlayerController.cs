@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -68,6 +69,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float crouchSpeed;
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
+    bool isCrouching;
 
     [Category("Melee System")]
     float swingDistance;
@@ -83,7 +85,16 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float dashDuration;
     [SerializeField] int dashCooldown;
     float dashTimer;
-    [SerializeField] LayerMask dashWallCollision; // Layer Mask so player doesn't dash through walls
+    [SerializeField] LayerMask wallCollision; // Layer Mask so player doesn't dash through walls
+
+    [Space(10)]
+    [Header("Dash")]
+    [Space(10)]
+    [SerializeField] float slideDistance;
+    [SerializeField] float slideDuration;
+    [SerializeField] int slideCooldown;
+    float slideTimer;
+
 
     [Space(10)]
     [Header("Player Materials")]
@@ -100,6 +111,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         healthMax = health;
         dashTimer = dashCooldown;
+        slideTimer = slideCooldown;
         speedOriginal = speed;
         
 
@@ -118,9 +130,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         
         Movement();
-        sprint();
         updatePlayerUIDash();
-        crouch();
     }
 
     void Movement()
@@ -129,6 +139,7 @@ public class PlayerController : MonoBehaviour, IDamage
         SwitchCaseWeapon(weapon);
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
+        slideTimer += Time.deltaTime;
 
         // Gravity System
         if (controller.isGrounded)
@@ -150,12 +161,29 @@ public class PlayerController : MonoBehaviour, IDamage
         controller.Move(jumpVec * Time.deltaTime);
 
         // Dash ability
-        if (Input.GetButton("Dash") && dashTimer >= dashCooldown)
+        if (Input.GetButton("Dash") && dashTimer >= dashCooldown && !isCrouching)
         {
             StartCoroutine(dash());
         }
 
+        // Rage Meter
         Rage();
+
+        // Crouch
+        crouch();
+
+        // Sprint
+        sprint();
+
+        if (isCrouching) speed = crouchSpeed;
+
+        // Slide
+        if (Input.GetButton("Crouch") && isSprinting && slideTimer >= slideCooldown && controller.isGrounded)
+        {
+            StartCoroutine(slide());
+            speed = crouchSpeed;
+            isCrouching = true;
+        }
 
         // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
         if (DetermineWeaponType() == "Ranged")
@@ -228,32 +256,56 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void crouch()
     {
-        if (Input.GetButtonDown("Crouch"))
+        if (Input.GetButtonDown("Crouch") && !isSprinting)
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             speed = crouchSpeed;
+            isCrouching = true;
         }
         if (Input.GetButtonUp("Crouch"))
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
             speed = walkingSpeed;
+            isCrouching = false;
         }
     }
 
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint"))
+        if (Input.GetButtonDown("Sprint") && !isCrouching)
         {
             speed *= sprintMod;
             isSprinting = true;
         }
         else if (Input.GetButtonUp("Sprint"))
         {
-            speed /= sprintMod;
+            speed = walkingSpeed;
             isSprinting = false;
         }
     }
+    IEnumerator slide()
+    {
+        slideTimer = 0;
+        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+        transform.position = new Vector3(transform.position.x, transform.position.y - 0.4f, transform.position.z);
+        Vector3 start = transform.position;
+        Vector3 end = (transform.position + (transform.forward * dashDistance));
+        float time = 0f;
 
+        while (time < slideDuration)
+        {
+            if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x - 0.2f, transform.localScale.y, 0.1f),
+                transform.forward, transform.rotation, 1, wallCollision))
+            {
+                break;
+            }
+
+            time += Time.deltaTime;
+
+            transform.position = Vector3.Lerp(start, end, time / slideDuration);
+            yield return null;
+        }
+    }
     IEnumerator dash()
     {
         dashTimer = 0;
@@ -264,7 +316,7 @@ public class PlayerController : MonoBehaviour, IDamage
         while (time < dashDuration)
         {
             if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x, transform.localScale.y, 0.1f),
-                transform.forward / 10, transform.rotation, 1, dashWallCollision))
+                transform.forward / 10, transform.rotation, 1, wallCollision))
             {
                 break;
             }
@@ -528,6 +580,7 @@ public class PlayerController : MonoBehaviour, IDamage
         {
             case Weapon.Pistol:
                 {
+                    isAutomatic = false;
                     fireDistance = 40;
                     fireRate = 0;
                     damage = 20;
@@ -545,12 +598,13 @@ public class PlayerController : MonoBehaviour, IDamage
                     damage = 10;
                     bullets = 1;
                     bloomMod = 0.015f;
-                    rageMeterIncrement = 5;
+                    rageMeterIncrement = 10;
                     break;
                 }
 
             case Weapon.Shotgun:
                 {
+                    isAutomatic = false;
                     fireDistance = 20;
                     fireRate = 0;
                     damage = 8;
@@ -566,7 +620,7 @@ public class PlayerController : MonoBehaviour, IDamage
                     swingRate = 0;
                     damage = 30;
                     bloomMod = 0.1f;
-                    rageMeterIncrement = 10;
+                    rageMeterIncrement = 30;
                     break;
                 }
 
