@@ -5,6 +5,11 @@ public class LightEvent : MonoBehaviour
     Light lightController;
     [SerializeField] GameObject lightObject;
     Material lightMaterial;
+
+    [Range(1, 10)]
+    public bool isRangeChanging = false;
+    public bool isIntensityChanging = false;
+    public bool isColorChanging = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,22 +20,22 @@ public class LightEvent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SwitchLights();
-        }
+        SwitchLights();
     }
     void SwitchLights()
     {
-        if(lightController.isActiveAndEnabled)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            lightController.enabled = false;
-            lightMaterial.SetColor("_EmissionColor", Color.black);
-        }
-        else
-        {
-            lightController.enabled = true;
-            lightMaterial.SetColor("_EmissionColor", Color.white);
+            if (lightController.isActiveAndEnabled)
+            {
+                lightController.enabled = false;
+                lightMaterial.SetColor("_EmissionColor", Color.black);
+            }
+            else
+            {
+                lightController.enabled = true;
+                lightMaterial.SetColor("_EmissionColor", Color.white);
+            }
         }
     }
 }
