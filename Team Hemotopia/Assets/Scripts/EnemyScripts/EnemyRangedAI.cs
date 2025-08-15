@@ -67,7 +67,15 @@ public class EnemyRangedAI : EnemyAI_Base
 
     void shoot()
     {
-        Instantiate(bullet, shootPos.position, transform.rotation);
+        //Instantiate(bullet, shootPos.position, transform.rotation);
+
+        if (!bullet || !shootPos) return;
+
+        Vector3 dir = (player.position - shootPos.position).normalized;
+
+        GameObject proj = Instantiate(bullet, shootPos.position, Quaternion.LookRotation(dir));
+
+        
         
 
     }
