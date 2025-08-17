@@ -32,7 +32,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 104618477035619065}
   m_Father: {fileID: 2537194250853230366}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8195841225803708576
@@ -154,7 +155,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!1 &4171374468211250499
+--- !u!1 &5844919525512660968
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,60 +163,64 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2451467428092234245}
-  - component: {fileID: 698296681211437785}
-  - component: {fileID: 4006393668679423428}
-  - component: {fileID: 1437895901042827769}
+  - component: {fileID: 104618477035619065}
+  - component: {fileID: 7141272296070069469}
+  - component: {fileID: 3393483659905727800}
+  - component: {fileID: 8593352408959884445}
   m_Layer: 3
-  m_Name: Directional Light
+  m_Name: Flashlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2451467428092234245
+--- !u!4 &104618477035619065
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4171374468211250499}
+  m_GameObject: {fileID: 5844919525512660968}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2537194250853230366}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &698296681211437785
+  m_Father: {fileID: 3562679295515409918}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &7141272296070069469
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4171374468211250499}
+  m_GameObject: {fileID: 5844919525512660968}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a300057d17e29f0419657acb601024d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightObject: {fileID: 8891338025465336973}
---- !u!108 &4006393668679423428
+  lightObject: {fileID: 5844919525512660968}
+  lightRange: 14.3
+  lightIntensity: 0.222
+  lightAngle: 22.9
+  fade: 4.32
+--- !u!108 &3393483659905727800
 Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4171374468211250499}
+  m_GameObject: {fileID: 5844919525512660968}
   m_Enabled: 1
   serializedVersion: 11
-  m_Type: 1
+  m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.1
-  m_Range: 8
-  m_SpotAngle: 12
-  m_InnerSpotAngle: 1
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -266,13 +271,13 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!114 &1437895901042827769
+--- !u!114 &8593352408959884445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4171374468211250499}
+  m_GameObject: {fileID: 5844919525512660968}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
@@ -327,7 +332,6 @@ Transform:
   - {fileID: 8837275277826678904}
   - {fileID: 4594659230020281656}
   - {fileID: 3562679295515409918}
-  - {fileID: 2451467428092234245}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6413034873912325651
