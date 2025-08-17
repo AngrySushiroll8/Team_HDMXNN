@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class LightEvent : MonoBehaviour
@@ -9,6 +10,7 @@ public class LightEvent : MonoBehaviour
     [Range(1f,50f)][SerializeField] float lightRange;
     [Range(0f,1f)][SerializeField] float lightIntensity;
     [Range(0f,120f)][SerializeField] float lightAngle;
+    [Range(0f, 5f)][SerializeField] float fade;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,7 +34,7 @@ public class LightEvent : MonoBehaviour
             else
             {
                 lightController.enabled = true;
-                lightMaterial.SetColor("_EmissionColor", Color.grey);
+                StartCoroutine(FadeLight(lightIntensity, fade));
             }
         }
     }
@@ -44,5 +46,17 @@ public class LightEvent : MonoBehaviour
         lightController.intensity = lightIntensity;
         lightController.spotAngle = lightAngle;
     }
-    
+    IEnumerator FadeLight(float lightIntensity, float duration)
+    {
+        float startingIntensity = lightController.intensity;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            lightController.intensity = Mathf.Lerp(startingIntensity, lightIntensity, elapsed / duration);
+            lightMaterial.SetColor("_EmissionColor", Color.white * lightController.intensity);
+            yield return null;
+        }
+        lightController.intensity = lightIntensity;
+    }
 }
