@@ -6,23 +6,21 @@ public class LightEvent : MonoBehaviour
     [SerializeField] GameObject lightObject;
     Material lightMaterial;
 
-    [Range(1, 10)]
-    public bool isRangeChanging = false;
-    public bool isIntensityChanging = false;
-    public bool isColorChanging = false;
+    [Range(1f,50f)][SerializeField] float lightRange;
+    [Range(0f,1f)][SerializeField] float lightIntensity;
+    [Range(0f,120f)][SerializeField] float lightAngle;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        lightController = GetComponent<Light>();
-        lightMaterial = lightObject.GetComponent<Renderer>().material;
+        LightSettings();
     }
 
     // Update is called once per frame
     void Update()
     {
-        SwitchLights();
+        Flashlight();
     }
-    void SwitchLights()
+    void Flashlight()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -34,8 +32,17 @@ public class LightEvent : MonoBehaviour
             else
             {
                 lightController.enabled = true;
-                lightMaterial.SetColor("_EmissionColor", Color.white);
+                lightMaterial.SetColor("_EmissionColor", Color.grey);
             }
         }
     }
+    void LightSettings()
+    {
+        lightController = GetComponent<Light>();
+        lightMaterial = lightObject.GetComponent<Renderer>().material;
+        lightController.range = lightRange;
+        lightController.intensity = lightIntensity;
+        lightController.spotAngle = lightAngle;
+    }
+    
 }
