@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 //using UnityEditor.ProBuilder;
 using UnityEngine;
@@ -382,6 +384,7 @@ public class PlayerController : MonoBehaviour, IDamage
     void Shoot()
     {
         fireTimer = 0;
+        Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
         for (int bulletIndex = 0; bulletIndex < bullets; bulletIndex++)
         {
@@ -415,9 +418,20 @@ public class PlayerController : MonoBehaviour, IDamage
                 if (dmg != null)
                 {
                     AddRage(rageMeterIncrement);
-                    dmg.TakeDamage(damage);
+                    if (damages.ContainsKey(dmg))
+                    {
+                        damages[dmg] += damage;
+                    }
+                    else
+                    {
+                        damages.Add(dmg, damage);
+                    }
                 }
             }
+        }
+        foreach (KeyValuePair<IDamage, int> entry in damages)
+        {
+            entry.Key.TakeDamage(entry.Value);
         }
     }
 
