@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Unity.VisualScripting;
 //using UnityEditor.ProBuilder;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class PlayerController : MonoBehaviour, IDamage
 {
@@ -174,7 +175,14 @@ public class PlayerController : MonoBehaviour, IDamage
         // Dash ability
         if (Input.GetButton("Dash") && dashTimer >= dashCooldown && !isCrouching)
         {
-            StartCoroutine(dash());
+            if (moveDir == new Vector3(0, 0, 0))
+            {
+
+            }
+            else
+            {
+                StartCoroutine(dash());
+            }
         }
 
         // Rage ability
@@ -321,13 +329,14 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         dashTimer = 0;
         Vector3 start = transform.position;
-        Vector3 end = (transform.position + (transform.forward * dashDistance));
+        Vector3 end = (transform.position + (moveDir * dashDistance));
+        
         float time = 0f;
 
         while (time < dashDuration)
         {
             if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x, transform.localScale.y, 0.1f),
-                transform.forward / 10, transform.rotation, 1, wallCollision))
+                moveDir, Quaternion.LookRotation(moveDir, Vector3.up), 1, wallCollision))
             {
                 break;
             }
