@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a300057d17e29f0419657acb601024d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightObject: {fileID: 5844919525512660968}
+  lightObject: {fileID: 8891338025465336973}
   lightRange: 14.3
   lightIntensity: 0.222
   lightAngle: 22.9
