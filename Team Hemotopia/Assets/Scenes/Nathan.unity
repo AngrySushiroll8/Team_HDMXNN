@@ -455,6 +455,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b69627e45df2df44d932938a55b46a00, type: 3}
+--- !u!1001 &473474585
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.713774
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.059888452
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 53.486538
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282494358698164286, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5442716588911405901, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
+      propertyPath: m_Name
+      value: Enemy Melee 2 test 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d3db376395f0bfb4ca51f67146a793ac, type: 3}
 --- !u!43 &476635819
 Mesh:
   m_ObjectHideFlags: 0
@@ -1900,3 +1957,4 @@ SceneRoots:
   - {fileID: 431370400}
   - {fileID: 1828411402}
   - {fileID: 337279743}
+  - {fileID: 473474585}
