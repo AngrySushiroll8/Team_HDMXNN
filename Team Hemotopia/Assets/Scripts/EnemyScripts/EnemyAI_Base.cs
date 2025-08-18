@@ -46,7 +46,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     // Update is called once per frame
     protected virtual void Update()
     {
-        if(agent != null && agent.remainingDistance < 0.01f)
+        if(agent != null && agent.enabled && agent.isOnNavMesh && agent.remainingDistance < 0.01f)
         {
             roamTimer += Time.deltaTime;
         }
@@ -82,7 +82,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     {
         if (agent == null) return;
 
-        if(roamTimer >= roamPauseTimer && agent.remainingDistance < 0.01f)
+        if(roamTimer >= roamPauseTimer && agent !=null && agent.enabled && agent.isOnNavMesh && agent.remainingDistance < 0.01f)
         {
             Roam();
         }

@@ -292,11 +292,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb14e9a4d4318f54b8e2d46096d57a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseSpeed: 8
+  chaseSpeed: 3
   minLeapDist: 4
   maxLeapDist: 20
-  leapForce: 10
-  upwardBoost: 0.25
+  leapForce: 12
+  upwardBoost: 0.5
   leapCooldown: 1
   reenableAgentDelay: 0.5
 --- !u!135 &3858311585638249283
