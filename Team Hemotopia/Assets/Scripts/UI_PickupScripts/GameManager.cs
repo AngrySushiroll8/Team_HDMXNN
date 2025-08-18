@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] MenuState menu;
 
     [SerializeField] TMP_Text gameGoalCountText;
+    [SerializeField] public GameObject activePowerUp;
+    [SerializeField] public GameObject doubleJumpText;
+    [SerializeField] TMP_Text doubleJumpTimer;
+    [SerializeField] public GameObject speedBoostText;
+    [SerializeField] TMP_Text speedBoostTimer;
 
     public bool isPaused;
 
@@ -37,6 +42,9 @@ public class GameManager : MonoBehaviour
     float timeScaleOriginal;
 
     int gameGoalCount;
+
+    public float doubleJumpTimerCount = 10;
+    public float speedBoostTimerCount = 5;
 
     enum MenuState
     {
@@ -162,6 +170,40 @@ public class GameManager : MonoBehaviour
 
             default:
                 break;
+        }
+    }
+
+    public void doubleJumpTimerUpdate()
+    {
+
+        activePowerUp = doubleJumpText;
+        activePowerUp.SetActive(true);
+
+        if(doubleJumpTimerCount != 0)
+        {
+            doubleJumpTimerCount -= 1 * Time.deltaTime;
+            doubleJumpTimer.text = doubleJumpTimerCount.ToString("F0");
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    public void speedBoostTimerUpdate()
+    {
+
+        activePowerUp = speedBoostText;
+        activePowerUp.SetActive(true);
+
+        if (speedBoostTimerCount != 0)
+        {
+            speedBoostTimerCount -= 1 * Time.deltaTime;
+            speedBoostTimer.text = speedBoostTimerCount.ToString("F0");
+        }
+        else
+        {
+            return;
         }
     }
 }
