@@ -3,35 +3,34 @@ using System.Collections;
 
 public class PlatformTriggerEvents : MonoBehaviour
 {
-    public Transform movingPlatform, position1, position2;
-    public Vector3 newPosition;
-    public string currentPosition;
-    public float speed, resetTime;
+    [SerializeField] Transform movingPlatform, destinationPoint;
+    [SerializeField] float speed, pauseOnPosition;
+    private Vector3 startPosition, endPosition;
+    private bool isPlatformMoving = true, isPaused = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ChangeTarget();
+        startPosition = movingPlatform.position;
+        endPosition = destinationPoint.position;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        movingPlatform.position = Vector3.Lerp(movingPlatform.position, newPosition, speed * Time.deltaTime);
+        MovingPlatform();
     }
-    void ChangeTarget()
+    public void MovingPlatform()
     {
-        if (currentPosition == "Moving To Position 1") {
-            currentPosition = "Moving To Position 2";
-            newPosition = position2.position;
-        }
-        else if (currentPosition == "Moving To Position 2") {
-            currentPosition = "Moving To Position 1";
-            newPosition = position1.position;
-        }
-        else {
-            currentPosition = "Moving To Position 2";
-            newPosition = position2.position;
-        }
-        Invoke("ChangeTarget", resetTime);
+        if (isPaused) return;
+        Vector3 targetLocation = isPlatformMoving ? endPosition : startPosition;
+        movingPlatform.position = Vector3.MoveTowards(movingPlatform.position, targetLocation, speed * Time.deltaTime);
+        if (Vector3.Distance(movingPlatform.position, targetLocation) < 0.01f) StartCoroutine(PauseAndReverse());
+    }
+    private IEnumerator PauseAndReverse()
+    {
+        isPaused = true;
+        yield return new WaitForSeconds(pauseOnPosition);
+        isPlatformMoving = !isPlatformMoving;
+        isPaused = false;
     }
 }
