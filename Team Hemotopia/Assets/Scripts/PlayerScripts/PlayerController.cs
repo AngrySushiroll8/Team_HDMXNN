@@ -1,10 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 //using UnityEditor.ProBuilder;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class PlayerController : MonoBehaviour, IDamage
 {
@@ -174,7 +177,14 @@ public class PlayerController : MonoBehaviour, IDamage
         // Dash ability
         if (Input.GetButton("Dash") && dashTimer >= dashCooldown && !isCrouching)
         {
-            StartCoroutine(dash());
+            if (moveDir == new Vector3(0, 0, 0))
+            {
+
+            }
+            else
+            {
+                StartCoroutine(dash());
+            }
         }
 
         // Rage ability
@@ -321,13 +331,14 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         dashTimer = 0;
         Vector3 start = transform.position;
-        Vector3 end = (transform.position + (transform.forward * dashDistance));
+        Vector3 end = (transform.position + (moveDir * dashDistance));
+        
         float time = 0f;
 
         while (time < dashDuration)
         {
             if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x, transform.localScale.y, 0.1f),
-                transform.forward / 10, transform.rotation, 1, wallCollision))
+                moveDir, Quaternion.LookRotation(moveDir, Vector3.up), 1, wallCollision))
             {
                 break;
             }
@@ -373,6 +384,7 @@ public class PlayerController : MonoBehaviour, IDamage
     void Shoot()
     {
         fireTimer = 0;
+        Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
         for (int bulletIndex = 0; bulletIndex < bullets; bulletIndex++)
         {
@@ -406,9 +418,20 @@ public class PlayerController : MonoBehaviour, IDamage
                 if (dmg != null)
                 {
                     AddRage(rageMeterIncrement);
-                    dmg.TakeDamage(damage);
+                    if (damages.ContainsKey(dmg))
+                    {
+                        damages[dmg] += damage;
+                    }
+                    else
+                    {
+                        damages.Add(dmg, damage);
+                    }
                 }
             }
+        }
+        foreach (KeyValuePair<IDamage, int> entry in damages)
+        {
+            entry.Key.TakeDamage(entry.Value);
         }
     }
 
