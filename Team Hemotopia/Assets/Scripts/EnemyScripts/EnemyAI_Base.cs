@@ -126,8 +126,11 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         if (HP > 0)
         {
             HP -= amount;
-            agent.SetDestination(player.position);
-            StartCoroutine(flashRed());
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+            {
+                agent.SetDestination(player.position);
+            }
+                StartCoroutine(flashRed());
         }
 
         if (HP <= 0)
