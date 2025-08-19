@@ -66,6 +66,9 @@ MonoBehaviour:
   FOV: 90
   roamDistance: 15
   roamPauseTimer: 3
+  healthPowerup: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
+  doubleJumpPowerup: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
+  speedBoostPowerup: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
   bullet: {fileID: 2958823327217795486, guid: f9e4a07370871544a85dea194d58240f, type: 3}
   shootPos: {fileID: 109933934319511339}
   shootCooldown: 1
