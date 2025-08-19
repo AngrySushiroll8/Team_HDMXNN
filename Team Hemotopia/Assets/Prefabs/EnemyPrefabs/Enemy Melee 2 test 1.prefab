@@ -275,6 +275,9 @@ MonoBehaviour:
   FOV: 90
   roamDistance: 15
   roamPauseTimer: 3
+  healthPowerup: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
+  doubleJumpPowerup: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
+  speedBoostPowerup: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
   weapon: {fileID: 0}
   attackPos: {fileID: 7949479292987463009}
   attackRange: 1.5

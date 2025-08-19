@@ -121,6 +121,10 @@ public class PlayerController : MonoBehaviour, IDamage
     int jumpCount;
     int healthMax;
 
+    //Testing the timer
+    bool doubleJumpIsActive;
+    bool speedBoostIsActive;
+
     void Start()
     {
         healthMax = health;
@@ -142,9 +146,37 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void Update()
     {
-
         Movement();
         updatePlayerUIDash();
+
+        if(doubleJumpIsActive || speedBoostIsActive)
+        {
+            if (doubleJumpIsActive)
+            {
+                GameManager.instance.doubleJumpTimerUpdate();
+
+                if (GameManager.instance.doubleJumpTimerCount <= 0)
+                {
+                    GameManager.instance.activePowerUp.SetActive(false);
+                    GameManager.instance.activePowerUp = null;
+                    GameManager.instance.doubleJumpTimerCount = 10;
+                    doubleJumpIsActive = false;
+                }
+            }
+
+            if(speedBoostIsActive)
+            {
+                GameManager.instance.speedBoostTimerUpdate();
+
+                if (GameManager.instance.speedBoostTimerCount <= 0)
+                {
+                    GameManager.instance.activePowerUp.SetActive(false);
+                    GameManager.instance.activePowerUp = null;
+                    GameManager.instance.speedBoostTimerCount = 5;
+                    speedBoostIsActive = false;
+                }
+            }
+        }
     }
 
     void Movement()
@@ -523,8 +555,11 @@ public class PlayerController : MonoBehaviour, IDamage
 
     IEnumerator DoubleJumpEnum()
     {
+        doubleJumpIsActive = true;
         jumpMax = 2;
-        yield return new WaitForSeconds(10);
+        GameManager.instance.activePowerUp = GameManager.instance.doubleJumpText;
+        GameManager.instance.activePowerUp.SetActive(true);
+        yield return new WaitForSeconds(GameManager.instance.doubleJumpTimerCount);
         jumpMax = 1;
     }
     public void DoubleJump()
@@ -534,8 +569,11 @@ public class PlayerController : MonoBehaviour, IDamage
 
     IEnumerator SpeedBoostEnum(float speedBoostMulti)
     {
+        speedBoostIsActive = true;
         speed *= speedBoostMulti;
-        yield return new WaitForSeconds(5);
+        GameManager.instance.activePowerUp = GameManager.instance.speedBoostText;
+        GameManager.instance.activePowerUp.SetActive(true);
+        yield return new WaitForSeconds(GameManager.instance.speedBoostTimerCount);
         speed = speedOriginal;
     }
 
