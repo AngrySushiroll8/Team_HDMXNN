@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
-  m_Name: AR Stats
+  m_Name: Shotgun Stats
   m_EditorClassIdentifier: 
-  model: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
-  isAutomatic: 1
-  damage: 10
-  fireDist: 60
-  bullets: 1
-  fireRate: 0.25
+  model: {fileID: 4205521026231025682, guid: f7a69565ab2ff984789da792b0969f4b, type: 3}
+  isAutomatic: 0
+  damage: 8
+  fireDist: 20
+  bullets: 6
+  fireRate: 0
   ammoCur: 0
-  ammoMax: 50
-  bloomMod: 0.015
+  ammoMax: 8
+  bloomMod: 0.1
   hitEffect: {fileID: 0}
   shootSound: []
-  fireVol: 5
-  rageMeterIncrement: 10
+  fireVol: 2
+  rageMeterIncrement: 8

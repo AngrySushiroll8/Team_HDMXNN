@@ -743,7 +743,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     public void getGunStats(gunStats gun)
     {
-        isAutomatic = gun.isAutomtic;
+        isAutomatic = gun.isAutomatic;
         fireDistance = gun.fireDist;
         fireRate = gun.fireRate;
         bullets = gun.bullets;
