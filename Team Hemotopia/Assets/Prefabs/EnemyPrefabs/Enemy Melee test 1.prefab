@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4353804695145217343}
   - component: {fileID: 2283002422000731710}
   - component: {fileID: 193243426877995952}
+  - component: {fileID: 6949307640519406084}
   - component: {fileID: 2282918115839061011}
   - component: {fileID: 2878564877571143860}
   m_Layer: 0
@@ -142,6 +143,23 @@ MonoBehaviour:
   attackRange: 1.5
   attackCooldown: 2
   meleeDamage: 10
+--- !u!114 &6949307640519406084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677999173075853174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2937d739148e040b0715f8a24fca1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeed: 4
+  viewDistance: 12
+  fovAngle: 90
+  eyeHeight: 1.5
+  loseSightGrace: 2
 --- !u!135 &2282918115839061011
 SphereCollider:
   m_ObjectHideFlags: 0
