@@ -1,10 +1,11 @@
-using System.Security.Cryptography.X509Certificates;
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PadTriggerEvents : MonoBehaviour
 {
     [SerializeField] int jumpHeight;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,10 +17,12 @@ public class PadTriggerEvents : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        GameObject bounce = collision.gameObject;
-        CharacterController character = bounce.GetComponent<CharacterController>();
+        //Extra teleport line for later
+        //GameManager.instance.player.transform.position = new Vector3(currentPos.x, currentPos.y + jumpHeight, currentPos.z);
         
+        // 50/50 Jump Pad
+        GameManager.instance.player.GetComponent<PlayerController>().jumpVec.y = jumpHeight;
     }
 }
