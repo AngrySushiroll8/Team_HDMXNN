@@ -14,6 +14,10 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     [SerializeField] protected float roamDistance;
     [SerializeField] protected float roamPauseTimer;
 
+    [SerializeField] protected GameObject healthPowerup;
+    [SerializeField] protected GameObject doubleJumpPowerup;
+    [SerializeField] protected GameObject speedBoostPowerup;
+
     protected Transform player;
 
     protected Color colorOrig;
@@ -46,7 +50,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     // Update is called once per frame
     protected virtual void Update()
     {
-        if(agent != null && agent.remainingDistance < 0.01f)
+        if(agent != null && agent.enabled && agent.isOnNavMesh && agent.remainingDistance < 0.01f)
         {
             roamTimer += Time.deltaTime;
         }
@@ -82,7 +86,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     {
         if (agent == null) return;
 
-        if(roamTimer >= roamPauseTimer && agent.remainingDistance < 0.01f)
+        if(roamTimer >= roamPauseTimer && agent !=null && agent.enabled && agent.isOnNavMesh && agent.remainingDistance < 0.01f)
         {
             Roam();
         }
@@ -122,13 +126,17 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         if (HP > 0)
         {
             HP -= amount;
-            agent.SetDestination(player.position);
-            StartCoroutine(flashRed());
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+            {
+                agent.SetDestination(player.position);
+            }
+                StartCoroutine(flashRed());
         }
 
         if (HP <= 0)
         {
             GameManager.instance.updateGameGoal(-1);
+            DropLoot();
             Destroy(gameObject);
         }
     }
@@ -156,5 +164,22 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
             ResetStoppingDistanceToZero();
         }
 
+    }
+
+    private void DropLoot()
+    {
+        int rand = Random.Range(0, 10);
+        if (rand == 0)
+        {
+            Instantiate(healthPowerup, transform.position, Quaternion.identity);
+        }
+        else if (rand == 1)
+        {
+            Instantiate(doubleJumpPowerup, transform.position, Quaternion.identity);
+        }
+        else if (rand == 2)
+        {
+            Instantiate(speedBoostPowerup, transform.position, Quaternion.identity);
+        }
     }
 }

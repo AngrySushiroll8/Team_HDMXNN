@@ -9,7 +9,12 @@ public class EnemyMeleeAI : EnemyAI_Base
     [SerializeField] float attackCooldown;
     [SerializeField] int meleeDamage;
 
+    EnemyMovement_Base movement;
+
     float attackTimer;
+
+     void Awake() => movement = GetComponent<EnemyMovement_Base>();
+    
 
     // Update is called once per frame
     protected override void Update()
@@ -27,38 +32,33 @@ public class EnemyMeleeAI : EnemyAI_Base
         {
             float distance = Vector3.Distance(transform.position, player.position);
 
-            if(distance > attackRange)
+            if (distance > attackRange)
             {
-                if (agent)
-                {
-                    agent.isStopped = false;
-                    agent.SetDestination(player.position);
-                }
-            }
-            else
-            {
-                if (agent)
-                {
-                    agent.isStopped = true;
-                    agent.ResetPath();
-                }
-                playerDir = player.position - transform.position;
-                FaceTarget();
-
-                if(attackTimer >= attackCooldown)
-                {
-                    attackTimer = 0f;
-                    DoMeleeAttack();
-                }
+                movement?.Move(agent, transform, player);
+                return;
             }
 
+            if(agent != null && agent.enabled && agent.isOnNavMesh)
+            {
+                agent.isStopped = true;
+                agent.ResetPath();
+            }
+
+            playerDir = player.position - transform.position;
+            FaceTarget();
+
+            if (attackTimer >= attackCooldown)
+            {
+                attackTimer = 0f;
+                DoMeleeAttack();
+
+            }
         }
         else
         {
             CheckRoam();
         }
   
-        
     }
 
     void DoMeleeAttack()

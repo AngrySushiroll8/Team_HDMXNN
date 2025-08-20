@@ -152,8 +152,10 @@ GameObject:
   - component: {fileID: 145585257626084619}
   - component: {fileID: 8509783740404087146}
   - component: {fileID: 705078577476592500}
+  - component: {fileID: 4212613062538381994}
   - component: {fileID: 3858311585638249283}
   - component: {fileID: 2896526524155027639}
+  - component: {fileID: 7423930744323425700}
   m_Layer: 0
   m_Name: Enemy Melee 2 test 1
   m_TagString: Untagged
@@ -273,11 +275,33 @@ MonoBehaviour:
   FOV: 90
   roamDistance: 15
   roamPauseTimer: 3
+  healthPowerup: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
+  doubleJumpPowerup: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
+  speedBoostPowerup: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
   weapon: {fileID: 0}
   attackPos: {fileID: 7949479292987463009}
   attackRange: 1.5
   attackCooldown: 2
   meleeDamage: 10
+--- !u!114 &4212613062538381994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5442716588911405901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb14e9a4d4318f54b8e2d46096d57a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeed: 3
+  minLeapDist: 4
+  maxLeapDist: 20
+  leapForce: 12
+  upwardBoost: 0.5
+  leapCooldown: 1
+  reenableAgentDelay: 0.5
 --- !u!135 &3858311585638249283
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -321,3 +345,30 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &7423930744323425700
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5442716588911405901}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 1
