@@ -5,6 +5,7 @@ public class WaveManager : MonoBehaviour
     public static WaveManager instance;
 
     public int waveNumber = 1;
+    public int numWaves;
 
     [SerializeField] GameObject wavesContainer;
 
@@ -14,9 +15,10 @@ public class WaveManager : MonoBehaviour
     void Awake()
     {
         waveNumber = 1;
+        numWaves = wavesContainer.transform.childCount;
         instance = this;
-        waves = new Wave[wavesContainer.transform.childCount];
-        for (int childIndex = 0; childIndex < wavesContainer.transform.childCount; childIndex++)
+        waves = new Wave[numWaves];
+        for (int childIndex = 0; childIndex < numWaves; childIndex++)
         {
             waves[childIndex] = wavesContainer.transform.GetChild(childIndex).GetComponent<Wave>();
         }
