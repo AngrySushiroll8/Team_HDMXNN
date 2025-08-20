@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
     // Weapon List
     enum Weapon
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] GameObject pistolModel;
     [SerializeField] GameObject assaultRifleModel;
     [SerializeField] GameObject shotgunModel;
+    [SerializeField] GameObject gunModel;
 
     [Space(10)]
     [Header("Controller")]
@@ -738,6 +739,21 @@ public class PlayerController : MonoBehaviour, IDamage
     void DecreaseRage()
     {
         rageMeter -= (rageMax / rageTimeLength) * Time.deltaTime;
+    }
+
+    public void getGunStats(gunStats gun)
+    {
+        isAutomatic = gun.isAutomatic;
+        fireDistance = gun.fireDist;
+        fireRate = gun.fireRate;
+        bullets = gun.bullets;
+        bloomMod = gun.bloomMod;
+        rageMeterIncrement = gun.rageMeterIncrement;
+        damage = gun.damage;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+
     }
 }
 
