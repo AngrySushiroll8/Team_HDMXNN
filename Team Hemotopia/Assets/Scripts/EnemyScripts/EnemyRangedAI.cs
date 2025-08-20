@@ -37,11 +37,15 @@ public class EnemyRangedAI : EnemyAI_Base
         {
             float d = Vector3.Distance(transform.position, player.position);
 
-            if(d > shootRange)
-            {
-                movement?.Move(agent, transform, player);
+            movement?.Move(agent, transform, player);
+
+            var kite = movement as EnemyKiteDashMovement;
+
+            if ((kite != null && (kite.IsDashing || d < kite.CloseThreshold)))
                 return;
-            }
+
+
+            if (d > shootRange) return;
             
             if (agent != null && agent.enabled && agent.isOnNavMesh)
             {

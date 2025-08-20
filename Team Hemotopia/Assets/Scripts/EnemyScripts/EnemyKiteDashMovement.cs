@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,13 +14,17 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
     [SerializeField] float dashDuration;
     [SerializeField] float dashCooldown;
 
+    public bool IsDashing => dashing;
+    public float CloseThreshold => closeThreshold;
+
     float cooldownTimer;
 
     bool dashing;
 
+
     public override void Move(NavMeshAgent agent, Transform self, Transform player)
     {
-        if (agent == null || !agent.enabled) return;
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh) return;
 
         cooldownTimer -= Time.deltaTime;
 
@@ -37,7 +42,7 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
             if(SampleOnNavMesh(dashTarget, dashDistance + 2f, out var navTarget))
             {
                 cooldownTimer = dashCooldown;
-                self.GetComponent<MonoBehaviour>().StartCoroutine(Dash(agent, navTarget));
+                self.GetComponent<MonoBehaviour>().StartCoroutine(DashBack(agent, self, player, navTarget));
                 return;
             }
         }
@@ -53,9 +58,9 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
         else if(d < preferredRange * 0.95f)
         {
             Vector3 away = DirTo(player, self);
-            Vector3 stepBack = self.position + away * 2f;
-            if(SampleOnNavMesh(stepBack, 2.5f, out var back))
-                agent.SetDestination(back);
+            Vector3 back = self.position + away * 2f;
+            if(SampleOnNavMesh(back, 3f, out var stepBack))
+                agent.SetDestination(stepBack);
         }
         else
         {
@@ -65,35 +70,49 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
 
     }
 
-    System.Collections.IEnumerator Dash(NavMeshAgent agent, Vector3 target)
+    System.Collections.IEnumerator DashBack(NavMeshAgent agent,Transform self, Transform player, Vector3 target)
     {
         dashing = true;
+
         float prevSpeed = agent.speed;
+        float prevAccel = agent.acceleration;
+        bool prevStopped = agent.isStopped;
+        bool prevUpdateRot = agent.updateRotation;
+        bool prevAutoBraking = agent.autoBraking;
+
+        agent.updateRotation = false;
+        agent.autoBraking = false;
+        agent.acceleration = 1000f;
         agent.speed = dashSpeed;
         agent.isStopped = false;
         agent.SetDestination(target);
-
+       
         float t = 0f;
         while(t < dashDuration)
         {
             t += Time.deltaTime;
+
+            Vector3 look = player.position - self.position; look.y = 0f;
+            if(look.sqrMagnitude > 0.0001f)
+            {
+                Quaternion desired = Quaternion.LookRotation(look);
+                self.rotation = Quaternion.Slerp(self.rotation, desired, Time.deltaTime * 12f);
+            }
+
             yield return null;
+            
         }
 
+        agent.updateRotation = prevUpdateRot;
+        agent.autoBraking = prevAutoBraking;
+        agent.acceleration = prevAccel;
         agent.speed = prevSpeed;
+        agent.isStopped = prevStopped;
+
         dashing = false;
+
+        
     }
 
-    static bool SampleOnNavMesh(Vector3 pos, float maxDist, out Vector3 result)
-    {
-        if(NavMesh.SamplePosition(pos, out NavMeshHit hit, maxDist, NavMesh.AllAreas))
-        {
-            result = hit.position;
-            return true;
-        }
-        result = pos;
-        return false;
-
-    }
 
 }

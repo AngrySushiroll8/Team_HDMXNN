@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5616867725444536933}
   - component: {fileID: 30100335973919741}
   - component: {fileID: 6905990232981735679}
+  - component: {fileID: -7078364107740575262}
   - component: {fileID: 5477810767433291081}
   - component: {fileID: 2023829361031610856}
   - component: {fileID: 1948470789272817044}
@@ -73,6 +74,25 @@ MonoBehaviour:
   shootPos: {fileID: 109933934319511339}
   shootCooldown: 1
   shootRange: 10
+--- !u!114 &-7078364107740575262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704697842744815832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6d8bec580634f14894c587910e6255a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preferredRange: 10
+  closeThreshold: 5
+  normalSpeed: 3.5
+  dashDistance: 6
+  dashSpeed: 12
+  dashDuration: 0.35
+  dashCooldown: 3
 --- !u!23 &5477810767433291081
 MeshRenderer:
   m_ObjectHideFlags: 0
