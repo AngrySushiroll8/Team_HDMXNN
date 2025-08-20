@@ -6,16 +6,19 @@ public class WaveManager : MonoBehaviour
 
     public int waveNumber = 1;
 
+    [SerializeField] GameObject wavesContainer;
+
     Wave[] waves;
+    bool started = false;
 
     void Awake()
     {
         waveNumber = 1;
         instance = this;
-        waves = new Wave[transform.childCount];
-        for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
+        waves = new Wave[wavesContainer.transform.childCount];
+        for (int childIndex = 0; childIndex < wavesContainer.transform.childCount; childIndex++)
         {
-            waves[childIndex] = transform.GetChild(childIndex).GetComponent<Wave>();
+            waves[childIndex] = wavesContainer.transform.GetChild(childIndex).GetComponent<Wave>();
         }
     }
 
@@ -28,9 +31,10 @@ public class WaveManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player") && waves.Length > 0)
+        if (other.gameObject.CompareTag("Player") && waves.Length > 0 && !started)
         {
             StartWave(0);
+            started = true;
         }
     }
 }

@@ -7,6 +7,7 @@ public class Wave : MonoBehaviour
     [SerializeField] GameObject[] enemyPrefabs;
     [Tooltip("Must be the same length as the prefabs.")]
     [SerializeField] int[] enemyAmounts;
+    [SerializeField] Transform[] spawnPositions;
 
     Dictionary<GameObject, int> waveEnemies = new Dictionary<GameObject, int>();
 
@@ -24,7 +25,7 @@ public class Wave : MonoBehaviour
         {
             for (int enemyIndex = 0; enemyIndex < pair.Value; enemyIndex++)
             {
-                Instantiate(pair.Key, transform.position, Quaternion.identity, null);
+                Instantiate(pair.Key, spawnPositions.Length > 0 ? spawnPositions[Random.Range(0, spawnPositions.Length - 1)].position : transform.position, Quaternion.identity, null);
             }
         }
     }
