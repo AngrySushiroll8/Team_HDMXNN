@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     [SerializeField] Material hurtMaterial;
 
-    Vector3 jumpVec;
+    public Vector3 jumpVec;
     Vector3 moveDir;
     int jumpCount;
     int healthMax;
