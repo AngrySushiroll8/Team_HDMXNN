@@ -109,14 +109,21 @@ public class GameManager : MonoBehaviour
 
         gameGoalCountText.text = gameGoalCount.ToString("F0");
 
-        // Win screen
         if(gameGoalCount <= 0)
         {
-            statePaused();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-            menu = MenuState.Win;
+            // Player wins if there are no more waves left
+            WaveManager.instance.waveNumber++;
+            if (!WaveManager.instance.StartWave(WaveManager.instance.waveNumber - 1)) Win();
         }
+    }
+
+    // Win screen
+    void Win()
+    {
+        statePaused();
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+        menu = MenuState.Win;
     }
 
     public void updateToLoseScreen()
