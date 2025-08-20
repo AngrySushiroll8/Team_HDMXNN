@@ -14,9 +14,17 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
     [SerializeField] protected float roamDistance;
     [SerializeField] protected float roamPauseTimer;
 
-    [SerializeField] protected GameObject healthPowerup;
-    [SerializeField] protected GameObject doubleJumpPowerup;
-    [SerializeField] protected GameObject speedBoostPowerup;
+    [System.Serializable]
+    public class DropItem
+    {
+        public GameObject prefab;
+        [Range(0, 1)] public float chance = 1;
+        public int minCount;
+        public int maxCount;
+    }
+
+    [SerializeField] bool enableDrops = true;
+    [SerializeField] DropItem[] drops;
 
     protected Transform player;
 
@@ -136,7 +144,12 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
         if (HP <= 0)
         {
             GameManager.instance.updateGameGoal(-1);
-            DropLoot();
+
+            if (enableDrops)
+            {
+                DropLoot();
+            }
+            
             Destroy(gameObject);
         }
     }
@@ -168,18 +181,19 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
 
     private void DropLoot()
     {
-        int rand = Random.Range(0, 10);
-        if (rand == 0)
+        foreach(var item in drops)
         {
-            Instantiate(healthPowerup, transform.position, Quaternion.identity);
-        }
-        else if (rand == 1)
-        {
-            Instantiate(doubleJumpPowerup, transform.position, Quaternion.identity);
-        }
-        else if (rand == 2)
-        {
-            Instantiate(speedBoostPowerup, transform.position, Quaternion.identity);
+            if (item.prefab == null) continue;
+
+            if (Random.value > item.chance) continue;
+
+            int count = Random.Range(item.minCount, item.maxCount + 1);
+            for(int i = 0; i < count; i++)
+            {
+                Vector3 pos = transform.position + (Vector3)Random.insideUnitCircle * 0.5f;
+                Instantiate(item.prefab, pos, Quaternion.identity);
+            }
+
         }
     }
 }
