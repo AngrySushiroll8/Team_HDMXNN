@@ -4,37 +4,32 @@ public class WaveManager : MonoBehaviour
 {
     public static WaveManager instance;
 
-    public int waveNumber = 1;
+    public Room[] rooms;
+    public int currentRoom;
 
-    [SerializeField] GameObject wavesContainer;
-
-    Wave[] waves;
-    bool started = false;
+    GameObject roomContainer;
 
     void Awake()
     {
-        waveNumber = 1;
         instance = this;
-        waves = new Wave[wavesContainer.transform.childCount];
-        for (int childIndex = 0; childIndex < wavesContainer.transform.childCount; childIndex++)
+        roomContainer = GameObject.Find("RoomContainer");
+
+        rooms = new Room[roomContainer.transform.childCount];
+        for (int roomIndex = 0; roomIndex < rooms.Length; roomIndex++)
         {
-            waves[childIndex] = wavesContainer.transform.GetChild(childIndex).GetComponent<Wave>();
+            rooms[roomIndex] = roomContainer.transform.GetChild(roomIndex).GetComponent<Room>();
         }
+
+        if (rooms.Length > 0) currentRoom = 0;
+        else currentRoom = -1;
     }
 
-    public bool StartWave(int waveIndex)
+    public bool StartRoom(int roomIndex)
     {
-        if (waveIndex >= waves.Length) return false;
-        waves[waveIndex].StartWave();
+        if (roomIndex >= rooms.Length) return false;
+
+        rooms[roomIndex].StartWave(rooms[roomIndex].waveNumber - 1);
+
         return true;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player") && waves.Length > 0 && !started)
-        {
-            StartWave(0);
-            started = true;
-        }
     }
 }

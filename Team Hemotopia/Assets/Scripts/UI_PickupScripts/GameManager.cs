@@ -109,11 +109,16 @@ public class GameManager : MonoBehaviour
 
         gameGoalCountText.text = gameGoalCount.ToString("F0");
 
-        if(gameGoalCount <= 0)
+        if (gameGoalCount <= 0)
         {
             // Player wins if there are no more waves left
-            WaveManager.instance.waveNumber++;
-            if (!WaveManager.instance.StartWave(WaveManager.instance.waveNumber - 1)) Win();
+            Room room = WaveManager.instance.rooms[WaveManager.instance.currentRoom];
+            room.waveNumber++;
+            if (!room.StartWave(room.waveNumber - 1))
+            {
+                WaveManager.instance.currentRoom++;
+                if (WaveManager.instance.currentRoom >= WaveManager.instance.rooms.Length) Win();
+            }
         }
     }
 

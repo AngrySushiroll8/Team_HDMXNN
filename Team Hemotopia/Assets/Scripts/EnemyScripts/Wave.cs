@@ -7,15 +7,23 @@ public class Wave : MonoBehaviour
     [SerializeField] GameObject[] enemyPrefabs;
     [Tooltip("Must be the same length as the prefabs.")]
     [SerializeField] int[] enemyAmounts;
-    [SerializeField] Transform[] spawnPositions;
 
+    Transform[] spawnPositions;
     Dictionary<GameObject, int> waveEnemies = new Dictionary<GameObject, int>();
+    
+    public GameObject positionContainer;
 
     void Start()
     {
         for (int i = 0; i < enemyPrefabs.Length; i++)
         {
             waveEnemies.Add(enemyPrefabs[i], enemyAmounts[i]);
+        }
+
+        spawnPositions = new Transform[positionContainer.transform.childCount];
+        for (int posIndex = 0; posIndex < spawnPositions.Length; posIndex++)
+        {
+            spawnPositions[posIndex] = positionContainer.transform.GetChild(posIndex);
         }
     }
 
