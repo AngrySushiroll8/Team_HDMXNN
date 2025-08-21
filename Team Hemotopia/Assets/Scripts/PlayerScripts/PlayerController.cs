@@ -25,10 +25,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("Models")]
     [Space(10)]
     
-    [SerializeField] GameObject axeModel;
-    [SerializeField] GameObject pistolModel;
-    [SerializeField] GameObject assaultRifleModel;
-    [SerializeField] GameObject shotgunModel;
+    
     [SerializeField] GameObject gunModel;
 
     [Space(10)]
@@ -137,8 +134,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         updatePlayerUI();
 
 
-        // Sets Weapon Values Based On Weapon Type
-        SwitchCaseWeapon(weapon);
+       
 
         damageOriginal = damage;
         rageSpeed = speed * 1.5f;
@@ -182,8 +178,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Movement()
     {
-        GetNumpadInput();
-        SwitchCaseWeapon(weapon);
+        
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
         slideTimer += Time.deltaTime;
@@ -239,23 +234,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             isCrouching = true;
         }
 
-        // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        if (DetermineWeaponType() == "Ranged")
-        {
+      
             if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
             {
                 Shoot();
             }
-        }
-        else
-        {
-
-            if ((Input.GetButtonDown("Fire1") && swingTimer >= swingRate))
-            {
-                Swing();
-            }
-
-        }
+        
+        
 
     }
 
@@ -590,7 +575,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.Pistol;
                     HideAllWeapons();
-                    pistolModel.gameObject.SetActive(true);
+                    //pistolModel.gameObject.SetActive(true);
 
                     //GameManager.instance.PistolIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
@@ -606,7 +591,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.AssaultRifle;
                     HideAllWeapons();
-                    assaultRifleModel.gameObject.SetActive(true);
+                    //assaultRifleModel.gameObject.SetActive(true);
                     //GameManager.instance.ARIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
                     GameManager.instance.ActiveReticle = null;
@@ -621,7 +606,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.Shotgun;
                     HideAllWeapons();
-                    shotgunModel.gameObject.SetActive(true);
+                    //shotgunModel.gameObject.SetActive(true);
                     //GameManager.instance.ShotgunIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
                     GameManager.instance.ActiveReticle = null;
@@ -636,7 +621,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.Axe;
                     HideAllWeapons();
-                    axeModel.gameObject.SetActive(true);
+                    //axeModel.gameObject.SetActive(true);
                     //GameManager.instance.AxeIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
                     GameManager.instance.ActiveReticle = null;
@@ -730,10 +715,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void HideAllWeapons() // sets visibility of all weapons to false
     {
-        pistolModel.gameObject.SetActive(false);
-        assaultRifleModel.gameObject.SetActive(false);
-        shotgunModel.gameObject.SetActive(false);
-        axeModel.gameObject.SetActive(false);
+        //pistolModel.gameObject.SetActive(false);
+        //assaultRifleModel.gameObject.SetActive(false);
+        //shotgunModel.gameObject.SetActive(false);
+        //axeModel.gameObject.SetActive(false);
     }
 
     void DecreaseRage()
