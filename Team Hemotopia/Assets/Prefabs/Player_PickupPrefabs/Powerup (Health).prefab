@@ -49,7 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupType: 0
   healAmount: 20
-  speedBoostAmount: 1.5
+  speedBoostMultiplier: 0
+  effectDuration: 0
 --- !u!33 &3730277183689461016
 MeshFilter:
   m_ObjectHideFlags: 0

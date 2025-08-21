@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4353804695145217343}
   - component: {fileID: 2283002422000731710}
   - component: {fileID: 193243426877995952}
+  - component: {fileID: 6949307640519406084}
   - component: {fileID: 2282918115839061011}
   - component: {fileID: 2878564877571143860}
   m_Layer: 0
@@ -134,14 +135,42 @@ MonoBehaviour:
   FOV: 90
   roamDistance: 15
   roamPauseTimer: 3
-  healthPowerup: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
-  doubleJumpPowerup: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
-  speedBoostPowerup: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
+  enableDrops: 1
+  drops:
+  - prefab: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
+  - prefab: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
+  - prefab: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
   weapon: {fileID: 0}
   attackPos: {fileID: 206979622822436845}
   attackRange: 1.5
   attackCooldown: 2
   meleeDamage: 10
+--- !u!114 &6949307640519406084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677999173075853174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2937d739148e040b0715f8a24fca1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeed: 4
+  viewDistance: 12
+  fovAngle: 90
+  eyeHeight: 1.5
+  loseSightGrace: 2
 --- !u!135 &2282918115839061011
 SphereCollider:
   m_ObjectHideFlags: 0

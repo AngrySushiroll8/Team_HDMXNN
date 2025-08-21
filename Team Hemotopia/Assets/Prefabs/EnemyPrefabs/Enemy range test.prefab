@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5616867725444536933}
   - component: {fileID: 30100335973919741}
   - component: {fileID: 6905990232981735679}
+  - component: {fileID: -7078364107740575262}
   - component: {fileID: 5477810767433291081}
   - component: {fileID: 2023829361031610856}
   - component: {fileID: 1948470789272817044}
@@ -66,13 +67,43 @@ MonoBehaviour:
   FOV: 90
   roamDistance: 15
   roamPauseTimer: 3
-  healthPowerup: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
-  doubleJumpPowerup: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
-  speedBoostPowerup: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
+  enableDrops: 1
+  drops:
+  - prefab: {fileID: 7920484572072240691, guid: 4760f20ae0787b5469f204c24bd17a8c, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
+  - prefab: {fileID: 23247457087209986, guid: 0192c03d15bb0f644ac8d9ed39a37edb, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
+  - prefab: {fileID: 2360030431375383638, guid: ea4efa70e1b74fe43b16c92f063e9cdb, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
   bullet: {fileID: 2958823327217795486, guid: f9e4a07370871544a85dea194d58240f, type: 3}
   shootPos: {fileID: 109933934319511339}
   shootCooldown: 1
   shootRange: 10
+--- !u!114 &-7078364107740575262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704697842744815832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6d8bec580634f14894c587910e6255a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preferredRange: 10
+  closeThreshold: 5
+  normalSpeed: 3.5
+  dashDistance: 6
+  dashSpeed: 12
+  dashDuration: 0.35
+  dashCooldown: 3
 --- !u!23 &5477810767433291081
 MeshRenderer:
   m_ObjectHideFlags: 0

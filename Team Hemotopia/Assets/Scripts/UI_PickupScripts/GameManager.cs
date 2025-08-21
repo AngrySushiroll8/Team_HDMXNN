@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
 
     int gameGoalCount;
 
-    public float doubleJumpTimerCount = 10;
-    public float speedBoostTimerCount = 5;
+    public float doubleJumpTimerCount;
+    public float speedBoostTimerCount;
 
     enum MenuState
     {

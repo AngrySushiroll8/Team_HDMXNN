@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
     // Weapon List
     enum Weapon
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] GameObject pistolModel;
     [SerializeField] GameObject assaultRifleModel;
     [SerializeField] GameObject shotgunModel;
+    [SerializeField] GameObject gunModel;
 
     [Space(10)]
     [Header("Controller")]
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     [SerializeField] Material hurtMaterial;
 
-    Vector3 jumpVec;
+    public Vector3 jumpVec;
     Vector3 moveDir;
     int jumpCount;
     int healthMax;
@@ -553,33 +554,35 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.PlayerHealScreen.SetActive(false);
     }
 
-    IEnumerator DoubleJumpEnum()
+    IEnumerator DoubleJumpEnum(float effectDuration)
     {
         doubleJumpIsActive = true;
         jumpMax = 2;
         GameManager.instance.activePowerUp = GameManager.instance.doubleJumpText;
         GameManager.instance.activePowerUp.SetActive(true);
-        yield return new WaitForSeconds(GameManager.instance.doubleJumpTimerCount);
+        GameManager.instance.doubleJumpTimerCount = effectDuration;
+        yield return new WaitForSeconds(effectDuration);
         jumpMax = 1;
     }
-    public void DoubleJump()
+    public void DoubleJump(float effectDuration)
     {
-        StartCoroutine(DoubleJumpEnum());
+        StartCoroutine(DoubleJumpEnum(effectDuration));
     }
 
-    IEnumerator SpeedBoostEnum(float speedBoostMulti)
+    IEnumerator SpeedBoostEnum(float speedBoostMulti, float effectDuration)
     {
         speedBoostIsActive = true;
         speed *= speedBoostMulti;
         GameManager.instance.activePowerUp = GameManager.instance.speedBoostText;
         GameManager.instance.activePowerUp.SetActive(true);
-        yield return new WaitForSeconds(GameManager.instance.speedBoostTimerCount);
+        GameManager.instance.speedBoostTimerCount = effectDuration;
+        yield return new WaitForSeconds(effectDuration);
         speed = speedOriginal;
     }
 
-    public void SpeedBoost(float speedBoostMulti)
+    public void SpeedBoost(float speedBoostMulti, float effectDuration)
     {
-        StartCoroutine(SpeedBoostEnum(speedBoostMulti));
+        StartCoroutine(SpeedBoostEnum(speedBoostMulti, effectDuration));
     }
     void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
     {
@@ -738,6 +741,21 @@ public class PlayerController : MonoBehaviour, IDamage
     void DecreaseRage()
     {
         rageMeter -= (rageMax / rageTimeLength) * Time.deltaTime;
+    }
+
+    public void getGunStats(gunStats gun)
+    {
+        isAutomatic = gun.isAutomatic;
+        fireDistance = gun.fireDist;
+        fireRate = gun.fireRate;
+        bullets = gun.bullets;
+        bloomMod = gun.bloomMod;
+        rageMeterIncrement = gun.rageMeterIncrement;
+        damage = gun.damage;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+
     }
 }
 
