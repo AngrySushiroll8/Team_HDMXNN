@@ -122,6 +122,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     int jumpCount;
     int healthMax;
 
+    public bool jumpPadded;
+    float gravityDelay;
+
     //Testing the timer
     bool doubleJumpIsActive;
     bool speedBoostIsActive;
@@ -188,8 +191,19 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         dashTimer += Time.deltaTime;
         slideTimer += Time.deltaTime;
 
+        // Jump Pad
+        if (jumpPadded)
+        {
+            gravityDelay += Time.deltaTime;
+            if (gravityDelay > 0.3f)
+            {
+                jumpPadded = false;
+                gravityDelay = 0;
+            }
+        }
+        
         // Gravity System
-        if (controller.isGrounded)
+        if (controller.isGrounded && !jumpPadded)
         {
             jumpCount = 0;
             jumpVec = Vector3.zero;
