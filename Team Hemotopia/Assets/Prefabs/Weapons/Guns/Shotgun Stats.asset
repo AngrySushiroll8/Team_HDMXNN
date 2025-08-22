@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
   m_Name: Shotgun Stats
   m_EditorClassIdentifier: 
+  weaponID: 4
   model: {fileID: 4205521026231025682, guid: f7a69565ab2ff984789da792b0969f4b, type: 3}
   isAutomatic: 0
   damage: 8

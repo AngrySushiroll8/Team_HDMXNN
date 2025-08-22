@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
   m_Name: Axe Stats
   m_EditorClassIdentifier: 
+  weaponID: 1
   model: {fileID: 919132149155446097, guid: 600e1c0f4ad93214eaa8c0095b1f971d, type: 3}
   isAutomatic: 0
   damage: 100

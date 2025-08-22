@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class gunStats : ScriptableObject
 {
+    [Range(1, 8)] public int weaponID;
     public GameObject model;
 
     public bool isAutomatic;

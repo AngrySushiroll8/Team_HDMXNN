@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 //using UnityEditor.ProBuilder;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
+
+
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
@@ -21,12 +24,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     }
 
+
+
     [Space(10)]
     [Header("Models")]
     [Space(10)]
-    
-    
+
+    [SerializeField] List<gunStats> gunList = new List<gunStats>();
     [SerializeField] GameObject gunModel;
+    int gunListPos;
 
     [Space(10)]
     [Header("Controller")]
@@ -240,7 +246,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 Shoot();
             }
         
-        
+        SelectGun();
 
     }
 
@@ -728,17 +734,40 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     public void getGunStats(gunStats gun)
     {
-        isAutomatic = gun.isAutomatic;
-        fireDistance = gun.fireDist;
-        fireRate = gun.fireRate;
-        bullets = gun.bullets;
-        bloomMod = gun.bloomMod;
-        rageMeterIncrement = gun.rageMeterIncrement;
-        damage = gun.damage;
+        gunList.Add(gun);
 
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+        gunListPos = gunList.Count - 1;
 
+        ChangeGun();
+
+    }
+
+    void ChangeGun()
+    {
+        isAutomatic = gunList[gunListPos].isAutomatic;
+        fireDistance = gunList[gunListPos].fireDist;
+        fireRate = gunList[gunListPos].fireRate;
+        bullets = gunList[gunListPos].bullets;
+        bloomMod = gunList[gunListPos].bloomMod;
+        rageMeterIncrement = gunList[gunListPos].rageMeterIncrement;
+        damage = gunList[gunListPos].damage;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    void SelectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
+        {
+            gunListPos++;
+            ChangeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
+        {
+            gunListPos--;
+            ChangeGun();
+        }
     }
 }
 

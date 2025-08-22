@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
   m_Name: Pistol Stats
   m_EditorClassIdentifier: 
+  weaponID: 2
   model: {fileID: 199669651405181594, guid: 41236ddb97b001d499cadd3503c086dc, type: 3}
-  isAutomtic: 0
+  isAutomatic: 0
   damage: 20
   fireDist: 40
   bullets: 1
