@@ -253,6 +253,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         
         SelectGun();
 
+        Reload();
+
     }
 
     void Rage()
@@ -434,6 +436,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         foreach (KeyValuePair<IDamage, int> entry in damages)
         {
             entry.Key.TakeDamage(entry.Value);
+        }
+    }
+
+    void Reload()
+    {
+        if(Input.GetButtonDown("Reload"))
+        {
+            gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
         }
     }
 
