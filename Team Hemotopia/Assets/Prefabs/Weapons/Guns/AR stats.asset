@@ -19,10 +19,10 @@ MonoBehaviour:
   fireDist: 60
   bullets: 1
   fireRate: 0.25
-  ammoCur: 0
-  ammoMax: 50
+  ammoCur: 120
+  ammoMax: 120
   bloomMod: 0.015
-  hitEffect: {fileID: 0}
+  hitEffect: {fileID: 8567743453655228817, guid: 212ef1a41838ce044a9ac54994866708, type: 3}
   shootSound: []
   fireVol: 5
   rageMeterIncrement: 10

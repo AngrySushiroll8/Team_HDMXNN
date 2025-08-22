@@ -149,7 +149,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        Movement();
+        if(!GameManager.instance.isPaused)
+        {
+            Movement();
+        }
+        
         updatePlayerUIDash();
 
         if(doubleJumpIsActive || speedBoostIsActive)
@@ -241,7 +245,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
 
       
-            if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0 && fireTimer >= fireRate) 
+            || (!isAutomatic && Input.GetButtonDown("Fire1")))
             {
                 Shoot();
             }
@@ -374,40 +379,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
 
-    void Swing()
-    {
-        RaycastHit hit;
-
-        swingTimer = 0;
-
-        float rangeX = Random.Range(-bloomMod, bloomMod);
-        float rangeY = Random.Range(-bloomMod, bloomMod);
-
-        if (Physics.Raycast(Camera.main.transform.position,
-                                new Vector3(Camera.main.transform.forward.x + rangeX,
-                                            Camera.main.transform.forward.y + rangeY,
-                                            Camera.main.transform.forward.z),
-                                out hit,
-                                swingDistance,
-                                ~ignoreLayer))
-        {
-            Debug.Log("HIT! | " + hit.collider.name);
-
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-
-            if (dmg != null)
-            {
-                AddRage(rageMeterIncrement);
-                dmg.TakeDamage(damage);
-            }
-        }
-
-
-    }
 
     void Shoot()
     {
         fireTimer = 0;
+        gunList[gunListPos].ammoCur--;
+
         Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
         for (int bulletIndex = 0; bulletIndex < bullets; bulletIndex++)
@@ -435,7 +412,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                                 fireDistance,
                                 ~ignoreLayer))
             {
-                Debug.Log("HIT! | " + hit.collider.name);
+                //Debug.Log("HIT! | " + hit.collider.name);
+                Instantiate(gunList[gunListPos].hitEffect, hit.point, Quaternion.identity);
 
                 IDamage dmg = hit.collider.GetComponent<IDamage>();
 
