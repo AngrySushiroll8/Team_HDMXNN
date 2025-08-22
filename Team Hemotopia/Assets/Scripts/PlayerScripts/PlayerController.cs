@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 //using UnityEditor.ProBuilder;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
+
+
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
@@ -21,15 +24,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     }
 
+
+
     [Space(10)]
     [Header("Models")]
     [Space(10)]
-    
-    [SerializeField] GameObject axeModel;
-    [SerializeField] GameObject pistolModel;
-    [SerializeField] GameObject assaultRifleModel;
-    [SerializeField] GameObject shotgunModel;
+
+    [SerializeField] List<gunStats> gunList = new List<gunStats>();
     [SerializeField] GameObject gunModel;
+    int gunListPos;
 
     [Space(10)]
     [Header("Controller")]
@@ -140,8 +143,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         updatePlayerUI();
 
 
-        // Sets Weapon Values Based On Weapon Type
-        SwitchCaseWeapon(weapon);
+       
 
         damageOriginal = damage;
         rageSpeed = speed * 1.5f;
@@ -150,7 +152,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        Movement();
+        if(!GameManager.instance.isPaused)
+        {
+            Movement();
+        }
+        
         updatePlayerUIDash();
 
         if(doubleJumpIsActive || speedBoostIsActive)
@@ -185,8 +191,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Movement()
     {
-        GetNumpadInput();
-        SwitchCaseWeapon(weapon);
+        
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
         slideTimer += Time.deltaTime;
@@ -253,23 +258,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             isCrouching = true;
         }
 
-        // Shooting System Based On If The Weapon Is Semi Auto Or Full Auto
-        if (DetermineWeaponType() == "Ranged")
-        {
-            if ((isAutomatic && Input.GetButton("Fire1") && fireTimer >= fireRate) || (!isAutomatic && Input.GetButtonDown("Fire1")))
+      
+            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0 && fireTimer >= fireRate) 
+            || (!isAutomatic && Input.GetButtonDown("Fire1")))
             {
                 Shoot();
             }
-        }
-        else
-        {
+        
+        SelectGun();
 
-            if ((Input.GetButtonDown("Fire1") && swingTimer >= swingRate))
-            {
-                Swing();
-            }
-
-        }
+        Reload();
 
     }
 
@@ -397,40 +395,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
     }
 
-    void Swing()
-    {
-        RaycastHit hit;
-
-        swingTimer = 0;
-
-        float rangeX = Random.Range(-bloomMod, bloomMod);
-        float rangeY = Random.Range(-bloomMod, bloomMod);
-
-        if (Physics.Raycast(Camera.main.transform.position,
-                                new Vector3(Camera.main.transform.forward.x + rangeX,
-                                            Camera.main.transform.forward.y + rangeY,
-                                            Camera.main.transform.forward.z),
-                                out hit,
-                                swingDistance,
-                                ~ignoreLayer))
-        {
-            Debug.Log("HIT! | " + hit.collider.name);
-
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-
-            if (dmg != null)
-            {
-                AddRage(rageMeterIncrement);
-                dmg.TakeDamage(damage);
-            }
-        }
-
-
-    }
 
     void Shoot()
     {
         fireTimer = 0;
+        gunList[gunListPos].ammoCur--;
+
         Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
         for (int bulletIndex = 0; bulletIndex < bullets; bulletIndex++)
@@ -458,7 +428,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                                 fireDistance,
                                 ~ignoreLayer))
             {
-                Debug.Log("HIT! | " + hit.collider.name);
+                //Debug.Log("HIT! | " + hit.collider.name);
+                Instantiate(gunList[gunListPos].hitEffect, hit.point, Quaternion.identity);
 
                 IDamage dmg = hit.collider.GetComponent<IDamage>();
 
@@ -479,6 +450,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         foreach (KeyValuePair<IDamage, int> entry in damages)
         {
             entry.Key.TakeDamage(entry.Value);
+        }
+    }
+
+    void Reload()
+    {
+        if(Input.GetButtonDown("Reload"))
+        {
+            gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
         }
     }
 
@@ -606,7 +585,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.Pistol;
                     HideAllWeapons();
-                    pistolModel.gameObject.SetActive(true);
+                    //pistolModel.gameObject.SetActive(true);
 
                     //GameManager.instance.PistolIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
@@ -622,7 +601,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.AssaultRifle;
                     HideAllWeapons();
-                    assaultRifleModel.gameObject.SetActive(true);
+                    //assaultRifleModel.gameObject.SetActive(true);
                     //GameManager.instance.ARIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
                     GameManager.instance.ActiveReticle = null;
@@ -637,7 +616,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.Shotgun;
                     HideAllWeapons();
-                    shotgunModel.gameObject.SetActive(true);
+                    //shotgunModel.gameObject.SetActive(true);
                     //GameManager.instance.ShotgunIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
                     GameManager.instance.ActiveReticle = null;
@@ -652,7 +631,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 {
                     weapon = Weapon.Axe;
                     HideAllWeapons();
-                    axeModel.gameObject.SetActive(true);
+                    //axeModel.gameObject.SetActive(true);
                     //GameManager.instance.AxeIcon.SetActive(true);
                     GameManager.instance.ActiveReticle.SetActive(false);
                     GameManager.instance.ActiveReticle = null;
@@ -746,10 +725,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void HideAllWeapons() // sets visibility of all weapons to false
     {
-        pistolModel.gameObject.SetActive(false);
-        assaultRifleModel.gameObject.SetActive(false);
-        shotgunModel.gameObject.SetActive(false);
-        axeModel.gameObject.SetActive(false);
+        //pistolModel.gameObject.SetActive(false);
+        //assaultRifleModel.gameObject.SetActive(false);
+        //shotgunModel.gameObject.SetActive(false);
+        //axeModel.gameObject.SetActive(false);
     }
 
     void DecreaseRage()
@@ -759,17 +738,40 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     public void getGunStats(gunStats gun)
     {
-        isAutomatic = gun.isAutomatic;
-        fireDistance = gun.fireDist;
-        fireRate = gun.fireRate;
-        bullets = gun.bullets;
-        bloomMod = gun.bloomMod;
-        rageMeterIncrement = gun.rageMeterIncrement;
-        damage = gun.damage;
+        gunList.Add(gun);
 
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+        gunListPos = gunList.Count - 1;
 
+        ChangeGun();
+
+    }
+
+    void ChangeGun()
+    {
+        isAutomatic = gunList[gunListPos].isAutomatic;
+        fireDistance = gunList[gunListPos].fireDist;
+        fireRate = gunList[gunListPos].fireRate;
+        bullets = gunList[gunListPos].bullets;
+        bloomMod = gunList[gunListPos].bloomMod;
+        rageMeterIncrement = gunList[gunListPos].rageMeterIncrement;
+        damage = gunList[gunListPos].damage;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    void SelectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
+        {
+            gunListPos++;
+            ChangeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
+        {
+            gunListPos--;
+            ChangeGun();
+        }
     }
 }
 
