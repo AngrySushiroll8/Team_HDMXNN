@@ -50,6 +50,7 @@ MonoBehaviour:
   powerupType: 1
   healAmount: 20
   speedBoostMultiplier: 1.5
+  effectDuration: 10
 --- !u!33 &2635481409630358982
 MeshFilter:
   m_ObjectHideFlags: 0

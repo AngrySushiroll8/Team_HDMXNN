@@ -122,6 +122,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     int jumpCount;
     int healthMax;
 
+    public bool jumpPadded;
+    float gravityDelay;
+
     //Testing the timer
     bool doubleJumpIsActive;
     bool speedBoostIsActive;
@@ -188,8 +191,19 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         dashTimer += Time.deltaTime;
         slideTimer += Time.deltaTime;
 
+        // Jump Pad
+        if (jumpPadded)
+        {
+            gravityDelay += Time.deltaTime;
+            if (gravityDelay > 0.3f)
+            {
+                jumpPadded = false;
+                gravityDelay = 0;
+            }
+        }
+        
         // Gravity System
-        if (controller.isGrounded)
+        if (controller.isGrounded && !jumpPadded)
         {
             jumpCount = 0;
             jumpVec = Vector3.zero;
@@ -554,33 +568,35 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         GameManager.instance.PlayerHealScreen.SetActive(false);
     }
 
-    IEnumerator DoubleJumpEnum()
+    IEnumerator DoubleJumpEnum(float effectDuration)
     {
         doubleJumpIsActive = true;
         jumpMax = 2;
         GameManager.instance.activePowerUp = GameManager.instance.doubleJumpText;
         GameManager.instance.activePowerUp.SetActive(true);
-        yield return new WaitForSeconds(GameManager.instance.doubleJumpTimerCount);
+        GameManager.instance.doubleJumpTimerCount = effectDuration;
+        yield return new WaitForSeconds(effectDuration);
         jumpMax = 1;
     }
-    public void DoubleJump()
+    public void DoubleJump(float effectDuration)
     {
-        StartCoroutine(DoubleJumpEnum());
+        StartCoroutine(DoubleJumpEnum(effectDuration));
     }
 
-    IEnumerator SpeedBoostEnum(float speedBoostMulti)
+    IEnumerator SpeedBoostEnum(float speedBoostMulti, float effectDuration)
     {
         speedBoostIsActive = true;
         speed *= speedBoostMulti;
         GameManager.instance.activePowerUp = GameManager.instance.speedBoostText;
         GameManager.instance.activePowerUp.SetActive(true);
-        yield return new WaitForSeconds(GameManager.instance.speedBoostTimerCount);
+        GameManager.instance.speedBoostTimerCount = effectDuration;
+        yield return new WaitForSeconds(effectDuration);
         speed = speedOriginal;
     }
 
-    public void SpeedBoost(float speedBoostMulti)
+    public void SpeedBoost(float speedBoostMulti, float effectDuration)
     {
-        StartCoroutine(SpeedBoostEnum(speedBoostMulti));
+        StartCoroutine(SpeedBoostEnum(speedBoostMulti, effectDuration));
     }
     void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
     {
