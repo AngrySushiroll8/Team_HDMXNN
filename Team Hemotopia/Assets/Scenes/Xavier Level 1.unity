@@ -2958,6 +2958,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+      propertyPath: weapon
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: gunModel
       value: 
       objectReference: {fileID: 1159892755}
@@ -2966,7 +2970,11 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6592388842039969767, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+    - {fileID: 2597248403343704804, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+    - {fileID: 4717974847128135625, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+    - {fileID: 6662914452652366380, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3562679295515409918, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       insertIndex: -1
