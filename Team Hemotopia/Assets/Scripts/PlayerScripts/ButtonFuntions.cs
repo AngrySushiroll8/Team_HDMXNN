@@ -32,5 +32,10 @@ Application.Quit();
     {
         GameManager.instance.settingsClosed();
     }
+
+    public void controlSettings() 
+    {
+        GameManager.instance.controlSettingsOpen();
+    }
 }
 
