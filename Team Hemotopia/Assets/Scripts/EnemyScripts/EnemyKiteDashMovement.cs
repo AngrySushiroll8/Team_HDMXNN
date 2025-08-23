@@ -14,6 +14,8 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
     [SerializeField] float dashDuration;
     [SerializeField] float dashCooldown;
 
+    [SerializeField] float faceWhileKitingSpeed;
+
     public bool IsDashing => dashing;
     public float CloseThreshold => closeThreshold;
 
@@ -24,7 +26,7 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
 
     public override void Move(NavMeshAgent agent, Transform self, Transform player)
     {
-        if (agent == null || !agent.enabled || !agent.isOnNavMesh) return;
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh || player == null) return;
 
         cooldownTimer -= Time.deltaTime;
 
@@ -32,6 +34,11 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
 
         //finish dash
         if (dashing) return;
+
+        bool inKiteSpace = d < preferredRange * 1.2f;
+        agent.updateRotation = !inKiteSpace;
+        if (inKiteSpace) FacePlayerFlat(self, player, faceWhileKitingSpeed);
+
 
         //Dash away if too close and not on cooldown
         if (d < closeThreshold && cooldownTimer <= 0f)
@@ -53,18 +60,23 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
 
         if(d > preferredRange * 1.05f)
         {
+            agent.updateRotation = true;
             agent.SetDestination(player.position);
         }
         else if(d < preferredRange * 0.95f)
         {
             Vector3 away = DirTo(player, self);
             Vector3 back = self.position + away * 2f;
-            if(SampleOnNavMesh(back, 3f, out var stepBack))
+            if (SampleOnNavMesh(back, 3f, out var stepBack))
+            {
+                agent.updateRotation = false;
                 agent.SetDestination(stepBack);
+            }
         }
         else
         {
             agent.ResetPath();
+            agent.isStopped = true;
         }
 
 
@@ -76,12 +88,14 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
 
         float prevSpeed = agent.speed;
         float prevAccel = agent.acceleration;
+        float prevAngular = agent.angularSpeed;
         bool prevStopped = agent.isStopped;
         bool prevUpdateRot = agent.updateRotation;
         bool prevAutoBraking = agent.autoBraking;
 
         agent.updateRotation = false;
         agent.autoBraking = false;
+        agent.angularSpeed = 0f;
         agent.acceleration = 1000f;
         agent.speed = dashSpeed;
         agent.isStopped = false;
@@ -92,12 +106,7 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
         {
             t += Time.deltaTime;
 
-            Vector3 look = player.position - self.position; look.y = 0f;
-            if(look.sqrMagnitude > 0.0001f)
-            {
-                Quaternion desired = Quaternion.LookRotation(look);
-                self.rotation = Quaternion.Slerp(self.rotation, desired, Time.deltaTime * 12f);
-            }
+            FacePlayerFlat(self, player, faceWhileKitingSpeed);
 
             yield return null;
             
@@ -107,11 +116,22 @@ public class EnemyKiteDashMovement : EnemyMovement_Base
         agent.autoBraking = prevAutoBraking;
         agent.acceleration = prevAccel;
         agent.speed = prevSpeed;
+        agent.angularSpeed = prevAngular;
         agent.isStopped = prevStopped;
 
         dashing = false;
 
         
+    }
+
+    static void FacePlayerFlat(Transform self, Transform player, float turnSpeed)
+    {
+        Vector3 look = player.position - self.position; 
+        look.y = 0f;
+        if (look.sqrMagnitude < 0.0001f) return;
+
+        Quaternion desired = Quaternion.LookRotation(look);
+        self.rotation = Quaternion.Slerp(self.rotation, desired, Time.deltaTime * turnSpeed);
     }
 
 

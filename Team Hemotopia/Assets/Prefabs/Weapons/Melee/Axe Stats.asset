@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
   m_Name: Axe Stats
   m_EditorClassIdentifier: 
+  weaponID: 1
   model: {fileID: 919132149155446097, guid: 600e1c0f4ad93214eaa8c0095b1f971d, type: 3}
   isAutomatic: 0
   damage: 100
   fireDist: 2
   bullets: 1
   fireRate: 2
-  ammoCur: 0
+  ammoCur: 81
   ammoMax: 100
   bloomMod: 0.1
-  hitEffect: {fileID: 0}
+  hitEffect: {fileID: 5396372950321188654, guid: fcb74f28d107e284e80af037bfec14ca, type: 3}
   shootSound: []
   fireVol: 2
   rageMeterIncrement: 30

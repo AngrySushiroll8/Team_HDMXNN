@@ -22,17 +22,17 @@ public class PadTriggerEvents : MonoBehaviour
         //GameManager.instance.player.transform.position = new Vector3(currentPos.x, currentPos.y + jumpHeight, currentPos.z);
 
         // 50/50 Jump Pad
-        if (this.CompareTag("jumpPad"))
+        if (collider.transform.CompareTag("Player"))
         {
-            while (true)
+            if (this.CompareTag("jumpPad"))
             {
                 GameManager.instance.player.GetComponent<PlayerController>().jumpVec.y = jumpHeight;
-                if (GameManager.instance.player.GetComponent<PlayerController>().jumpVec.y != 0) break;
+                GameManager.instance.player.GetComponent<PlayerController>().jumpPadded = true;
             }
-        }
-        else if (this.CompareTag("slowField"))
-        {
-            
+            else if (this.CompareTag("slowField"))
+            {
+
+            }
         }
     }
 }

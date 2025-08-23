@@ -14,6 +14,7 @@ public class PowerupController : MonoBehaviour
 
     [SerializeField] int healAmount = 20;
     [SerializeField] float speedBoostMultiplier = 1.5f;  // speed is multiplied by this
+    [SerializeField] float effectDuration = 5f;
 
 
 
@@ -41,12 +42,12 @@ public class PowerupController : MonoBehaviour
                 }
             case PowerupType.SpeedBoost:
                 {
-                    GameManager.instance.player.GetComponent<PlayerController>().SpeedBoost(speedBoostMultiplier);
+                    GameManager.instance.player.GetComponent<PlayerController>().SpeedBoost(speedBoostMultiplier, effectDuration);
                     break;
                 }
             case PowerupType.Doublejump:
                 {
-                    GameManager.instance.player.GetComponent<PlayerController>().DoubleJump();
+                    GameManager.instance.player.GetComponent<PlayerController>().DoubleJump(effectDuration);
                     break;
                 }
         }
