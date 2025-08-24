@@ -457,12 +457,27 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if(Input.GetButtonDown("Reload"))
         {
+            if (gunList[gunListPos].ammoCur == 0)
+                return;
             
-            if(gunList[gunListPos].ammoClip != 0) // if the clip is not empty
+
+
+            if (gunList[gunListPos].ammoClip != 0) // if the clip is not empty
             {
                 int reserve = gunList[gunListPos].ammoClip;
+
+                
+
                 gunList[gunListPos].ammoClip = 0;
                 gunList[gunListPos].ammoCur += reserve;
+
+                if (gunList[gunListPos].ammoCur < gunList[gunListPos].clipSize && gunList[gunListPos].ammoCur > 0)
+                {
+
+                    gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+                    gunList[gunListPos].ammoCur = 0;
+                    return;
+                }
             }
 
             if (gunList[gunListPos].clipSize <= gunList[gunListPos].ammoCur)
