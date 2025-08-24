@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,11 +25,12 @@ public class GameManager : MonoBehaviour
 
     public bool isPaused;
 
-    [SerializeField] public GameObject ActiveReticle;
-    public GameObject PistolReticle;
-    public GameObject ShotgunReticle;
-    public GameObject ARReticle;
-    public GameObject AxeReticle;
+    [SerializeField] public List<GameObject> reticleList = new List<GameObject>();
+    [SerializeField] public GameObject reticle;
+    [SerializeField] public GameObject ARReticle;
+    [SerializeField] public GameObject ShotgunReticle;
+    [SerializeField] public GameObject PistolReticle;
+    [SerializeField] public GameObject AxeReticle;
     public GameObject DefaultReticle;
 
     public Image RageMeter;
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
-        ActiveReticle = DefaultReticle;
+        reticle = DefaultReticle;
     }
 
     // Update is called once per frame
