@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("Models")]
     [Space(10)]
 
-    [SerializeField] List<gunStats> gunList = new List<gunStats>();
+    [SerializeField] public List<gunStats> gunList = new List<gunStats>();
     [SerializeField] GameObject gunModel;
     int gunListPos;
 
@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] LayerMask wallCollision; // Layer Mask so player doesn't dash through walls
 
     [Space(10)]
-    [Header("Dash")]
+    [Header("Slide")]
     [Space(10)]
     [SerializeField] float slideDistance;
     [SerializeField] float slideDuration;
