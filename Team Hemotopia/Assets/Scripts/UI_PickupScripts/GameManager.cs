@@ -10,9 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuSettings;
+    [SerializeField] GameObject menuControlSettings;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
-    [SerializeField] MenuState menu;
+    [SerializeField] MenuState curMenu;
 
     [SerializeField] TMP_Text gameGoalCountText;
     [SerializeField] public GameObject activePowerUp;
@@ -46,14 +47,16 @@ public class GameManager : MonoBehaviour
     public float doubleJumpTimerCount;
     public float speedBoostTimerCount;
 
-    enum MenuState
+    public enum MenuState
     {
         None,
         Pause,
         Win,
-        Lose
+        Lose,
+        Settings
     }
 
+    public MenuState origMenu;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -91,7 +94,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        menu = MenuState.Pause;
+        curMenu = MenuState.Pause;
+        origMenu = MenuState.Pause;
     }
     public void stateUnpaused()
     {
@@ -101,6 +105,8 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         menuActive.SetActive(false);
         menuActive = null;
+        curMenu = 0;
+        origMenu = 0;
     }
     
     public void updateGameGoal(int value)
@@ -128,7 +134,8 @@ public class GameManager : MonoBehaviour
         statePaused();
         menuActive = menuWin;
         menuActive.SetActive(true);
-        menu = MenuState.Win;
+        curMenu = MenuState.Win;
+        origMenu = MenuState.Win;
     }
 
     public void updateToLoseScreen()
@@ -136,7 +143,8 @@ public class GameManager : MonoBehaviour
         statePaused();
         menuActive = menuLose;
         menuActive.SetActive(true);
-        menu = MenuState.Lose;
+        curMenu = MenuState.Lose;
+        origMenu = MenuState.Lose;
     }
 
     public void settingsOpen()
@@ -148,9 +156,19 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
+    public void controlSettingsOpen()
+    {
+        menuActive.SetActive(false);
+        menuActive = null;
+
+        menuActive = menuControlSettings;
+        menuActive.SetActive(true);
+        curMenu = MenuState.Settings;
+    }
+
     public void settingsClosed()
     {
-        switch(menu)
+        switch(curMenu)
         {
             case MenuState.Pause:
             {
@@ -176,6 +194,16 @@ public class GameManager : MonoBehaviour
                  menuActive = null;
 
                  menuActive = menuLose;
+                 menuActive.SetActive(true);
+                 break;
+            }
+            case MenuState.Settings:
+            {
+                    curMenu = origMenu;
+                 menuActive.SetActive(false);
+                 menuActive = null;
+
+                 menuActive = menuSettings;
                  menuActive.SetActive(true);
                  break;
             }
