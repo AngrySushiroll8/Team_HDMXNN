@@ -1382,10 +1382,8 @@ MonoBehaviour:
   m_VersionIndex: 26602
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 14
-    b: 15
-  m_SelectedVertices: 0e0000000f000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!4 &1189197602
 Transform:
   m_ObjectHideFlags: 0
@@ -1448,6 +1446,10 @@ PrefabInstance:
     - target: {fileID: 2537194250853230366, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6413034873912325651, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
+      propertyPath: weapon
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8891338025465336973, guid: 90e5f16a13ea6a0448e8c173a6a76700, type: 3}
       propertyPath: m_Name
