@@ -19,7 +19,9 @@ MonoBehaviour:
   fireDist: 40
   bullets: 1
   fireRate: 0
-  ammoCur: 2
+  ammoClip: 0
+  clipSize: 6
+  ammoCur: 50
   ammoMax: 50
   bloomMod: 0.01
   hitEffect: {fileID: 970440554703164915, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
