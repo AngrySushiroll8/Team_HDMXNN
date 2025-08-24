@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     float speedOriginal;
     bool isSprinting;
     bool isRaging;
+    float defaultHeight;
 
     [Space(10)]
     [Header("Shooting System")]
@@ -78,12 +79,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     float fireTimer;
 
     [Space(10)]
-    [Header("Crounch")]
+    [Header("Crouch")]
     [Space(10)]
 
     [SerializeField] float crouchSpeed;
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
+    [SerializeField] float crouchHeight;
     bool isCrouching;
 
     [Space(10)]
@@ -108,7 +110,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Space(10)]
     [Header("Slide")]
     [Space(10)]
-    [SerializeField] float slideDistance;
     [SerializeField] float slideDuration;
     [SerializeField] int slideCooldown;
     float slideTimer;
@@ -138,7 +139,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         dashTimer = dashCooldown;
         slideTimer = slideCooldown;
         speedOriginal = speed;
-
+        defaultHeight = controller.height;
 
         updatePlayerUI();
 
@@ -324,13 +325,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if (Input.GetButtonDown("Crouch") && !isSprinting)
         {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            controller.height = crouchHeight;
             speed = crouchSpeed;
             isCrouching = true;
         }
         if (Input.GetButtonUp("Crouch"))
         {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            controller.height = defaultHeight;
             speed = walkingSpeed;
             isCrouching = false;
         }
@@ -352,15 +353,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator slide()
     {
         slideTimer = 0;
-        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-        transform.position = new Vector3(transform.position.x, transform.position.y - 0.4f, transform.position.z);
+        controller.height = crouchHeight;
         Vector3 start = transform.position;
         Vector3 end = (transform.position + (transform.forward * dashDistance));
         float time = 0f;
 
         while (time < slideDuration)
         {
-            if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x - 0.2f, transform.localScale.y, 0.1f),
+            if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x - 0.2f, transform.localScale.y - (crouchHeight / defaultHeight), 0.1f),
                 transform.forward, transform.rotation, 1, wallCollision))
             {
                 break;
