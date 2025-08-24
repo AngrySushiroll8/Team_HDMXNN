@@ -62,8 +62,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 5477810767433291081}
   agent: {fileID: 1948470789272817044}
-  HP: 50
-  faceTargetSpeed: 5
+  HP: 200
+  faceTargetSpeed: 10
   FOV: 90
   roamDistance: 15
   roamPauseTimer: 3
@@ -98,12 +98,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preferredRange: 10
-  closeThreshold: 5
-  normalSpeed: 3.5
+  closeThreshold: 6
+  normalSpeed: 4.5
   dashDistance: 6
   dashSpeed: 12
-  dashDuration: 0.35
-  dashCooldown: 3
+  dashDuration: 0.5
+  dashCooldown: 2
+  faceWhileKitingSpeed: 14
 --- !u!23 &5477810767433291081
 MeshRenderer:
   m_ObjectHideFlags: 0
