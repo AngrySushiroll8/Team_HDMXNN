@@ -260,7 +260,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
       
             if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0 && fireTimer >= fireRate) 
-            || (!isAutomatic && Input.GetButtonDown("Fire1")))
+            || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0))
             {
                 Shoot();
             }
