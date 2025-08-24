@@ -261,8 +261,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
 
       
-            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0 && fireTimer >= fireRate) 
-            || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0))
+            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0 && fireTimer >= fireRate) 
+            || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0))
             {
                 Shoot();
             }
@@ -400,7 +400,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     void Shoot()
     {
         fireTimer = 0;
-        gunList[gunListPos].ammoCur--;
+        gunList[gunListPos].ammoClip--;
 
         Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
@@ -458,7 +458,30 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if(Input.GetButtonDown("Reload"))
         {
-            gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
+            
+            if(gunList[gunListPos].ammoClip != 0) // if the clip is not empty
+            {
+                int reserve = gunList[gunListPos].ammoClip;
+                gunList[gunListPos].ammoClip = 0;
+                gunList[gunListPos].ammoCur += reserve;
+            }
+
+            if (gunList[gunListPos].clipSize <= gunList[gunListPos].ammoCur)
+            {
+                gunList[gunListPos].ammoClip = gunList[gunListPos].clipSize;
+                gunList[gunListPos].ammoCur -= gunList[gunListPos].clipSize;
+
+            }
+            else if (gunList[gunListPos].clipSize > gunList[gunListPos].ammoCur)
+            {
+                gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+
+            }
+            else
+            {
+                return;
+            }
+
         }
     }
 
@@ -685,9 +708,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     public void getGunStats(gunStats gun)
     {
         gunList.Add(gun);
-
+        
         gunListPos = gunList.Count - 1;
         GameManager.instance.reticleList.Add(gun.reticle);
+        gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
+        gunList[gunListPos].ammoClip = gunList[gunListPos].clipSize;
+        //Reload();
 
         ChangeGun();
 
@@ -706,6 +732,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+        
     }
 
     void SelectGun()
