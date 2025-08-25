@@ -489,7 +489,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             }
             else if (gunList[gunListPos].clipSize > gunList[gunListPos].ammoCur)
             {
+                if (gunList[gunListPos].ammoCur < gunList[gunListPos].clipSize && gunList[gunListPos].ammoCur > 0)
+                {
+
+                    gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+                    gunList[gunListPos].ammoCur = 0;
+                    return;
+                }
+
                 gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+
+                
 
             }
             else
