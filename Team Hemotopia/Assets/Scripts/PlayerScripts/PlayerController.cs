@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     [SerializeField] public List<gunStats> gunList = new List<gunStats>();
     [SerializeField] GameObject gunModel;
-    int gunListPos;
+    public int gunListPos;
 
     [Space(10)]
     [Header("Controller")]
@@ -154,7 +154,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        if(!GameManager.instance.isPaused)
+        
+
+        if (!GameManager.instance.isPaused)
         {
             Movement();
         }
@@ -188,6 +190,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                     speedBoostIsActive = false;
                 }
             }
+        }
+        if(gunList.Count > 0)
+        {
+            GameManager.instance.ammoCurrent.text = gunList[gunListPos].ammoClip.ToString("F0");
+            GameManager.instance.ammoTotal.text = gunList[gunListPos].ammoCur.ToString("F0");
         }
     }
 

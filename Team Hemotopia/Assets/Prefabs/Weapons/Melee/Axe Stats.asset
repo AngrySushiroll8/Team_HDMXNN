@@ -20,10 +20,10 @@ MonoBehaviour:
   fireDist: 5
   bullets: 1
   fireRate: 2
-  ammoClip: 0
-  clipSize: 100
-  ammoCur: 100
-  ammoMax: 100
+  ammoClip: 40
+  clipSize: 40
+  ammoCur: 80
+  ammoMax: 80
   bloomMod: 0.1
   hitEffect: {fileID: 5396372950321188654, guid: fcb74f28d107e284e80af037bfec14ca, type: 3}
   shootSound: []

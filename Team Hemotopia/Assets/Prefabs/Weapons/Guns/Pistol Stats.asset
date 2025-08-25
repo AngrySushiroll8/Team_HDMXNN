@@ -19,8 +19,8 @@ MonoBehaviour:
   damage: 20
   fireDist: 40
   bullets: 1
-  fireRate: 0
-  ammoClip: 0
+  fireRate: 0.1
+  ammoClip: 1
   clipSize: 6
   ammoCur: 50
   ammoMax: 50

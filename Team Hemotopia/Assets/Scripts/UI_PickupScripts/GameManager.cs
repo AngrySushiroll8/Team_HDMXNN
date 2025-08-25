@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject speedBoostText;
     [SerializeField] TMP_Text speedBoostTimer;
 
+    [SerializeField] public TMP_Text ammoCurrent;
+    [SerializeField] public TMP_Text ammoTotal;
+
     public bool isPaused;
 
     [SerializeField] public List<GameObject> reticleList = new List<GameObject>();
@@ -75,6 +78,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if(Input.GetButtonDown("Cancel"))
         {
             if(menuActive == null)
