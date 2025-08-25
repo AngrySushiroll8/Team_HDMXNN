@@ -14,15 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponID: 2
   model: {fileID: 199669651405181594, guid: 41236ddb97b001d499cadd3503c086dc, type: 3}
+  reticle: {fileID: 9220618885194309934, guid: 9bb2fe07a1de8604fa336cf8d9f5f69f, type: 3}
   isAutomatic: 0
   damage: 20
   fireDist: 40
   bullets: 1
-  fireRate: 0
-  ammoCur: 2
+  fireRate: 0.1
+  ammoClip: 1
+  clipSize: 6
+  ammoCur: 50
   ammoMax: 50
-  bloomMod: 0.01
+  bloomMod: 0.015
   hitEffect: {fileID: 970440554703164915, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
   shootSound: []
-  fireVol: 2
-  rageMeterIncrement: 1000
+  fireVol: 1
+  rageMeterIncrement: 30

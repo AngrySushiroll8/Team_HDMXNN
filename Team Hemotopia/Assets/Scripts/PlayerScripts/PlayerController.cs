@@ -8,6 +8,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 //using UnityEditor.ProBuilder;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.ProBuilder.MeshOperations;
 
 
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     [SerializeField] public List<gunStats> gunList = new List<gunStats>();
     [SerializeField] GameObject gunModel;
-    int gunListPos;
+    public int gunListPos;
 
     [Space(10)]
     [Header("Controller")]
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     float speedOriginal;
     bool isSprinting;
     bool isRaging;
+    float defaultHeight;
 
     [Space(10)]
     [Header("Shooting System")]
@@ -78,12 +80,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     float fireTimer;
 
     [Space(10)]
-    [Header("Crounch")]
+    [Header("Crouch")]
     [Space(10)]
 
     [SerializeField] float crouchSpeed;
     [SerializeField] float crouchYScale;
     [SerializeField] float startYScale;
+    [SerializeField] float crouchHeight;
     bool isCrouching;
 
     [Space(10)]
@@ -108,7 +111,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Space(10)]
     [Header("Slide")]
     [Space(10)]
-    [SerializeField] float slideDistance;
     [SerializeField] float slideDuration;
     [SerializeField] int slideCooldown;
     float slideTimer;
@@ -138,7 +140,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         dashTimer = dashCooldown;
         slideTimer = slideCooldown;
         speedOriginal = speed;
-
+        defaultHeight = controller.height;
 
         updatePlayerUI();
 
@@ -152,7 +154,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        if(!GameManager.instance.isPaused)
+        
+
+        if (!GameManager.instance.isPaused)
         {
             Movement();
         }
@@ -186,6 +190,11 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                     speedBoostIsActive = false;
                 }
             }
+        }
+        if(gunList.Count > 0)
+        {
+            GameManager.instance.ammoCurrent.text = gunList[gunListPos].ammoClip.ToString("F0");
+            GameManager.instance.ammoTotal.text = gunList[gunListPos].ammoCur.ToString("F0");
         }
     }
 
@@ -259,8 +268,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
 
       
-            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0 && fireTimer >= fireRate) 
-            || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoCur > 0))
+            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0 && fireTimer >= fireRate) 
+            || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0))
             {
                 Shoot();
             }
@@ -324,13 +333,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if (Input.GetButtonDown("Crouch") && !isSprinting)
         {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            controller.height = crouchHeight;
             speed = crouchSpeed;
             isCrouching = true;
         }
         if (Input.GetButtonUp("Crouch"))
         {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            controller.height = defaultHeight;
             speed = walkingSpeed;
             isCrouching = false;
         }
@@ -352,15 +361,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     IEnumerator slide()
     {
         slideTimer = 0;
-        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-        transform.position = new Vector3(transform.position.x, transform.position.y - 0.4f, transform.position.z);
+        controller.height = crouchHeight;
         Vector3 start = transform.position;
         Vector3 end = (transform.position + (transform.forward * dashDistance));
         float time = 0f;
 
         while (time < slideDuration)
         {
-            if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x - 0.2f, transform.localScale.y, 0.1f),
+            if (Physics.BoxCast(transform.position, new Vector3(transform.localScale.x - 0.2f, transform.localScale.y - (crouchHeight / defaultHeight), 0.1f),
                 transform.forward, transform.rotation, 1, wallCollision))
             {
                 break;
@@ -399,7 +407,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     void Shoot()
     {
         fireTimer = 0;
-        gunList[gunListPos].ammoCur--;
+        gunList[gunListPos].ammoClip--;
 
         Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
@@ -457,7 +465,55 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if(Input.GetButtonDown("Reload"))
         {
-            gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
+            if (gunList[gunListPos].ammoCur == 0)
+                return;
+            
+
+
+            if (gunList[gunListPos].ammoClip != 0) // if the clip is not empty
+            {
+                int reserve = gunList[gunListPos].ammoClip;
+
+                
+
+                gunList[gunListPos].ammoClip = 0;
+                gunList[gunListPos].ammoCur += reserve;
+
+                if (gunList[gunListPos].ammoCur < gunList[gunListPos].clipSize && gunList[gunListPos].ammoCur > 0)
+                {
+
+                    gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+                    gunList[gunListPos].ammoCur = 0;
+                    return;
+                }
+            }
+
+            if (gunList[gunListPos].clipSize <= gunList[gunListPos].ammoCur)
+            {
+                gunList[gunListPos].ammoClip = gunList[gunListPos].clipSize;
+                gunList[gunListPos].ammoCur -= gunList[gunListPos].clipSize;
+
+            }
+            else if (gunList[gunListPos].clipSize > gunList[gunListPos].ammoCur)
+            {
+                if (gunList[gunListPos].ammoCur < gunList[gunListPos].clipSize && gunList[gunListPos].ammoCur > 0)
+                {
+
+                    gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+                    gunList[gunListPos].ammoCur = 0;
+                    return;
+                }
+
+                gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
+
+                
+
+            }
+            else
+            {
+                return;
+            }
+
         }
     }
 
@@ -577,151 +633,96 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         StartCoroutine(SpeedBoostEnum(speedBoostMulti, effectDuration));
     }
-    void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
-    {
-        switch (weaponID)
-        {
-            case 1: // pistol
-                {
-                    weapon = Weapon.Pistol;
-                    HideAllWeapons();
-                    //pistolModel.gameObject.SetActive(true);
+    //void SwitchWeapon(int weaponID) // uses a weapon id to switch the current weapon to a hard coded weapon slot.
+    //{
+    //    switch (weaponID)
+    //    {
+    //        case 1: // pistol
+    //            {
+    //                weapon = Weapon.Pistol;
+    //                HideAllWeapons();
+    //                //pistolModel.gameObject.SetActive(true);
 
-                    //GameManager.instance.PistolIcon.SetActive(true);
-                    GameManager.instance.ActiveReticle.SetActive(false);
-                    GameManager.instance.ActiveReticle = null;
+    //                //GameManager.instance.PistolIcon.SetActive(true);
+    //                GameManager.instance.ActiveReticle.SetActive(false);
+    //                GameManager.instance.ActiveReticle = null;
                    
-                    GameManager.instance.ActiveReticle = GameManager.instance.PistolReticle;
-                    GameManager.instance.ActiveReticle.SetActive(true);
+    //                GameManager.instance.ActiveReticle = GameManager.instance.PistolReticle;
+    //                GameManager.instance.ActiveReticle.SetActive(true);
 
-                    break;
-                }
+    //                break;
+    //            }
 
-            case 2: // Assault Rifle
-                {
-                    weapon = Weapon.AssaultRifle;
-                    HideAllWeapons();
-                    //assaultRifleModel.gameObject.SetActive(true);
-                    //GameManager.instance.ARIcon.SetActive(true);
-                    GameManager.instance.ActiveReticle.SetActive(false);
-                    GameManager.instance.ActiveReticle = null;
+    //        case 2: // Assault Rifle
+    //            {
+    //                weapon = Weapon.AssaultRifle;
+    //                HideAllWeapons();
+    //                //assaultRifleModel.gameObject.SetActive(true);
+    //                //GameManager.instance.ARIcon.SetActive(true);
+    //                GameManager.instance.ActiveReticle.SetActive(false);
+    //                GameManager.instance.ActiveReticle = null;
                     
-                    GameManager.instance.ActiveReticle = GameManager.instance.ARReticle;
-                    GameManager.instance.ActiveReticle.SetActive(true);
+    //                GameManager.instance.ActiveReticle = GameManager.instance.ARReticle;
+    //                GameManager.instance.ActiveReticle.SetActive(true);
 
-                    break;
-                }
+    //                break;
+    //            }
 
-            case 3: // Shotgun
-                {
-                    weapon = Weapon.Shotgun;
-                    HideAllWeapons();
-                    //shotgunModel.gameObject.SetActive(true);
-                    //GameManager.instance.ShotgunIcon.SetActive(true);
-                    GameManager.instance.ActiveReticle.SetActive(false);
-                    GameManager.instance.ActiveReticle = null;
+    //        case 3: // Shotgun
+    //            {
+    //                weapon = Weapon.Shotgun;
+    //                HideAllWeapons();
+    //                //shotgunModel.gameObject.SetActive(true);
+    //                //GameManager.instance.ShotgunIcon.SetActive(true);
+    //                GameManager.instance.ActiveReticle.SetActive(false);
+    //                GameManager.instance.ActiveReticle = null;
                    
-                    GameManager.instance.ActiveReticle = GameManager.instance.ShotgunReticle;
-                    GameManager.instance.ActiveReticle.SetActive(true);
+    //                GameManager.instance.ActiveReticle = GameManager.instance.ShotgunReticle;
+    //                GameManager.instance.ActiveReticle.SetActive(true);
 
-                    break;
-                }
+    //                break;
+    //            }
 
-            case 4: //Axe
-                {
-                    weapon = Weapon.Axe;
-                    HideAllWeapons();
-                    //axeModel.gameObject.SetActive(true);
-                    //GameManager.instance.AxeIcon.SetActive(true);
-                    GameManager.instance.ActiveReticle.SetActive(false);
-                    GameManager.instance.ActiveReticle = null;
+    //        case 4: //Axe
+    //            {
+    //                weapon = Weapon.Axe;
+    //                HideAllWeapons();
+    //                //axeModel.gameObject.SetActive(true);
+    //                //GameManager.instance.AxeIcon.SetActive(true);
+    //                GameManager.instance.ActiveReticle.SetActive(false);
+    //                GameManager.instance.ActiveReticle = null;
 
-                    GameManager.instance.ActiveReticle = GameManager.instance.AxeReticle;
-                    GameManager.instance.ActiveReticle.SetActive(true);
+    //                GameManager.instance.ActiveReticle = GameManager.instance.AxeReticle;
+    //                GameManager.instance.ActiveReticle.SetActive(true);
 
-                    break;
-                }
+    //                break;
+    //            }
 
-            default:
-                break;
-        }
+    //        default:
+    //            break;
+    //    }
 
-    }
+    //}
 
-    void GetNumpadInput()
-    {
-        if (Input.GetButtonDown("Weapon1"))
-        {
-            SwitchWeapon(1);
-        }
-        else if (Input.GetButtonDown("Weapon2"))
-        {
-            SwitchWeapon(2);
-        }
-        else if (Input.GetButtonDown("Weapon3"))
-        {
-            SwitchWeapon(3);
-        }
-        else if (Input.GetButtonDown("Weapon4"))
-        {
-            SwitchWeapon(4);
-        }
-    }
-
-    void SwitchCaseWeapon(Weapon weapon)
-    {
-        switch (weapon)
-        {
-            case Weapon.Pistol:
-                {
-                    isAutomatic = false;
-                    fireDistance = 40;
-                    fireRate = 0;
-                    damage = 20;
-                    bullets = 1;
-                    bloomMod = 0.01f;
-                    rageMeterIncrement = 1000;
-                    break;
-                }
-
-            case Weapon.AssaultRifle:
-                {
-                    isAutomatic = true;
-                    fireDistance = 60;
-                    fireRate = 0.25f;
-                    damage = 10;
-                    bullets = 1;
-                    bloomMod = 0.015f;
-                    rageMeterIncrement = 10;
-                    break;
-                }
-
-            case Weapon.Shotgun:
-                {
-                    isAutomatic = false;
-                    fireDistance = 20;
-                    fireRate = 0;
-                    damage = 8;
-                    bullets = 6;
-                    bloomMod = 0.1f;
-                    rageMeterIncrement = 8;
-                    break;
-                }
-
-            case Weapon.Axe:
-                {
-                    swingDistance = 5;
-                    swingRate = 0;
-                    damage = 30;
-                    bloomMod = 0.1f;
-                    rageMeterIncrement = 30;
-                    break;
-                }
-
-            default:
-                break;
-        }
-    }
+    //void GetNumpadInput()
+    //{
+    //    if (Input.GetButtonDown("Weapon1"))
+    //    {
+    //        SwitchWeapon(1);
+    //    }
+    //    else if (Input.GetButtonDown("Weapon2"))
+    //    {
+    //        SwitchWeapon(2);
+    //    }
+    //    else if (Input.GetButtonDown("Weapon3"))
+    //    {
+    //        SwitchWeapon(3);
+    //    }
+    //    else if (Input.GetButtonDown("Weapon4"))
+    //    {
+    //        SwitchWeapon(4);
+    //    }
+    //}
 
     void HideAllWeapons() // sets visibility of all weapons to false
     {
@@ -739,8 +740,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     public void getGunStats(gunStats gun)
     {
         gunList.Add(gun);
-
+        
         gunListPos = gunList.Count - 1;
+        GameManager.instance.reticleList.Add(gun.reticle);
+        gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
+        gunList[gunListPos].ammoClip = gunList[gunListPos].clipSize;
+        //Reload();
 
         ChangeGun();
 
@@ -748,6 +753,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void ChangeGun()
     {
+        
         isAutomatic = gunList[gunListPos].isAutomatic;
         fireDistance = gunList[gunListPos].fireDist;
         fireRate = gunList[gunListPos].fireRate;
@@ -758,6 +764,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
+        
     }
 
     void SelectGun()
