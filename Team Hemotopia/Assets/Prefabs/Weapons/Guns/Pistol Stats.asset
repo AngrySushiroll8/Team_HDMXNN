@@ -20,7 +20,7 @@ MonoBehaviour:
   fireDist: 40
   bullets: 1
   fireRate: 0.1
-  ammoClip: 1
+  ammoClip: 6
   clipSize: 6
   ammoCur: 50
   ammoMax: 50
