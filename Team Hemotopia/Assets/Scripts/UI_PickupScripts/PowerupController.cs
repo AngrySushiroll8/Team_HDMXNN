@@ -54,6 +54,13 @@ public class PowerupController : MonoBehaviour
                 }
             case PowerupType.Ammo:
                 {
+                    int gunListPos = GameManager.instance.player.GetComponent<PlayerController>().gunListPos;
+
+                    if (GameManager.instance.player.GetComponent<PlayerController>().gunList.Count == 0 ||
+                        GameManager.instance.player.GetComponent<PlayerController>().gunList[gunListPos].infiniteAmmo == true)
+                    {
+                        return;
+                    }
                     GameManager.instance.player.GetComponent<PlayerController>().AddAmmo(ammoAmount);
                     break;
                 }
