@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,15 +13,18 @@ public class gunStats : ScriptableObject
     public GameObject reticle;
 
     public bool isAutomatic;
+    public bool infiniteAmmo;
+    public bool lifeSteal;
 
     [Range(1, 100)] public int damage;
-    [Range(5, 60)] public int fireDist;
+    public int rageDamage;
+    [Range (1, 100)] public int fireDist;
     [Range(1, 6)] public int bullets;
     [Range(0.1f, 3)] public float fireRate;
     [Range(1, 40)] public int ammoClip;
     [Range(1, 40)] public int clipSize;
     public int ammoCur;
-    [Range(5, 80)] public int ammoMax;
+    [Range(1, 80)] public int ammoMax;
     [Range(0.015f, 5)] public float bloomMod;
     public ParticleSystem hitEffect;
     public AudioClip[] shootSound;

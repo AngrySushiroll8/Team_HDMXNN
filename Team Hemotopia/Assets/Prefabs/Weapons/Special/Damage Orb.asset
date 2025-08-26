@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
+  m_Name: Damage Orb
+  m_EditorClassIdentifier: 
+  weaponID: 6
+  model: {fileID: 2962172355704975971, guid: 4e1be93e271955548ad7f1da13e4de79, type: 3}
+  reticle: {fileID: 8684505839368676914, guid: da9056206cff46d4da4ae119015fd942, type: 3}
+  isAutomatic: 1
+  infiniteAmmo: 1
+  lifeSteal: 1
+  damage: 5
+  rageDamage: 0
+  fireDist: 5
+  bullets: 1
+  fireRate: 0.25
+  ammoClip: 10
+  clipSize: 10
+  ammoCur: 0
+  ammoMax: 10
+  bloomMod: 0.015
+  hitEffect: {fileID: 8884371268655795233, guid: 20fda529c996a334da7fd65b48ea40df, type: 3}
+  shootSound: []
+  fireVol: 0
+  rageMeterIncrement: 0
