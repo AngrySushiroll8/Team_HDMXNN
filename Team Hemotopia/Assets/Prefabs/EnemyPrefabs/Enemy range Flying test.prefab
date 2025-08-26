@@ -223,7 +223,7 @@ MonoBehaviour:
     maxCount: 1
   bullet: {fileID: 2958823327217795486, guid: f9e4a07370871544a85dea194d58240f, type: 3}
   shootPos: {fileID: 4210083063254881054}
-  shootCooldown: 1
+  shootCooldown: 0.5
   shootRange: 50
 --- !u!114 &1575214059427780280
 MonoBehaviour:
@@ -240,9 +240,9 @@ MonoBehaviour:
   approachRange: 12
   rangeDeadZone: 0.5
   strafeInsideRange: 1
-  strafeSpeed: 12
+  strafeSpeed: 8
   strafeSwitchInterval: 3
-  moveSpeed: 12
+  moveSpeed: 8
   acceleration: 20
   turnSpeed: 16
   lockToStartAltitude: 1
@@ -324,7 +324,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
