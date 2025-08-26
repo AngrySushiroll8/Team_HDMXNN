@@ -17,6 +17,7 @@ MonoBehaviour:
   reticle: {fileID: 9220618885194309934, guid: 9bb2fe07a1de8604fa336cf8d9f5f69f, type: 3}
   isAutomatic: 0
   damage: 20
+  rageDamage: 30
   fireDist: 40
   bullets: 1
   fireRate: 0.1

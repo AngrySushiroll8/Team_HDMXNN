@@ -17,12 +17,13 @@ MonoBehaviour:
   reticle: {fileID: 8684505839368676914, guid: da9056206cff46d4da4ae119015fd942, type: 3}
   isAutomatic: 0
   damage: 8
+  rageDamage: 12
   fireDist: 20
   bullets: 6
   fireRate: 0.1
-  ammoClip: 3
+  ammoClip: 2
   clipSize: 3
-  ammoCur: 25
+  ammoCur: 14
   ammoMax: 25
   bloomMod: 0.1
   hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
