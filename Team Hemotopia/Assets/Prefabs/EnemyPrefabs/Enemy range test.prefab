@@ -81,6 +81,10 @@ MonoBehaviour:
     chance: 0.5
     minCount: 0
     maxCount: 1
+  - prefab: {fileID: 1113819477254594974, guid: a7dd4ac4e59a1cb4586a8dc4145eb4bb, type: 3}
+    chance: 0.5
+    minCount: 0
+    maxCount: 1
   bullet: {fileID: 2958823327217795486, guid: f9e4a07370871544a85dea194d58240f, type: 3}
   shootPos: {fileID: 109933934319511339}
   shootCooldown: 1

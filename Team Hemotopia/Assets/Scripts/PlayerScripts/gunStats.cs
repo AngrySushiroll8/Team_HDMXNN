@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class gunStats : ScriptableObject
     public bool infiniteAmmo;
 
     [Range(1, 100)] public int damage;
+    public int rageDamage;
     [Range(5, 60)] public int fireDist;
     [Range(1, 6)] public int bullets;
     [Range(0.1f, 3)] public float fireRate;
