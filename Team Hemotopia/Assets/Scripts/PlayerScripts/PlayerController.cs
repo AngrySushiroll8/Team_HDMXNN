@@ -144,9 +144,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         updatePlayerUI();
 
-
-       
-
         damageOriginal = damage;
         rageSpeed = speed * 1.5f;
         rageDamage = (int)(damage * 1.5f);
@@ -759,6 +756,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         bloomMod = gunList[gunListPos].bloomMod;
         rageMeterIncrement = gunList[gunListPos].rageMeterIncrement;
         damage = gunList[gunListPos].damage;
+        damageOriginal = damage;
+        rageDamage = gunList[gunListPos].rageDamage;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
