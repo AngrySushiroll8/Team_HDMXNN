@@ -143,9 +143,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         defaultHeight = controller.height;
 
         updatePlayerUI();
-
-
-       
+        GameManager.instance.ammoUI.SetActive(false);
 
         damageOriginal = damage;
         rageSpeed = speed * 1.5f;
@@ -194,6 +192,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.ammoCurrent.text = gunList[gunListPos].ammoClip.ToString("F0");
             GameManager.instance.ammoTotal.text = gunList[gunListPos].ammoCur.ToString("F0");
+            ammoUIUpdates();
         }
     }
 
@@ -753,7 +752,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         ChangePlayerReticle();
 
     }
-
     void ChangeGun()
     {
         isAutomatic = gunList[gunListPos].isAutomatic;
@@ -773,6 +771,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if (gunList[gunListPos].weaponID == 1)
         {
+            GameManager.instance.ammoUI.SetActive(false);
             GameManager.instance.reticle.SetActive(false);
             GameManager.instance.reticle = null;
 
@@ -781,6 +780,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
         else if (gunList[gunListPos].weaponID == 2)
         {
+            GameManager.instance.ammoUI.SetActive(true);
             GameManager.instance.reticle.SetActive(false);
             GameManager.instance.reticle = null;
 
@@ -789,6 +789,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
         else if (gunList[gunListPos].weaponID == 3)
         {
+            GameManager.instance.ammoUI.SetActive(true);
             GameManager.instance.reticle.SetActive(false);
             GameManager.instance.reticle = null;
 
@@ -797,6 +798,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         }
         else if (gunList[gunListPos].weaponID == 4)
         {
+            GameManager.instance.ammoUI.SetActive(true);
             GameManager.instance.reticle.SetActive(false);
             GameManager.instance.reticle = null;
 
@@ -818,6 +820,29 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             gunListPos--;
             ChangeGun();
             ChangePlayerReticle();
+        }
+    }
+
+    void ammoUIUpdates()
+    {
+        // Reload UI
+        if (gunList[gunListPos].ammoClip == 0)
+        {
+            GameManager.instance.reloadUI.SetActive(true);
+        }
+        else
+        {
+            GameManager.instance.reloadUI.SetActive(false);
+        }
+
+        // Out of ammo UI
+        if (gunList[gunListPos].ammoCur == 0)
+        {
+            GameManager.instance.outOfAmmoUI.SetActive(true);
+        }
+        else
+        {
+            GameManager.instance.outOfAmmoUI.SetActive(false);
         }
     }
 }
