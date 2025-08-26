@@ -13,6 +13,7 @@ public class gunStats : ScriptableObject
     public GameObject reticle;
 
     public bool isAutomatic;
+    public bool infiniteAmmo;
 
     [Range(1, 100)] public int damage;
     public int rageDamage;
