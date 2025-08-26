@@ -406,7 +406,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     void Shoot()
     {
         fireTimer = 0;
-        gunList[gunListPos].ammoClip--;
+        if (gunList[gunListPos].infiniteAmmo == false)
+            gunList[gunListPos].ammoClip--;
 
         Dictionary<IDamage, int> damages = new Dictionary<IDamage, int>();
 
@@ -464,6 +465,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         if(Input.GetButtonDown("Reload"))
         {
+            if (gunList[gunListPos].infiniteAmmo == true)
+                return;
+
             if (gunList[gunListPos].ammoCur == 0)
                 return;
             
