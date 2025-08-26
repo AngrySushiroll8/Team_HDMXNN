@@ -84,9 +84,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Space(10)]
 
     [SerializeField] float crouchSpeed;
-    [SerializeField] float crouchYScale;
-    [SerializeField] float startYScale;
     [SerializeField] float crouchHeight;
+    Vector3 defaultCameraHeight;
     bool isCrouching;
 
     [Space(10)]
@@ -130,6 +129,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     public bool jumpPadded;
     float gravityDelay;
 
+    public float teleporterCooldown;
+
     //Testing the timer
     bool doubleJumpIsActive;
     bool speedBoostIsActive;
@@ -157,10 +158,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             Movement();
         }
-        
+
         updatePlayerUIDash();
 
-        if(doubleJumpIsActive || speedBoostIsActive)
+        if (doubleJumpIsActive || speedBoostIsActive)
         {
             if (doubleJumpIsActive)
             {
@@ -175,7 +176,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 }
             }
 
-            if(speedBoostIsActive)
+            if (speedBoostIsActive)
             {
                 GameManager.instance.speedBoostTimerUpdate();
 
@@ -188,7 +189,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 }
             }
         }
-        if(gunList.Count > 0)
+        if (gunList.Count > 0)
         {
             GameManager.instance.ammoCurrent.text = gunList[gunListPos].ammoClip.ToString("F0");
             GameManager.instance.ammoTotal.text = gunList[gunListPos].ammoCur.ToString("F0");
@@ -198,7 +199,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Movement()
     {
-        
+
         fireTimer += Time.deltaTime;
         dashTimer += Time.deltaTime;
         slideTimer += Time.deltaTime;
@@ -213,7 +214,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
                 gravityDelay = 0;
             }
         }
-        
+
         // Gravity System
         if (controller.isGrounded && !jumpPadded)
         {
@@ -265,17 +266,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             isCrouching = true;
         }
 
-      
-            if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0 && fireTimer >= fireRate) 
-            || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0))
-            {
-                Shoot();
-            }
-        
+        if ((isAutomatic && Input.GetButton("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0 && fireTimer >= fireRate)
+        || (!isAutomatic && Input.GetButtonDown("Fire1") && gunList.Count > 0 && gunList[gunListPos].ammoClip > 0))
+        {
+            Shoot();
+        }
+
         SelectGun();
 
         Reload();
 
+        teleporterCooldown += Time.deltaTime;
     }
 
     void Rage()
@@ -332,12 +333,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         if (Input.GetButtonDown("Crouch") && !isSprinting)
         {
             controller.height = crouchHeight;
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z);
             speed = crouchSpeed;
             isCrouching = true;
         }
         if (Input.GetButtonUp("Crouch"))
         {
             controller.height = defaultHeight;
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z); ;
             speed = walkingSpeed;
             isCrouching = false;
         }
@@ -360,6 +363,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     {
         slideTimer = 0;
         controller.height = crouchHeight;
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z);
         Vector3 start = transform.position;
         Vector3 end = (transform.position + (transform.forward * dashDistance));
         float time = 0f;
@@ -383,7 +387,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         dashTimer = 0;
         Vector3 start = transform.position;
         Vector3 end = (transform.position + (moveDir * dashDistance));
-        
+
         float time = 0f;
 
         while (time < dashDuration)
@@ -462,21 +466,21 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Reload()
     {
-        if(Input.GetButtonDown("Reload"))
+        if (Input.GetButtonDown("Reload"))
         {
             if (gunList[gunListPos].infiniteAmmo == true)
                 return;
 
             if (gunList[gunListPos].ammoCur == 0)
                 return;
-            
+
 
 
             if (gunList[gunListPos].ammoClip != 0) // if the clip is not empty
             {
                 int reserve = gunList[gunListPos].ammoClip;
 
-                
+
 
                 gunList[gunListPos].ammoClip = 0;
                 gunList[gunListPos].ammoCur += reserve;
@@ -508,7 +512,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
                 gunList[gunListPos].ammoClip = gunList[gunListPos].ammoCur;
 
-                
+
 
             }
             else
@@ -648,7 +652,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //                //GameManager.instance.PistolIcon.SetActive(true);
     //                GameManager.instance.ActiveReticle.SetActive(false);
     //                GameManager.instance.ActiveReticle = null;
-                   
+
     //                GameManager.instance.ActiveReticle = GameManager.instance.PistolReticle;
     //                GameManager.instance.ActiveReticle.SetActive(true);
 
@@ -663,7 +667,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //                //GameManager.instance.ARIcon.SetActive(true);
     //                GameManager.instance.ActiveReticle.SetActive(false);
     //                GameManager.instance.ActiveReticle = null;
-                    
+
     //                GameManager.instance.ActiveReticle = GameManager.instance.ARReticle;
     //                GameManager.instance.ActiveReticle.SetActive(true);
 
@@ -678,7 +682,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //                //GameManager.instance.ShotgunIcon.SetActive(true);
     //                GameManager.instance.ActiveReticle.SetActive(false);
     //                GameManager.instance.ActiveReticle = null;
-                   
+
     //                GameManager.instance.ActiveReticle = GameManager.instance.ShotgunReticle;
     //                GameManager.instance.ActiveReticle.SetActive(true);
 
@@ -742,7 +746,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     public void getGunStats(gunStats gun)
     {
         gunList.Add(gun);
-        
+
         gunListPos = gunList.Count - 1;
         gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
         gunList[gunListPos].ammoClip = gunList[gunListPos].clipSize;
