@@ -811,6 +811,24 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             GameManager.instance.reticle = GameManager.instance.ShotgunReticle;
             GameManager.instance.reticle.SetActive(true);
         }
+        else if (gunList[gunListPos].weaponID == 5)
+        {
+            GameManager.instance.ammoUI.SetActive(true);
+            GameManager.instance.reticle.SetActive(false);
+            GameManager.instance.reticle = null;
+
+            GameManager.instance.reticle = GameManager.instance.PistolReticle;
+            GameManager.instance.reticle.SetActive(true);
+        }
+        else if (gunList[gunListPos].weaponID == 6)
+        {
+            GameManager.instance.ammoUI.SetActive(false);
+            GameManager.instance.reticle.SetActive(false);
+            GameManager.instance.reticle = null;
+
+            GameManager.instance.reticle = GameManager.instance.ShotgunReticle;
+            GameManager.instance.reticle.SetActive(true);
+        }
     }
 
     void SelectGun()
