@@ -10,24 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
-  m_Name: Knife Stats
+  m_Name: Damage Orb
   m_EditorClassIdentifier: 
-  weaponID: 1
-  model: {fileID: 674577237976883932, guid: 20f9b16f76c4310448f13a1124c6d867, type: 3}
-  reticle: {fileID: 4050485392377832992, guid: 0acf67fc69b17034ebe228dc06c85e36, type: 3}
-  isAutomatic: 0
+  weaponID: 6
+  model: {fileID: 2962172355704975971, guid: 4e1be93e271955548ad7f1da13e4de79, type: 3}
+  reticle: {fileID: 8684505839368676914, guid: da9056206cff46d4da4ae119015fd942, type: 3}
+  isAutomatic: 1
   infiniteAmmo: 1
-  damage: 20
+  lifeSteal: 1
+  damage: 5
   rageDamage: 0
-  fireDist: 2
+  fireDist: 5
   bullets: 1
-  fireRate: 0.1
-  ammoClip: 1
-  clipSize: 1
-  ammoCur: 1
-  ammoMax: 1
+  fireRate: 0.25
+  ammoClip: 10
+  clipSize: 10
+  ammoCur: 0
+  ammoMax: 10
   bloomMod: 0.015
-  hitEffect: {fileID: 4508117539550737482, guid: da34d66431c8cd04aa98411a543a83bf, type: 3}
+  hitEffect: {fileID: 8884371268655795233, guid: 20fda529c996a334da7fd65b48ea40df, type: 3}
   shootSound: []
   fireVol: 0
   rageMeterIncrement: 0

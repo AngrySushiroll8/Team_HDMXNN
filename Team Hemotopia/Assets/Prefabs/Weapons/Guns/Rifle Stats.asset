@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
-  m_Name: Knife Stats
+  m_Name: Rifle Stats
   m_EditorClassIdentifier: 
-  weaponID: 1
-  model: {fileID: 674577237976883932, guid: 20f9b16f76c4310448f13a1124c6d867, type: 3}
-  reticle: {fileID: 4050485392377832992, guid: 0acf67fc69b17034ebe228dc06c85e36, type: 3}
+  weaponID: 5
+  model: {fileID: 2352997721424495953, guid: bb0cd604d12965b48bc6104313af13d8, type: 3}
+  reticle: {fileID: 9220618885194309934, guid: 9bb2fe07a1de8604fa336cf8d9f5f69f, type: 3}
   isAutomatic: 0
-  infiniteAmmo: 1
-  damage: 20
+  infiniteAmmo: 0
+  damage: 80
   rageDamage: 0
-  fireDist: 2
+  fireDist: 80
   bullets: 1
   fireRate: 0.1
   ammoClip: 1
   clipSize: 1
-  ammoCur: 1
-  ammoMax: 1
+  ammoCur: 5
+  ammoMax: 10
   bloomMod: 0.015
-  hitEffect: {fileID: 4508117539550737482, guid: da34d66431c8cd04aa98411a543a83bf, type: 3}
+  hitEffect: {fileID: 5991545297567742199, guid: 36a3ddd9e9258474aa29a08939eeda45, type: 3}
   shootSound: []
   fireVol: 0
   rageMeterIncrement: 0

@@ -14,10 +14,11 @@ public class gunStats : ScriptableObject
 
     public bool isAutomatic;
     public bool infiniteAmmo;
+    public bool lifeSteal;
 
     [Range(1, 100)] public int damage;
     public int rageDamage;
-    [Range (1, 60)] public int fireDist;
+    [Range (1, 100)] public int fireDist;
     [Range(1, 6)] public int bullets;
     [Range(0.1f, 3)] public float fireRate;
     [Range(1, 40)] public int ammoClip;
