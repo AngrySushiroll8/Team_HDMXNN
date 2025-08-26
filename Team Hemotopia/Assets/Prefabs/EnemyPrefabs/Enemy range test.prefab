@@ -62,7 +62,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 5477810767433291081}
   agent: {fileID: 1948470789272817044}
-  HP: 200
+  HP: 45
   faceTargetSpeed: 10
   FOV: 90
   roamDistance: 15
