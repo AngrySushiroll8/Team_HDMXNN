@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuLose;
     [SerializeField] MenuState curMenu;
 
+    [SerializeField] public GameObject wavePlusEnemyUI;
+    [SerializeField] public TMP_Text waveCurrent;
+    [SerializeField] public TMP_Text waveTotal;
     [SerializeField] TMP_Text gameGoalCountText;
     [SerializeField] public GameObject activePowerUp;
     [SerializeField] public GameObject doubleJumpText;
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
 
     float timeScaleOriginal;
 
+
     int gameGoalCount;
 
     public float doubleJumpTimerCount;
@@ -75,6 +79,8 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<PlayerController>();
 
         reticle = DefaultReticle;
+
+        wavePlusEnemyUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -127,7 +133,14 @@ public class GameManager : MonoBehaviour
         {
             // Player wins if there are no more waves left
             Room room = WaveManager.instance.rooms[WaveManager.instance.currentRoom];
+            if(room.waveNumber != room.waves.Length + 1)
+            {
+            waveCurrent.text = room.waveNumber.ToString("F0");
+            waveTotal.text = room.waves.Length.ToString("F0");
+                
+            }
             room.waveNumber++;
+
             if (!room.StartWave(room.waveNumber - 1))
             {
                 WaveManager.instance.currentRoom++;
