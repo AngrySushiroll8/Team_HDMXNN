@@ -26,9 +26,14 @@ public class EnemyRangedAI : EnemyAI_Base
 
         shootTimer += Time.deltaTime;
 
+        bool usingAgent = agent != null && agent.enabled && agent.isOnNavMesh;
+        bool isFlyer = movement is EnemyFlyingMovement;
+
         if (!playerInTrigger)
         {
-            CheckRoam();
+            if (!usingAgent || isFlyer) movement?.Move(agent, transform, player);
+            else
+                CheckRoam();
             return;
 
         }
@@ -41,20 +46,21 @@ public class EnemyRangedAI : EnemyAI_Base
 
             var kite = movement as EnemyKiteDashMovement;
 
-            if ((kite != null && (kite.IsDashing || d < kite.CloseThreshold)))
-                return;
+            if (kite != null && (kite.IsDashing || d < kite.CloseThreshold)) return;
 
 
             if (d > shootRange) return;
-            
-            if (agent != null && agent.enabled && agent.isOnNavMesh)
-            {
-               agent.isStopped = true;
-               agent.ResetPath();
-            }
 
-            playerDir = player.position - transform.position;
-            FaceTarget();
+            if (usingAgent)
+            {
+                agent.isStopped = true;
+                agent.updateRotation = false;
+                agent.ResetPath();
+
+                playerDir = player.position - transform.position;
+                FaceTarget();
+
+            }
 
             if(shootTimer >= shootCooldown)
             {
@@ -65,7 +71,9 @@ public class EnemyRangedAI : EnemyAI_Base
         }
         else
         {
-            CheckRoam();
+            if (!usingAgent || isFlyer) movement?.Move(agent, transform, player);
+            else
+                CheckRoam();
         }
 
         

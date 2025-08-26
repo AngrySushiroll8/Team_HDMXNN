@@ -475,6 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunList: []
   gunModel: {fileID: 9132080250496465481}
+  gunListPos: 0
   controller: {fileID: 2586898108793330339}
   health: 100
   speed: 10
@@ -493,13 +494,13 @@ MonoBehaviour:
   crouchSpeed: 3
   crouchYScale: 0.6
   startYScale: 1
+  crouchHeight: 0
   dashDistance: 8
   dashDuration: 0.2
   dashCooldown: 3
   wallCollision:
     serializedVersion: 2
     m_Bits: 512
-  slideDistance: 50
   slideDuration: 0.5
   slideCooldown: 5
   hurtMaterial: {fileID: 0}
