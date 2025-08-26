@@ -130,6 +130,8 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     public bool jumpPadded;
     float gravityDelay;
 
+    public float teleporterCooldown;
+
     //Testing the timer
     bool doubleJumpIsActive;
     bool speedBoostIsActive;
@@ -277,6 +279,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         Reload();
 
+        teleporterCooldown += Time.deltaTime;
     }
 
     void Rage()
