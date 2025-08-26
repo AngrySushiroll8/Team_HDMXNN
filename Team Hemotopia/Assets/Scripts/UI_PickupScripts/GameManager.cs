@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject speedBoostText;
     [SerializeField] TMP_Text speedBoostTimer;
 
+    [SerializeField] public GameObject reloadUI;
+    [SerializeField] public GameObject outOfAmmoUI;
+    [SerializeField] public GameObject ammoUI;
     [SerializeField] public TMP_Text ammoCurrent;
     [SerializeField] public TMP_Text ammoTotal;
 
