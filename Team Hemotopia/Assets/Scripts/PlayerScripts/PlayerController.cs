@@ -816,5 +816,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             ChangePlayerReticle();
         }
     }
+
+    public void AddAmmo(int addedAmmo)
+    {
+        gunList[gunListPos].ammoCur += addedAmmo;
+        if (gunList[gunListPos].ammoCur > gunList[gunListPos].ammoMax)
+        {
+            gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
+        }
+    }
 }
 
