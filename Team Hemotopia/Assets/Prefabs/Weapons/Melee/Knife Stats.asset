@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6aa9651263e614fbb8d59aa43cba7a, type: 3}
-  m_Name: Axe Stats
+  m_Name: Knife Stats
   m_EditorClassIdentifier: 
   weaponID: 1
-  model: {fileID: 3054509356080965957, guid: ad443ad961f8e1a40a4e1e251c7f5c9c, type: 3}
-  reticle: {fileID: 1807766089503213027, guid: d6e3b2d52b872174981f820ea10888a8, type: 3}
+  model: {fileID: 674577237976883932, guid: 20f9b16f76c4310448f13a1124c6d867, type: 3}
+  reticle: {fileID: 4050485392377832992, guid: 0acf67fc69b17034ebe228dc06c85e36, type: 3}
   isAutomatic: 0
   infiniteAmmo: 1
-  damage: 100
+  damage: 20
   rageDamage: 0
-  fireDist: 5
+  fireDist: 2
   bullets: 1
-  fireRate: 2
-  ammoClip: 40
-  clipSize: 40
-  ammoCur: 80
-  ammoMax: 80
-  bloomMod: 0.1
-  hitEffect: {fileID: 5396372950321188654, guid: fcb74f28d107e284e80af037bfec14ca, type: 3}
+  fireRate: 0.1
+  ammoClip: 1
+  clipSize: 1
+  ammoCur: 5
+  ammoMax: 5
+  bloomMod: 0.015
+  hitEffect: {fileID: 4508117539550737482, guid: da34d66431c8cd04aa98411a543a83bf, type: 3}
   shootSound: []
-  fireVol: 1
-  rageMeterIncrement: 30
+  fireVol: 0
+  rageMeterIncrement: 0

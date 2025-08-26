@@ -73,7 +73,7 @@ public class EnemyFlyingMovement : EnemyMovement_Base
         PickNewRoamTarget();
 
         smoothPlainDir = transform.forward; smoothPlainDir.y = 0f;
-        if(smoothPlainDir.sqrMagnitude < 0.001f) smoothPlainDir = Vector3.forward;
+        if (smoothPlainDir.sqrMagnitude < 0.001f) smoothPlainDir = Vector3.forward;
         smoothFaceDir = smoothPlainDir;
     }
 
@@ -81,10 +81,9 @@ public class EnemyFlyingMovement : EnemyMovement_Base
     {
         if (!player) return;
 
-
         //Distance on XZ plane
         Vector3 toPlayer = player.position - self.position; toPlayer.y = 0f;
-       
+
         float d = toPlayer.magnitude;
 
         float enterD = approachRange * engageEnterFactor;
@@ -175,13 +174,13 @@ public class EnemyFlyingMovement : EnemyMovement_Base
         else
         {
 
-            #if UNITY_6000_0_OR_NEWER
-                rb.linearVelocity = Vector3.MoveTowards(rb.linearVelocity, wantedVel, acceleration * Time.deltaTime);
+#if UNITY_6000_0_OR_NEWER
+            rb.linearVelocity = Vector3.MoveTowards(rb.linearVelocity, wantedVel, acceleration * Time.deltaTime);
 
-            #else
+#else
                 rb.velocity = Vector3.MoveTowards(rb.velocity, wantedVel, acceleration * Time.deltaTime);
             
-            #endif
+#endif
         }
 
         Vector3 targetFace = engaged ? toPlayer : (roamTarget - self.position);
@@ -194,7 +193,7 @@ public class EnemyFlyingMovement : EnemyMovement_Base
 
     void PickNewRoamTarget()
     {
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             Vector3 offset = Random.insideUnitSphere * roamRadius; offset.y = 0f;
             Vector3 p = roamCenter + offset;
@@ -202,7 +201,7 @@ public class EnemyFlyingMovement : EnemyMovement_Base
             Vector3 dir = (p - transform.position); dir.y = 0f;
             if (dir.sqrMagnitude < 1f) continue;
 
-            if(!Physics.SphereCast(transform.position, avoidRadius, dir.normalized, out _, dir.magnitude, obstacleMask, QueryTriggerInteraction.Ignore))
+            if (!Physics.SphereCast(transform.position, avoidRadius, dir.normalized, out _, dir.magnitude, obstacleMask, QueryTriggerInteraction.Ignore))
             {
                 roamTarget = p;
                 hasRoamTarget = true;
@@ -226,17 +225,17 @@ public class EnemyFlyingMovement : EnemyMovement_Base
 
         Vector3 dir = probeDir.normalized;
 
-        
+
         Vector3 start = origin + dir * (avoidRadius + 0.05f);
 
         if (Physics.SphereCast(start, avoidRadius, dir, out var hit, avoidProbeDist,
                                obstacleMask, QueryTriggerInteraction.Ignore))
         {
-            
+
             if (hit.rigidbody == rb || hit.transform == transform || hit.transform.IsChildOf(transform))
                 return Vector3.zero;
 
-            
+
             if (hit.collider.CompareTag("Player"))
                 return Vector3.zero;
 
@@ -273,7 +272,7 @@ public class EnemyFlyingMovement : EnemyMovement_Base
 
         if (rb != null)
         {
-            if(!rb.isKinematic) rb.angularVelocity = Vector3.zero;
+            if (!rb.isKinematic) rb.angularVelocity = Vector3.zero;
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, desired, Time.deltaTime * turnSpeed));
         }
         else
