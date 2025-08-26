@@ -7,7 +7,7 @@ public class Room : MonoBehaviour
     [SerializeField] GameObject wavesContainer;
     [SerializeField] GameObject posContainer;
 
-    Wave[] waves;
+    public Wave[] waves;
     bool started = false;
 
     void Awake()
@@ -32,7 +32,10 @@ public class Room : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") && waves.Length > 0 && !started)
         {
+            GameManager.instance.wavePlusEnemyUI.SetActive(true);
             StartWave(0);
+            GameManager.instance.waveCurrent.text = waveNumber.ToString("F0");
+            GameManager.instance.waveTotal.text = waves.Length.ToString("F0");
             started = true;
         }
     }
