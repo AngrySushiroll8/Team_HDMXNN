@@ -154,7 +154,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void Update()
     {
-        
 
         if (!GameManager.instance.isPaused)
         {
@@ -742,18 +741,17 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         gunList.Add(gun);
         
         gunListPos = gunList.Count - 1;
-        GameManager.instance.reticleList.Add(gun.reticle);
         gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
         gunList[gunListPos].ammoClip = gunList[gunListPos].clipSize;
         //Reload();
 
         ChangeGun();
+        ChangePlayerReticle();
 
     }
 
     void ChangeGun()
     {
-        
         isAutomatic = gunList[gunListPos].isAutomatic;
         fireDistance = gunList[gunListPos].fireDist;
         fireRate = gunList[gunListPos].fireRate;
@@ -764,7 +762,43 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
-        
+
+    }
+
+    void ChangePlayerReticle()
+    {
+        if (gunList[gunListPos].weaponID == 1)
+        {
+            GameManager.instance.reticle.SetActive(false);
+            GameManager.instance.reticle = null;
+
+            GameManager.instance.reticle = GameManager.instance.AxeReticle;
+            GameManager.instance.reticle.SetActive(true);
+        }
+        else if (gunList[gunListPos].weaponID == 2)
+        {
+            GameManager.instance.reticle.SetActive(false);
+            GameManager.instance.reticle = null;
+
+            GameManager.instance.reticle = GameManager.instance.PistolReticle;
+            GameManager.instance.reticle.SetActive(true);
+        }
+        else if (gunList[gunListPos].weaponID == 3)
+        {
+            GameManager.instance.reticle.SetActive(false);
+            GameManager.instance.reticle = null;
+
+            GameManager.instance.reticle = GameManager.instance.ARReticle;
+            GameManager.instance.reticle.SetActive(true);
+        }
+        else if (gunList[gunListPos].weaponID == 4)
+        {
+            GameManager.instance.reticle.SetActive(false);
+            GameManager.instance.reticle = null;
+
+            GameManager.instance.reticle = GameManager.instance.ShotgunReticle;
+            GameManager.instance.reticle.SetActive(true);
+        }
     }
 
     void SelectGun()
@@ -773,11 +807,13 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             gunListPos++;
             ChangeGun();
+            ChangePlayerReticle();
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
         {
             gunListPos--;
             ChangeGun();
+            ChangePlayerReticle();
         }
     }
 }

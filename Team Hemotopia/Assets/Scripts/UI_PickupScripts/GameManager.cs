@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
 
     public bool isPaused;
 
-    [SerializeField] public List<GameObject> reticleList = new List<GameObject>();
     [SerializeField] public GameObject reticle;
     [SerializeField] public GameObject ARReticle;
     [SerializeField] public GameObject ShotgunReticle;

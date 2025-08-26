@@ -10277,7 +10277,6 @@ MonoBehaviour:
   ammoCurrent: {fileID: 8091775856491466189}
   ammoTotal: {fileID: 7629966363511070420}
   isPaused: 0
-  reticleList: []
   reticle: {fileID: 0}
   ARReticle: {fileID: 2914807812251251280}
   ShotgunReticle: {fileID: 1526212640985128650}
@@ -10416,6 +10415,10 @@ PrefabInstance:
     - target: {fileID: 1807766089503213027, guid: d6e3b2d52b872174981f820ea10888a8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7156500593356986259, guid: d6e3b2d52b872174981f820ea10888a8, type: 3}
+      propertyPath: m_Color.a
+      value: 0.78431374
       objectReference: {fileID: 0}
     - target: {fileID: 8475115121946447897, guid: d6e3b2d52b872174981f820ea10888a8, type: 3}
       propertyPath: m_Pivot.x
@@ -10631,6 +10634,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7895434171114304012}
     m_Modifications:
+    - target: {fileID: 1508295044808890291, guid: 406a9fc29bf156c4296e7e12c1b50056, type: 3}
+      propertyPath: m_Color.a
+      value: 0.78431374
+      objectReference: {fileID: 0}
     - target: {fileID: 4889066100430018769, guid: 406a9fc29bf156c4296e7e12c1b50056, type: 3}
       propertyPath: m_Name
       value: ARReticle
@@ -10718,6 +10725,10 @@ PrefabInstance:
     - target: {fileID: 6051401601348479487, guid: 406a9fc29bf156c4296e7e12c1b50056, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110490811642475902, guid: 406a9fc29bf156c4296e7e12c1b50056, type: 3}
+      propertyPath: m_Color.a
+      value: 0.78431374
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10821,6 +10832,10 @@ PrefabInstance:
     - target: {fileID: 4111620044349698818, guid: da9056206cff46d4da4ae119015fd942, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4917218149652317365, guid: da9056206cff46d4da4ae119015fd942, type: 3}
+      propertyPath: m_Color.a
+      value: 0.78431374
       objectReference: {fileID: 0}
     - target: {fileID: 8684505839368676914, guid: da9056206cff46d4da4ae119015fd942, type: 3}
       propertyPath: m_Name
