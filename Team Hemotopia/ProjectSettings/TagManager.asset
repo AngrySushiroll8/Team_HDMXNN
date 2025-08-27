@@ -8,6 +8,9 @@ TagManager:
   - RotatingWall
   - jumpPad
   - slowField
+  - FlyingEnemy
+  - PlayerSpawnPos
+  - GunPickup
   layers:
   - Default
   - TransparentFX

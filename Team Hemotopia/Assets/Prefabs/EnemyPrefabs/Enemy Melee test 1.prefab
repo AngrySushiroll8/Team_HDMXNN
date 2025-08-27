@@ -153,6 +153,7 @@ MonoBehaviour:
     chance: 0.5
     minCount: 0
     maxCount: 1
+  enemyStats: {fileID: 11400000, guid: 3f93c8639889f1d40974e50c5e878405, type: 2}
   weapon: {fileID: 0}
   attackPos: {fileID: 206979622822436845}
   attackRange: 1.5

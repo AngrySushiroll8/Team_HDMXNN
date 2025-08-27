@@ -1,17 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
-
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.VisualScripting;
-//using UnityEditor.ProBuilder;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.ProBuilder.MeshOperations;
-
-
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
@@ -24,8 +14,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         Axe
 
     }
-
-
 
     [Space(10)]
     [Header("Models")]
@@ -45,6 +33,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Header("Player Stats")]
     [Space(10)]
 
+    public Transform spawnPos;
     [SerializeField] int health;
     [SerializeField] float speed;
     [SerializeField] float walkingSpeed;
@@ -134,6 +123,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     //Testing the timer
     bool doubleJumpIsActive;
     bool speedBoostIsActive;
+
+    void Awake()
+    {
+        controller.enabled = false;
+        transform.position = spawnPos.position;
+        transform.rotation = spawnPos.rotation;
+        controller.enabled = true;
+    }
 
     void Start()
     {
@@ -756,7 +753,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         ChangePlayerReticle();
 
     }
-    void ChangeGun()
+    public void ChangeGun()
     {
         isAutomatic = gunList[gunListPos].isAutomatic;
         fireDistance = gunList[gunListPos].fireDist;
@@ -773,7 +770,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     }
 
-    void ChangePlayerReticle()
+    public void ChangePlayerReticle()
     {
         if (gunList[gunListPos].weaponID == 1)
         {
@@ -855,7 +852,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
             gunList[gunListPos].ammoCur = gunList[gunListPos].ammoMax;
         }
     }
-    
+
     void ammoUIUpdates()
     {
         // Reload UI
@@ -877,6 +874,39 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         {
             GameManager.instance.outOfAmmoUI.SetActive(false);
         }
+    }
+
+    public void Respawn()
+    {
+        health = healthMax;
+        rageMeter = 0;
+        controller.enabled = false;
+        transform.position = spawnPos.position;
+        transform.rotation = spawnPos.rotation;
+        controller.enabled = true;
+        jumpVec = Vector3.zero;
+        dashTimer = dashCooldown;
+
+        updatePlayerUI();
+        updatePlayerUIDash();
+        updatePlayerUIRage();
+    }
+
+    public void ResetPlayerGunStats()
+    {
+        damage = 0;
+        damageOriginal = 0;
+        isAutomatic = false;
+        fireDistance = 0;
+        fireRate = 0;
+        rageDamage = 0;
+        rageMeterIncrement = 0;
+        bloomMod = 0;
+        bullets = 0;
+        GameManager.instance.ammoUI.SetActive(false);
+        GameManager.instance.reticle.SetActive(false);
+        gunModel.GetComponent<MeshFilter>().sharedMesh = null;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = null;
     }
 }
 
