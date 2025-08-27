@@ -225,6 +225,7 @@ MonoBehaviour:
     chance: 0.5
     minCount: 0
     maxCount: 1
+  enemyStats: {fileID: 11400000, guid: 512f6080b6deb5c4883946e9aa690211, type: 2}
   bullet: {fileID: 2958823327217795486, guid: f9e4a07370871544a85dea194d58240f, type: 3}
   shootPos: {fileID: 4210083063254881054}
   shootCooldown: 0.5

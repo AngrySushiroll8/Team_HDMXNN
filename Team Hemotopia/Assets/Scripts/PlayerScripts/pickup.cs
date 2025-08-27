@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class pickup : MonoBehaviour
 {
-    [SerializeField] gunStats gun;
+    [SerializeField] public gunStats gun;
     Vector3 startingPos;
     Vector3 upPos;
     bool upDown;

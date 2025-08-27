@@ -16,6 +16,7 @@ MonoBehaviour:
   model: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
   reticle: {fileID: 4889066100430018769, guid: 406a9fc29bf156c4296e7e12c1b50056, type: 3}
   isAutomatic: 1
+  infiniteAmmo: 0
   damage: 10
   rageDamage: 15
   fireDist: 60
@@ -30,3 +31,4 @@ MonoBehaviour:
   shootSound: []
   fireVol: 1
   rageMeterIncrement: 10
+  prefab: {fileID: 9053302829533967690, guid: 98ae9de686d7b8a48a59c290235ba7aa, type: 3}
