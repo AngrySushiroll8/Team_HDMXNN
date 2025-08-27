@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2122588072768956765}
   m_Layer: 0
   m_Name: Gun - Shotgun
-  m_TagString: Untagged
+  m_TagString: GunPickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gun: {fileID: 11400000, guid: 446672b52289b1042961ab92ec8d75aa, type: 2}
+  prefab: {fileID: 7559300565473470121}
 --- !u!33 &1370248337147311975
 MeshFilter:
   m_ObjectHideFlags: 0

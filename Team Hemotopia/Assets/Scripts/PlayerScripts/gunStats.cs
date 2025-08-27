@@ -29,4 +29,5 @@ public class gunStats : ScriptableObject
     public AudioClip[] shootSound;
     [Range(0, 1)] public float fireVol;
     [Range(0, 30)] public int rageMeterIncrement;
+    public GameObject prefab;
 }

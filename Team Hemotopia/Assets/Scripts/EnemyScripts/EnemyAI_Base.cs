@@ -8,7 +8,7 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
 
     [SerializeField] protected Renderer model;
     [SerializeField] protected NavMeshAgent agent;
-    [SerializeField] protected int HP;
+    [SerializeField] public int HP;
     [SerializeField] protected int faceTargetSpeed;
     [SerializeField] protected int FOV;
     [SerializeField] protected float roamDistance;
@@ -25,6 +25,8 @@ public class EnemyAI_Base : MonoBehaviour, IDamage
 
     [SerializeField] bool enableDrops = true;
     [SerializeField] DropItem[] drops;
+
+    public EnemyStats enemyStats;
 
     protected Transform player;
 

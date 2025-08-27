@@ -33,9 +33,16 @@ Application.Quit();
         GameManager.instance.settingsClosed();
     }
 
-    public void controlSettings() 
+    public void controlSettings()
     {
         GameManager.instance.controlSettingsOpen();
+    }
+
+    public void respawn()
+    {
+        GameManager.instance.playerScript.Respawn();
+        GameManager.instance.LoadRespawn();
+        GameManager.instance.stateUnpaused();
     }
 }
 

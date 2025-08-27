@@ -42,7 +42,6 @@ public class Wave : MonoBehaviour
                 Instantiate(enemiesToSpawn[0], spawnPositions.Length > 0 ? (enemiesToSpawn[0].CompareTag("FlyingEnemy") ? spawnPositions[spawnIndex].position + (spawnPositions[spawnIndex].up * flyingEnemyHeight) : spawnPositions[spawnIndex].position) : transform.position, Quaternion.identity, null);
                 enemiesToSpawn.RemoveAt(0);
                 enemyTimer = 0;
-                Debug.Log("Spawn");
             }
         }
     }

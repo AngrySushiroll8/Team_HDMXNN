@@ -8,7 +8,7 @@ public class Room : MonoBehaviour
     [SerializeField] GameObject posContainer;
 
     Wave[] waves;
-    bool started = false;
+    public bool started = false;
 
     void Awake()
     {
